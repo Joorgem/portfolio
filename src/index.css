@@ -51,8 +51,8 @@ body {
   background: #000000;
   font-family: "Funnel Display", sans-serif;
   color: white;
-  scroll-behavior: smooth;
-  overflow-x: hidden;
+  overflow: hidden; /* Remove scroll completamente */
+  height: 100vh; /* Altura fixa da viewport */
 }
 
 .c-space {

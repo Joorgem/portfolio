@@ -21,9 +21,11 @@ const RotatingRing = ({ radius }) => {
     <mesh ref={meshRef} rotation={[Math.PI / 2, 0, 0]}>
       <torusGeometry args={[radius * 1.3, 2, 8, 32]} />
       <meshBasicMaterial 
+        attach="material"
         color="#00ff00"
         emissive="#00ff00"
         emissiveIntensity={0.3}
+        transparent={false}
       />
     </mesh>
   );
@@ -89,10 +91,12 @@ const OptimizedHitbox = React.memo(({
         onPointerDown={(e) => e.stopPropagation()}
       >
         <meshBasicMaterial 
-          transparent
+          attach="material"
+          transparent={true}
           opacity={debugMode ? 0.1 : 0}
           color={debugMode ? getColor(point.id) : '#000000'}
           side={THREE.DoubleSide}
+          colorWrite={debugMode}
         />
       </mesh>
       
@@ -101,10 +105,11 @@ const OptimizedHitbox = React.memo(({
         <mesh>
           <sphereGeometry args={[point.radius * 1.1, 32, 32]} />
           <meshBasicMaterial 
+            attach="material"
             color="#ffffff"
-            transparent
+            transparent={true}
             opacity={0.1}
-            wireframe
+            wireframe={true}
           />
         </mesh>
       )}
@@ -115,10 +120,11 @@ const OptimizedHitbox = React.memo(({
           <mesh>
             <sphereGeometry args={[point.radius * 1.2, 16, 16]} />
             <meshBasicMaterial 
+              attach="material"
               color="#00ff00"
-              transparent
+              transparent={true}
               opacity={0.15}
-              wireframe
+              wireframe={true}
             />
           </mesh>
           

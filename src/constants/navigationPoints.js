@@ -81,13 +81,12 @@ export const NAVIGATION_CONFIG = {
   HOVER_GLOW_INTENSITY: 0.5,
   HOVER_ANIMATION_DURATION: 0.3,
   
-  // Configurações de transição de câmera
-  ZOOM_DURATION: 2.0,
-  ZOOM_EASING: 'power2.inOut',
+  // Configurações de transição de câmera (SIMPLIFICADO)
+  TRANSITION_DURATION: 1.0,
   
-  // Configurações de scroll
-  SCROLL_SENSITIVITY: 0.002,
-  SCROLL_THRESHOLD: 0.8, // % da seção para trigger zoom-out
+  // Configurações de scroll (REMOVIDO)
+  // SCROLL_SENSITIVITY: 0.002,
+  // SCROLL_THRESHOLD: 0.8, // % da seção para trigger zoom-out
   
   // Estados da aplicação
   STATES: {

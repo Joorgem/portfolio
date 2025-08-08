@@ -10,8 +10,10 @@ import Footer from './sections/Footer';
 
 const App = () => {
   return (
-    <div className="bg-black min-h-screen relative">
+    <div className="bg-black h-screen w-screen fixed inset-0 overflow-hidden">
       <Hero />
+      {/* Seções removidas - serão acessadas via navegação 3D */}
+      {/* 
       <div className="relative z-10">
         <Navbar />
         <About />
@@ -21,6 +23,7 @@ const App = () => {
         <Contact />
         <Footer/>
       </div>
+      */}
     </div>
   );
 };
