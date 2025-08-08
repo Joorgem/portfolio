@@ -6,13 +6,16 @@ Source: https://sketchfab.com/3d-models/space-boi-f6a8c6a6727b4f2cb020c8b50bb2ee
 Title: space boi
 */
 
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect, useState, forwardRef, useImperativeHandle } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useMotionValue, useSpring } from "motion/react"
 import { useFrame, useThree } from "@react-three/fiber"
 
-export function Astronaut(props) {
+export const Astronaut = forwardRef((props, ref) => {
   const group = useRef();
+  
+  // Expõe a referência do grupo para componentes externos
+  useImperativeHandle(ref, () => group.current);
   const { nodes, materials } = useGLTF('/models/space_boi.glb')
   
   // Estado para controlar se está arrastando
@@ -294,6 +297,6 @@ export function Astronaut(props) {
       </group>
     </group>
   )
-}
+});
 
 useGLTF.preload('/models/space_boi.glb')
