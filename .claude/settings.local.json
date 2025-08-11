@@ -4,7 +4,10 @@
       "Bash(npm run dev:*)",
       "Bash(dir \"C:\\Users\\jorge.molina\\OneDrive - Iteris Consultoria e Software\\Documents\\Pessoal\\Portfolio\\Portfolio\\public\\models\\tenhun_falling_spaceman_fanart.glb\")",
       "Bash(copy:*)",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "Bash(cat:*)",
+      "Bash(del \"C:\\Users\\jorge.molina\\OneDrive - Iteris Consultoria e Software\\Documents\\Pessoal\\Portfolio\\Portfolio\\src\\components\\AstronautManInBlackHole.jsx\")",
+      "Bash(rm:*)"
     ],
     "deny": []
   }

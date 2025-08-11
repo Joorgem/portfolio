@@ -10,7 +10,7 @@ import Loader from "../components/Loader";
 import NavigationDebug from "../components/NavigationDebug";
 import NavigationSystemStable from "../components/NavigationSystemStable";
 import CameraController, { useCameraNavigation } from "../components/CameraController";
-import { ScreenOverlay } from "../components/BackgroundTransition";
+import { ZoomIndicator } from "../components/ZoomIndicator";
 
 const Hero = () => {
   const isMobile = useMediaQuery({ maxWidth: 853 });
@@ -22,15 +22,29 @@ const Hero = () => {
   
   // Hook de navegação da câmera
   const {
+    // Estados de navegação
     targetSection,
-    currentSection,
+    orbitingSection,
     isTransitioning,
-    backgroundColor,
+    
+    // Estados de zoom
+    currentRadius,
+    penetrationDepth,
+    isInsidePlanet,
+    zoomLevel,
+    
+    // Estados de fade
+    fadeColor,
+    fadeOpacity,
+    
+    // Ações
     navigateToSection,
     returnToMain,
+    
+    // Handlers
     onTransitionStart,
     onTransitionComplete,
-    onBackgroundChange
+    onZoomUpdate
   } = useCameraNavigation();
   
   // Handler de navegação - conecta clique com câmera
@@ -49,14 +63,14 @@ const Hero = () => {
       }
       
       // Tecla ESC para voltar à cena principal
-      if (e.key === 'Escape' && currentSection !== 'MAIN') {
+      if (e.key === 'Escape' && orbitingSection !== 'MAIN') {
         returnToMain();
       }
     };
     
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [debugVisible, currentSection, returnToMain]);
+  }, [debugVisible, orbitingSection, returnToMain]);
   
   return (
     <section className="relative flex items-start justify-center h-screen w-screen overflow-hidden md:items-start md:justify-start c-space">
@@ -65,7 +79,7 @@ const Hero = () => {
         className="fixed inset-0 z-0"
         style={{ width: "100vw", height: "100vh" }}
       >
-        <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
+        <Canvas camera={{ position: [0, 0, 5], fov: 75, near: 0.001, far: 1000 }}>
           <Suspense fallback={<Loader />}>
             <ambientLight intensity={0.5} />
             <directionalLight position={[10, 10, 5]} intensity={1} />
@@ -92,7 +106,7 @@ const Hero = () => {
               astronautPosition={astronautPosition}
               onTransitionStart={onTransitionStart}
               onTransitionComplete={onTransitionComplete}
-              onBackgroundChange={onBackgroundChange}
+              onZoomUpdate={onZoomUpdate}
               enabled={true}
             />
             
@@ -112,11 +126,26 @@ const Hero = () => {
         </Canvas>
       </figure>
       
-      {/* Overlay de transição de fundo */}
-      <ScreenOverlay 
-        color={backgroundColor}
-        opacity={0.85}
-        duration={1.0}
+      {/* Overlay de transição de fundo - SIMPLIFICADO */}
+      {fadeColor && fadeOpacity > 0 && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: fadeColor,
+            opacity: fadeOpacity,
+            pointerEvents: 'none',
+            zIndex: 5,
+            transition: 'opacity 0.2s ease-out'
+          }}
+        />
+      )}
+      
+      {/* Indicador de zoom */}
+      <ZoomIndicator 
+        zoomLevel={zoomLevel}
+        isInsideSection={isInsidePlanet}
+        visible={orbitingSection !== 'MAIN'}
       />
       
       {/* Info de debug e navegação */}
@@ -140,24 +169,46 @@ const Hero = () => {
         
         <div style={{ marginTop: '10px' }}>
           <div style={{ color: '#00ff00' }}>
-            📍 Seção: {currentSection || 'MAIN'}
+            📍 Orbitando: {orbitingSection || 'MAIN'}
           </div>
           {isTransitioning && (
             <div style={{ color: '#ffaa00', fontSize: '12px' }}>
               ⏳ Transicionando...
             </div>
           )}
-          {backgroundColor && (
-            <div style={{ color: '#ff6b6b', fontSize: '12px' }}>
-              🎨 Fundo: {backgroundColor}
+          {zoomLevel !== 'FAR' && (
+            <div style={{ color: '#00ffff', fontSize: '12px' }}>
+              🔍 Nível Zoom: {zoomLevel}
+            </div>
+          )}
+          {penetrationDepth > 0 && (
+            <div style={{ color: '#ff9900', fontSize: '12px' }}>
+              🌊 Penetração: {(penetrationDepth * 100).toFixed(0)}%
+            </div>
+          )}
+          {isInsidePlanet && (
+            <div style={{ color: '#ff00ff', fontSize: '12px', fontWeight: 'bold' }}>
+              🌍 DENTRO DO PLANETA!
+            </div>
+          )}
+          {fadeOpacity > 0 && (
+            <div style={{ color: '#ffff00', fontSize: '11px' }}>
+              🎨 Fade: {fadeColor} @ {(fadeOpacity * 100).toFixed(0)}%
+            </div>
+          )}
+          {/* Debug adicional */}
+          {orbitingSection !== 'MAIN' && (
+            <div style={{ color: '#888888', fontSize: '10px', marginTop: '5px' }}>
+              Raio: {currentRadius?.toFixed(2) || '?'} | Dentro: {isInsidePlanet ? 'SIM' : 'NÃO'}
             </div>
           )}
         </div>
         
         <div style={{ marginTop: '10px', fontSize: '11px', opacity: 0.6 }}>
           • Clique na cabeça ou planetas para navegar<br/>
-          • Sistema orbital satelital ativo<br/>
-          • Órbita dinâmica implementada
+          • Use o scroll/wheel para zoom in/out<br/>
+          • Zoom máximo entra na seção<br/>
+          • ESC ou scroll reverso para sair
         </div>
       </div>
     </section>
