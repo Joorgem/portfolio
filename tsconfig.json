@@ -16,8 +16,8 @@
 
     /* Linting */
     "strict": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
     /* Path mapping */
@@ -29,8 +29,10 @@
     /* Type checking - gradual activation */
     "allowJs": true,
     "checkJs": false,
-    "noImplicitAny": false,
-    "strictNullChecks": false
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true
   },
   "include": [
     "src"

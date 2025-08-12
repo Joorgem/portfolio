@@ -45,11 +45,6 @@ const HeroZustand: React.FC = () => {
     startNavigation(point.id);
   }, [startNavigation, canInteract, navigationState]);
   
-  // Handler para voltar ao início
-  const handleBackToMain = useCallback(() => {
-    console.log('🏠 Voltando para MAIN');
-    startNavigation('MAIN');
-  }, [startNavigation]);
   
   // Setup de event listeners
   useEffect(() => {

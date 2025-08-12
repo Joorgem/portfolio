@@ -95,10 +95,12 @@ export const Astronaut = forwardRef<THREE.Group, AstronautProps>((props, ref: Fo
         window.removeEventListener('pointerup', handlePointerUp);
       };
     }
+    // Cleanup function is required for all branches
+    return undefined;
   }, [isDragging]);
   
   // Rotação com inércia natural
-  useFrame((state, delta) => {
+  useFrame((_state, _delta) => {
     if (group.current) {
       // Movimento de entrada
       group.current.position.y = ySpring.get();

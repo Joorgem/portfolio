@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo } from 'react';
+import React, { useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Sphere } from '@react-three/drei';
 import { NAVIGATION_POINTS, NavigationPoint } from '../constants/navigationPoints';
