@@ -1,8 +1,6 @@
 import { useRef } from "react";
 import Card from "../components/Card";
-import { Globe } from "../components/globe";
 import CopyEmailButton from "../components/CopyEmailButton";
-import { Frameworks } from "../components/Frameworks";
 
 const About: React.FC = () => {
   const grid2Container = useRef<HTMLDivElement>(null);
@@ -87,7 +85,7 @@ const About: React.FC = () => {
             </p>
           </div>
           <figure className="absolute left-[30%] top-[10%]">
-            <Globe className="w-full h-full" />
+            <div className="w-32 h-32 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full opacity-20"></div>
           </figure>
         </div>
         {/* Grid 4 */}
@@ -109,7 +107,12 @@ const About: React.FC = () => {
             </p>
           </div>
           <div className="absolute inset-y-0 md:inset-y-9 w-full h-full start-[50%] md:scale-125">
-            <Frameworks />
+            <div className="flex flex-wrap gap-4 p-4">
+              <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold">React</div>
+              <div className="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center text-white font-bold">JS</div>
+              <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">TS</div>
+              <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center text-white font-bold">Node</div>
+            </div>
           </div>
         </div>
       </div>

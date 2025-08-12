@@ -1,5 +1,4 @@
 import React, { Suspense, lazy } from 'react';
-import PageContainerZustand from '../components/PageContainerZustand';
 
 // Lazy load das seções existentes
 const About = lazy(() => import('../sections/About'));

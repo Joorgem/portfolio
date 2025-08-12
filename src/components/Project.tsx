@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import ProjectDetails from "./ProjectDetails";
 import { Project as ProjectType } from "../constants/index";
 
 interface ProjectProps {
@@ -48,15 +47,45 @@ const Project: React.FC<ProjectProps> = ({
       </div>
       <div className="bg-gradient-to-r from-transparent via-neutral-700 to-transparent h-[1px] w-full" />
       {isHidden && (
-        <ProjectDetails
-          title={title}
-          description={description}
-          subDescription={subDescription}
-          image={image}
-          tags={tags}
-          href={href}
-          closeModal={() => setIsHidden(false)}
-        />
+        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold">{title}</h2>
+                <button
+                  onClick={() => setIsHidden(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  ✕
+                </button>
+              </div>
+              <img src={image} alt={title} className="w-full h-48 object-cover rounded mb-4" />
+              <p className="text-gray-600 mb-4">{description}</p>
+              {subDescription && (
+                <div className="space-y-2 mb-4">
+                  {subDescription.map((desc, index) => (
+                    <p key={index} className="text-sm text-gray-500">{desc}</p>
+                  ))}
+                </div>
+              )}
+              {tags && (
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {tags.map((tag, index) => (
+                    <span key={index} className="px-2 py-1 bg-gray-200 rounded text-sm">{String(tag)}</span>
+                  ))}
+                </div>
+              )}
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              >
+                Ver Projeto
+              </a>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );
