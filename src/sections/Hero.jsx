@@ -1,16 +1,17 @@
-import { Canvas, useFrame } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
 import HeroText from "../components/HeroText";
 import ParallaxBackground from "../components/ParallaxBackground";
 import { Astronaut } from "../components/Astronaut";
 import { Float } from "@react-three/drei";
 import { useMediaQuery } from "react-responsive";
-// import { easing } from "maath"; // Removido - não usado mais
 import { Suspense, useRef, useState, useEffect, useCallback } from "react";
 import Loader from "../components/Loader";
 import NavigationDebug from "../components/NavigationDebug";
 import NavigationSystemStable from "../components/NavigationSystemStable";
 import CameraController, { useCameraNavigation } from "../components/CameraController";
 import { ZoomIndicator } from "../components/ZoomIndicator";
+import { OptimizedCanvas } from "../components/OptimizedCanvas";
+import { useNavigation } from "../contexts/NavigationContext";
 
 const Hero = () => {
   const isMobile = useMediaQuery({ maxWidth: 853 });
@@ -47,11 +48,26 @@ const Hero = () => {
     onZoomUpdate
   } = useCameraNavigation();
   
+  // Hook do contexto de navegação global
+  const { updateFadeProgress, completeTransition } = useNavigation();
+  
   // Handler de navegação - conecta clique com câmera
   const handleNavigate = useCallback((point) => {
     console.log('🚀 Clique detectado:', point.name);
     navigateToSection(point.id);
   }, [navigateToSection]);
+  
+  // Atualiza contexto global com progresso do fade
+  useEffect(() => {
+    updateFadeProgress(fadeOpacity);
+  }, [fadeOpacity, updateFadeProgress]);
+  
+  // Completa transição quando necessário
+  useEffect(() => {
+    if (!isTransitioning && orbitingSection !== 'MAIN') {
+      completeTransition();
+    }
+  }, [isTransitioning, orbitingSection, completeTransition]);
   
   // Debug keyboard handler + teclas de navegação
   useEffect(() => {
@@ -79,7 +95,7 @@ const Hero = () => {
         className="fixed inset-0 z-0"
         style={{ width: "100vw", height: "100vh" }}
       >
-        <Canvas camera={{ position: [0, 0, 5], fov: 75, near: 0.001, far: 1000 }}>
+        <OptimizedCanvas camera={{ position: [0, 0, 5], fov: 75, near: 0.001, far: 1000 }}>
           <Suspense fallback={<Loader />}>
             <ambientLight intensity={0.5} />
             <directionalLight position={[10, 10, 5]} intensity={1} />
@@ -123,7 +139,7 @@ const Hero = () => {
             {/* Rig REMOVIDO - conflitava com CameraController */}
             {/* {!isTransitioning && <Rig />} */}
           </Suspense>
-        </Canvas>
+        </OptimizedCanvas>
       </figure>
       
       {/* Overlay de transição de fundo - SIMPLIFICADO */}

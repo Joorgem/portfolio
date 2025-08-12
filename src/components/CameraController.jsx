@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { NAVIGATION_POINTS } from '../constants/navigationPoints';
 import * as THREE from 'three';
+import { useNavigation } from '../contexts/NavigationContext';
 
 /**
  * Configurações orbitais para cada seção
@@ -521,6 +522,9 @@ export const CameraController = ({
  * Hook para controlar navegação da câmera - Única fonte de verdade
  */
 export const useCameraNavigation = () => {
+  // Hook do contexto global
+  const globalNav = useNavigation();
+  
   // Estados de navegação
   const [targetSection, setTargetSection] = useState(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -540,12 +544,16 @@ export const useCameraNavigation = () => {
   const navigateToSection = React.useCallback((sectionId) => {
     console.log(`🎯 Navegando para seção: ${sectionId}`);
     setTargetSection(sectionId);
-  }, []);
+    // Notifica contexto global
+    globalNav.navigateToSection(sectionId);
+  }, [globalNav]);
   
   const returnToMain = React.useCallback(() => {
     console.log('🏠 Solicitando retorno para main');
     setTargetSection('MAIN');
-  }, []);
+    // Notifica contexto global
+    globalNav.returnToMain();
+  }, [globalNav]);
   
   const handleTransitionStart = React.useCallback((sectionId) => {
     setIsTransitioning(true);

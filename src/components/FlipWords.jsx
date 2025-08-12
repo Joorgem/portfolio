@@ -27,6 +27,7 @@ export const FlipWords = ({ words, duration = 3000, className }) => {
       }}
     >
       <motion.div
+        style={{ position: 'relative' }}
         initial={{
           opacity: 0,
           y: 10,

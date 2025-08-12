@@ -7,7 +7,14 @@
       "Bash(cp:*)",
       "Bash(cat:*)",
       "Bash(del \"C:\\Users\\jorge.molina\\OneDrive - Iteris Consultoria e Software\\Documents\\Pessoal\\Portfolio\\Portfolio\\src\\components\\AstronautManInBlackHole.jsx\")",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(npm install:*)",
+      "Bash(grep:*)",
+      "Bash(mkdir:*)",
+      "Bash(npm run lint)",
+      "Bash(npm run build:*)",
+      "Bash(rg:*)",
+      "Bash(sed:*)"
     ],
     "deny": []
   }
