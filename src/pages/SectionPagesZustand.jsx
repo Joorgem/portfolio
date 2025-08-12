@@ -1,4 +1,5 @@
 import React, { Suspense, lazy } from 'react';
+import { useNavigationStore } from '../stores/navigation.store';
 
 // Lazy load das seções existentes
 const About = lazy(() => import('../sections/About'));
@@ -20,6 +21,25 @@ const PageLoader = () => (
   </div>
 );
 
+// Componente simples de container de página
+const PageContainer = ({ sectionId, backgroundColor = "#0a0a0a", children }) => {
+  const currentSection = useNavigationStore(state => state.currentSection);
+  const navigationState = useNavigationStore(state => state.navigationState);
+  
+  const isVisible = navigationState === 'in_section' && currentSection === sectionId.toUpperCase();
+  
+  if (!isVisible) return null;
+  
+  return (
+    <div 
+      className="fixed inset-0 z-20 overflow-y-auto"
+      style={{ backgroundColor }}
+    >
+      {children}
+    </div>
+  );
+};
+
 /**
  * Páginas das seções com Zustand
  */
@@ -27,7 +47,7 @@ const SectionPagesZustand = () => {
   return (
     <>
       {/* About Page */}
-      <PageContainerZustand 
+      <PageContainer 
         sectionId="about" 
         backgroundColor="#0a0a0a"
       >
@@ -36,10 +56,10 @@ const SectionPagesZustand = () => {
             <About />
           </div>
         </Suspense>
-      </PageContainerZustand>
+      </PageContainer>
       
       {/* Projects Page */}
-      <PageContainerZustand 
+      <PageContainer 
         sectionId="projects" 
         backgroundColor="#0a0a0a"
       >
@@ -48,10 +68,10 @@ const SectionPagesZustand = () => {
             <Projects />
           </div>
         </Suspense>
-      </PageContainerZustand>
+      </PageContainer>
       
       {/* Experience Page */}
-      <PageContainerZustand 
+      <PageContainer 
         sectionId="experience" 
         backgroundColor="#0a0a0a"
       >
@@ -65,10 +85,10 @@ const SectionPagesZustand = () => {
             </div>
           </div>
         </Suspense>
-      </PageContainerZustand>
+      </PageContainer>
       
       {/* Contact Page */}
-      <PageContainerZustand 
+      <PageContainer 
         sectionId="contact" 
         backgroundColor="#0a0a0a"
       >
@@ -77,10 +97,10 @@ const SectionPagesZustand = () => {
             <Contact />
           </div>
         </Suspense>
-      </PageContainerZustand>
+      </PageContainer>
       
       {/* Testimonials Page */}
-      <PageContainerZustand 
+      <PageContainer 
         sectionId="testimonials" 
         backgroundColor="#0a0a0a"
       >
@@ -89,7 +109,7 @@ const SectionPagesZustand = () => {
             <Testimonial />
           </div>
         </Suspense>
-      </PageContainerZustand>
+      </PageContainer>
     </>
   );
 };
