@@ -1,5 +1,5 @@
 import React from "react";
-import HeroZustand from "./sections/HeroZustand.tsx";
+import HeroZustand from "./sections/HeroZustand";
 import SectionPagesZustand from "./pages/SectionPagesZustand";
 
 const App = () => {

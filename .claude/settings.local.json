@@ -21,7 +21,8 @@
       "Bash(git push:*)",
       "Bash(mv:*)",
       "Bash(npx tsc:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(/dev/null)"
     ],
     "deny": []
   }
