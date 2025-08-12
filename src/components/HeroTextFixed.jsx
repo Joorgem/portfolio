@@ -1,6 +1,6 @@
 import { FlipWords } from "./FlipWords";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigationStore } from "../stores/navigation.store";
+import { useNavigationStore } from "../stores/navigation.store.ts";
 
 const HeroTextFixed = () => {
   const words = ["Secure", "Modern", "Scalable"];

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigationStore } from '../stores/navigation.store';
+import { useNavigationStore } from '../stores/navigation.store.ts';
 
 /**
  * Container otimizado para páginas com Zustand

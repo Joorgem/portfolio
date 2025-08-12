@@ -14,7 +14,13 @@
       "Bash(npm run lint)",
       "Bash(npm run build:*)",
       "Bash(rg:*)",
-      "Bash(sed:*)"
+      "Bash(sed:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "Bash(mv:*)",
+      "Bash(npx tsc:*)"
     ],
     "deny": []
   }

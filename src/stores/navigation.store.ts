@@ -1,8 +1,8 @@
-// src/stores/navigation.store.js
+// src/stores/navigation.store.ts
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 
-// A máquina de estados completa
+// Navigation States enum for better type safety
 export const NavigationStates = {
   IDLE: 'idle',
   ORBITING: 'orbiting',
@@ -11,10 +11,70 @@ export const NavigationStates = {
   IN_SECTION: 'in_section',
   EXITING: 'exiting',
   ZOOMING_OUT: 'zooming_out',
-};
+} as const;
+
+export type NavigationState = typeof NavigationStates[keyof typeof NavigationStates];
+
+// Configuration interface
+interface NavigationConfig {
+  zoomInSensitivity: number;
+  zoomOutSensitivity: number;
+  zoomSpeed: number;
+  fadeSpeed: number;
+  zoomStartFade: number;
+  zoomComplete: number;
+  fadePauseCanvas: number;
+  zoomAutoComplete: number;
+  zoomOutCompleteThreshold: number;
+  exitScrollThreshold: number;
+  scrollThrottle: number;
+  maxScrollDelta: number;
+}
+
+// Animation internal state interface
+interface AnimationState {
+  frame: number | null;
+  zoomDirection: number;
+  fadeFrame: number | null;
+  lastScrollTime: number;
+}
+
+// Main store state interface
+interface NavigationStoreState {
+  navigationState: NavigationState;
+  currentSection: string;
+  targetSection: string | null;
+  zoomProgress: number;
+  fadeProgress: number;
+  pageVisible: boolean;
+  canvas3DActive: boolean;
+  _animation: AnimationState;
+  zoomOutProgress: number;
+}
+
+// Store actions interface
+interface NavigationStoreActions {
+  isNavigating: () => boolean;
+  isInSection: () => boolean;
+  canInteract: () => boolean;
+  startNavigation: (sectionId: string) => string | void;
+  handleScroll: (deltaY: number, isInsideContent?: boolean) => void;
+  startZoomIn: () => void;
+  initiateExit: () => void;
+  goToInitialState: () => void;
+  startAnimationLoop: () => void;
+  startFadeInAnimation: () => void;
+  startFadeOutAnimation: () => void;
+  enterSection: () => void;
+  completeExit: () => void;
+  cleanup: () => void;
+}
+
+// Complete store type
+export type NavigationStore = NavigationStoreState & NavigationStoreActions;
 
 // Configurações do sistema
-const CONFIG = {
+const CONFIG: NavigationConfig = {
   // Sensibilidades balanceadas para scroll suave
   zoomInSensitivity: 0.0008,      // Zoom in normal
   zoomOutSensitivity: 0.0010,     // AJUSTADO: meio termo entre suave e responsivo
@@ -38,7 +98,7 @@ const CONFIG = {
   maxScrollDelta: 120,            // Limita picos de deltaY para evitar saltos
 };
 
-export const useNavigationStore = create(
+export const useNavigationStore = create<NavigationStore>()(
   subscribeWithSelector((set, get) => ({
     // ===================================
     // ESTADO (STATE)
@@ -89,7 +149,7 @@ export const useNavigationStore = create(
     /**
      * Inicia navegação para uma seção (clique no planeta)
      */
-    startNavigation: (sectionId) => {
+    startNavigation: (sectionId: string) => {
       const state = get();
       
       // Valida se pode navegar
@@ -97,21 +157,20 @@ export const useNavigationStore = create(
         return;
       }
       
-      
       // Se está mudando de planeta, reseta valores
       if (state.navigationState === NavigationStates.ORBITING && 
           state.targetSection !== sectionId) {
         set({ 
           zoomProgress: 0, 
           fadeProgress: 0,
-          _animation: { ...state._animation, scrollAccumulated: 0, zoomDirection: 0 }
+          _animation: { ...state._animation, zoomDirection: 0 }
         });
       }
       
       set({ 
         targetSection: sectionId, 
         navigationState: NavigationStates.ORBITING,
-        _animation: { ...state._animation, scrollAccumulated: 0, zoomDirection: 0 }
+        _animation: { ...state._animation, zoomDirection: 0 }
       });
       
       return sectionId;
@@ -120,7 +179,7 @@ export const useNavigationStore = create(
     /**
      * Processa scroll do mouse de forma ULTRA-SUAVE
      */
-    handleScroll: (deltaY, isInsideContent = false) => {
+    handleScroll: (deltaY: number, isInsideContent: boolean = false) => {
       const state = get();
       const anim = state._animation;
       const now = Date.now();
@@ -155,11 +214,8 @@ export const useNavigationStore = create(
             zoomOutProgress: 0 // Reset zoom out
           });
           
-
-          
           // Se passou do threshold automático (agora em 65%)
           if (newZoom >= CONFIG.zoomAutoComplete && state._animation.zoomDirection === 0) {
-
             set({ 
               navigationState: NavigationStates.ZOOMING_IN,
               _animation: { ...state._animation, zoomDirection: 1 }
@@ -177,11 +233,8 @@ export const useNavigationStore = create(
             zoomProgress: Math.max(0, state.zoomProgress - increment * 0.3) // Reduzido de 0.5 para 0.3
           });
           
-
-          
           // Se zoom out chegou quase no máximo, volta ao inicial
           if (newZoomOut >= CONFIG.zoomOutCompleteThreshold) {
-
             get().goToInitialState();
             return;
           }
@@ -200,16 +253,12 @@ export const useNavigationStore = create(
           
           set({ zoomProgress: newZoom });
           
-
-          
           // Se fez scroll reverso e chegou próximo de 0
           if (newZoom < 0.03 && clampedDeltaY < 0) {
-
             get().goToInitialState();
           }
           // Se chegou no auto-complete, ativa animação
           else if (newZoom >= CONFIG.zoomAutoComplete && state._animation.zoomDirection === 0) {
-
             set({ _animation: { ...state._animation, zoomDirection: 1 } });
             get().startAnimationLoop();
           }
@@ -252,8 +301,6 @@ export const useNavigationStore = create(
       const state = get();
       if (state.navigationState !== NavigationStates.IN_SECTION) return;
       
-
-      
       // Atualização atômica para evitar estados intermediários
       set({ 
         navigationState: NavigationStates.EXITING,
@@ -294,9 +341,11 @@ export const useNavigationStore = create(
           zoomOutProgress: 0,
           pageVisible: false,
           canvas3DActive: true,
-          _animation: { frame: null, zoomDirection: 0, fadeFrame: null }
+          _animation: { frame: null, zoomDirection: 0, fadeFrame: null, lastScrollTime: 0 }
         });
-        window.history.pushState({ section: 'MAIN' }, '', '#');
+        if (typeof window !== 'undefined') {
+          window.history.pushState({ section: 'MAIN' }, '', '#');
+        }
       }
     },
     
@@ -321,13 +370,11 @@ export const useNavigationStore = create(
           
           // Inicia fade
           if (nextZoom >= CONFIG.zoomStartFade && state.fadeProgress === 0) {
-
             get().startFadeInAnimation();
           }
           
           // Completa zoom
           if (nextZoom >= CONFIG.zoomComplete) {
-
             get().enterSection();
             shouldContinue = false;
           }
@@ -388,7 +435,6 @@ export const useNavigationStore = create(
         
         // Pausa canvas quando fade alto
         if (nextFade >= CONFIG.fadePauseCanvas && state.canvas3DActive) {
-
           set({ canvas3DActive: false });
         }
         
@@ -433,7 +479,6 @@ export const useNavigationStore = create(
         
         // Resume canvas quando fade baixo
         if (nextFade <= 0.5 && !state.canvas3DActive) {
-
           set({ canvas3DActive: true });
         }
         
@@ -460,7 +505,6 @@ export const useNavigationStore = create(
       const section = state.targetSection;
       if (!section) return;
       
-
       set({ navigationState: NavigationStates.ENTERING });
       
       setTimeout(() => {
@@ -472,11 +516,13 @@ export const useNavigationStore = create(
       }, 200);
       
       // Atualiza URL
-      window.history.pushState(
-        { section },
-        '',
-        `#${section.toLowerCase()}`
-      );
+      if (typeof window !== 'undefined') {
+        window.history.pushState(
+          { section },
+          '',
+          `#${section.toLowerCase()}`
+        );
+      }
     },
     
     /**
@@ -495,11 +541,14 @@ export const useNavigationStore = create(
         _animation: {
           frame: null,
           zoomDirection: 0,
-          fadeFrame: null
+          fadeFrame: null,
+          lastScrollTime: 0
         }
       });
       
-      window.history.pushState({ section: 'MAIN' }, '', '#');
+      if (typeof window !== 'undefined') {
+        window.history.pushState({ section: 'MAIN' }, '', '#');
+      }
     },
     
     // ===================================

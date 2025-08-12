@@ -6,7 +6,7 @@ import { Astronaut } from "../components/Astronaut";
 import Loader from "../components/Loader";
 import NavigationSystemStable from "../components/NavigationSystemStable";
 import CameraControllerZustand from "../components/CameraController.Zustand";
-import { useNavigationStore } from "../stores/navigation.store";
+import { useNavigationStore } from "../stores/navigation.store.ts";
 
 /**
  * Hero Section com Zustand
