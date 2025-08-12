@@ -15,9 +15,9 @@ export const NavigationStates = {
 
 // Configurações do sistema
 const CONFIG = {
-  // Sensibilidades MUITO reduzidas para scroll ultra-suave
-  zoomInSensitivity: 0.0008,      // Reduzido de 0.002 para 0.0008 (2.5x mais suave)
-  zoomOutSensitivity: 0.0012,     // Reduzido de 0.003 para 0.0012 (2.5x mais suave)
+  // Sensibilidades balanceadas para scroll suave
+  zoomInSensitivity: 0.0008,      // Zoom in normal
+  zoomOutSensitivity: 0.0010,     // AJUSTADO: meio termo entre suave e responsivo
   
   // Velocidades de animação automática mais lentas
   zoomSpeed: 0.012,               // Reduzido de 0.015 para 0.012
@@ -30,8 +30,8 @@ const CONFIG = {
   zoomAutoComplete: 0.65,         // AUMENTADO de 0.3 para 0.65 (65% = muito mais scroll manual)
   
   // Thresholds para estados especiais
-  zoomOutCompleteThreshold: 0.92, // Reduzido de 0.95 para 0.92 (sai mais cedo)
-  exitScrollThreshold: -150,      // Reduzido de -200 para -150 (mais sensível para sair)
+  zoomOutCompleteThreshold: 0.65, // AUMENTADO de 0.85 para 0.65 (ativa animação mais cedo - menos "vai e volta")
+  exitScrollThreshold: -150,      // Mantido
   
   // Novos parâmetros para suavidade extra
   scrollThrottle: 12,             // Throttle mais baixo (era 16ms, agora 12ms)

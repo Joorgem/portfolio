@@ -321,10 +321,10 @@ export const CameraControllerZustand = ({ astronautRef }) => {
       const cubicEasing = zoomOutProgress * zoomOutProgress * (3 - 2 * zoomOutProgress);
       const zoomOutEased = (sinEasing + cubicEasing) * 0.5;
       
-      // Aplica zoom out sobre os valores já calculados (multiplicadores reduzidos para suavidade)
-      targetSmoothRadius *= (1 + zoomOutEased * 1.5); // Reduzido de 1.8 para 1.5
-      targetSmoothHeight *= (1 + zoomOutEased * 0.5);  // Reduzido de 0.6 para 0.5
-      targetSmoothFov = Math.min(85, targetSmoothFov * (1 + zoomOutEased * 0.2)); // Reduzido limites
+      // Aplica zoom out com IMPACTO VISUAL MÍNIMO - quase sem afastamento
+      targetSmoothRadius *= (1 + zoomOutEased * 0.08); // DRASTICAMENTE REDUZIDO de 0.8 para 0.3 
+      targetSmoothHeight *= (1 + zoomOutEased * 0.002); // REDUZIDO de 0.3 para 0.15
+      targetSmoothFov = Math.min(85, targetSmoothFov * (1 + zoomOutEased * 0.01)); // REDUZIDO de 0.15 para 0.08
     }
     
     // Interpola ULTRA-SUAVEMENTE para os valores alvo (elimina completamente os "degraus")
