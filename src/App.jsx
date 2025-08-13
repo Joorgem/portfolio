@@ -2,7 +2,7 @@ import React from "react";
 import HeroZustand from "./sections/HeroZustand";
 import SectionPagesZustand from "./pages/SectionPagesZustand";
 import CustomCursor from "./components/CustomCursor";
-import MobilePlanetIndicator from "./components/MobilePlanetIndicator";
+import MobileBottomNav from "./components/MobileBottomNav";
 
 const App = () => {
   return (
@@ -10,8 +10,8 @@ const App = () => {
       {/* Cursor customizado */}
       <CustomCursor />
       
-      {/* Indicador de planeta para mobile */}
-      <MobilePlanetIndicator />
+      {/* Menu de navegação inferior para mobile */}
+      <MobileBottomNav />
       
       {/* Cena 3D principal com navegação usando Zustand */}
       <HeroZustand />

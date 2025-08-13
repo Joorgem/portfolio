@@ -32,7 +32,7 @@ const HeroTextFixed: React.FC = () => {
           {/* Desktop View - Responsive breakpoints */}
           <div className="hidden md:block">
             <motion.h1
-              className="text-3xl lg:text-3xl xl:text-4xl 2xl:text-4xl font-medium text-white mb-4"
+              className="text-xl md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl font-medium text-white mb-3"
               variants={variants}
               initial="hidden"
               animate="visible"
@@ -41,9 +41,9 @@ const HeroTextFixed: React.FC = () => {
             >
               Hi I'm Jorge
             </motion.h1>
-            <div className="space-y-2">
+            <div className="space-y-1">
               <motion.p
-                className="text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl font-medium text-neutral-300"
+                className="text-2xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-medium text-neutral-300"
                 variants={variants}
                 initial="hidden"
                 animate="visible"
@@ -61,11 +61,11 @@ const HeroTextFixed: React.FC = () => {
               >
                 <FlipWords
                   words={words}
-                  className="font-black text-white text-6xl lg:text-6xl xl:text-7xl 2xl:text-8xl"
+                  className="font-black text-white text-3xl md:text-3xl lg:text-4xl xl:text-6xl 2xl:text-7xl"
                 />
               </motion.div>
               <motion.p
-                className="text-3xl lg:text-3xl xl:text-4xl 2xl:text-4xl font-medium text-neutral-300"
+                className="text-xl md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl font-medium text-neutral-300"
                 variants={variants}
                 initial="hidden"
                 animate="visible"
