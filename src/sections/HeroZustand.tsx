@@ -282,85 +282,31 @@ const HeroZustand: React.FC = () => {
         />
       )}
       
-      {/* Indicador de zoom out com progresso */}
-      {navigationState === 'orbiting' && targetSection && targetSection !== 'MAIN' && (
-        <div className="fixed top-4 left-4 z-30 px-3 py-2 
-                        bg-white/5 backdrop-blur-sm rounded-lg
-                        border border-white/10 text-white/60 text-xs
-                        pointer-events-none flex items-center gap-2">
-          <span>🖱️ ⬆️</span>
-          <span>Zoom out para voltar</span>
-          {zoomOutProgress > 0 && (
-            <div className="ml-2 w-16 h-1 bg-white/20 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-gradient-to-r from-orange-500 to-red-500 transition-all"
-                style={{ width: `${zoomOutProgress * 100}%` }}
-              />
-            </div>
-          )}
-        </div>
-      )}
       
-      {/* Instruções Contextuais */}
+      {/* Instruções minimalistas no rodapé */}
       {navigationState === 'idle' && (
-        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-20
-                        animate-pulse pointer-events-none">
-          <div className="px-5 py-2.5 bg-white/10 backdrop-blur-sm rounded-full
-                          border border-white/20 text-white/80 text-sm">
-            👆 Clique nos planetas para navegar
+        <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-20
+                        pointer-events-none">
+          <div className="text-white/20 text-[10px] tracking-wider">
+            Clique nos planetas
           </div>
         </div>
       )}
       
       {navigationState === 'orbiting' && (
-        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-20
+        <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-20
                         pointer-events-none">
-          <div className="px-5 py-2.5 bg-white/10 backdrop-blur-sm rounded-full
-                          border border-white/20 text-white/80 text-sm text-center">
-            {currentSection !== 'MAIN' ? (
-              <>
-                <span className="font-semibold">🌍 {currentSection}</span>
-                <span className="mx-2">|</span>
-                <span>🖱️ Scroll fluido para navegar</span>
-                <span className="mx-2">|</span>
-                <span>👆 Outro planeta</span>
-              </>
-            ) : (
-              '👆 Clique em um planeta para explorar'
-            )}
+          <div className="text-white/20 text-[10px] tracking-wider flex items-center gap-2">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-60">
+              <polyline points="7 13 12 18 17 13"></polyline>
+              <polyline points="7 6 12 11 17 6"></polyline>
+            </svg>
+            <span className="opacity-40">•</span>
+            <span>ESC</span>
           </div>
         </div>
       )}
       
-      {/* Indicador de progresso do zoom fluido */}
-      {(navigationState === 'orbiting' || navigationState === 'zooming_in') && 
-       (zoomProgress > 0.05 || zoomOutProgress > 0.05) && (
-        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-20
-                        pointer-events-none">
-          <div className="px-5 py-2.5 bg-white/10 backdrop-blur-sm rounded-full
-                          border border-white/20 text-white/80 text-sm text-center">
-            <div className="flex items-center justify-center gap-3 mb-2">
-              <span>🖱️ Scroll fluido</span>
-              {zoomProgress > 0.05 && <span className="text-blue-400">↗️ {Math.round(zoomProgress * 100)}%</span>}
-              {zoomOutProgress > 0.05 && <span className="text-orange-400">↙️ {Math.round(zoomOutProgress * 100)}%</span>}
-            </div>
-            <div className="w-48 h-2 bg-white/20 rounded-full overflow-hidden flex">
-              {/* Barra de zoom in (azul) */}
-              <div 
-                className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all"
-                style={{ width: `${zoomProgress * 50}%` }}
-              />
-              {/* Espaço do meio */}
-              <div className="flex-1 bg-white/10" />
-              {/* Barra de zoom out (laranja) */}
-              <div 
-                className="h-full bg-gradient-to-l from-orange-500 to-red-500 transition-all"
-                style={{ width: `${zoomOutProgress * 50}%` }}
-              />
-            </div>
-          </div>
-        </div>
-      )}
       
       {/* Monitor de Desenvolvimento */}
       <DevMonitor />

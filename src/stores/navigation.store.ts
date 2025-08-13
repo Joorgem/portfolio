@@ -50,6 +50,7 @@ interface NavigationStoreState {
   canvas3DActive: boolean;
   _animation: AnimationState;
   zoomOutProgress: number;
+  hoveredPlanet: string | null;
 }
 
 // Store actions interface
@@ -68,6 +69,7 @@ interface NavigationStoreActions {
   enterSection: () => void;
   completeExit: () => void;
   cleanup: () => void;
+  setHoveredPlanet: (planet: string | null) => void;
 }
 
 // Complete store type
@@ -126,6 +128,9 @@ export const useNavigationStore = create<NavigationStore>()(
     
     // Zoom out visual (0 a 1, onde 1 = zoom out máximo)
     zoomOutProgress: 0,
+    
+    // Hover do planeta
+    hoveredPlanet: null,
     
     // ===================================
     // GETTERS (HELPERS)
@@ -563,6 +568,13 @@ export const useNavigationStore = create<NavigationStore>()(
       const anim = get()._animation;
       if (anim.frame) cancelAnimationFrame(anim.frame);
       if (anim.fadeFrame) cancelAnimationFrame(anim.fadeFrame);
+    },
+    
+    // ===================================
+    // CURSOR/HOVER
+    // ===================================
+    setHoveredPlanet: (planet: string | null) => {
+      set({ hoveredPlanet: planet });
     }
   }))
 );

@@ -53,6 +53,11 @@ body {
   color: white;
   overflow: hidden; /* Remove scroll completamente */
   height: 100vh; /* Altura fixa da viewport */
+  cursor: none;
+}
+
+* {
+  cursor: none !important;
 }
 
 .c-space {

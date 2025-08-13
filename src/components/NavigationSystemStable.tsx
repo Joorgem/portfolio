@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { Sphere } from '@react-three/drei';
 import { NAVIGATION_POINTS, NavigationPoint } from '../constants/navigationPoints';
 import { useNavigationInteraction, useNavigationCursor } from '../hooks/useNavigationInteraction';
+import { useNavigationStore } from '../stores/navigation.store';
 import * as THREE from 'three';
 
 interface StableHitboxProps {
@@ -75,29 +76,6 @@ const StableHitbox = React.memo<StableHitboxProps>(({
         />
       </Sphere>
       
-      {/* Visual de hover simples e estável */}
-      {(isHovered || localHover) && (
-        <Sphere args={[point.radius * 1.1, 16, 16]}>
-          <meshBasicMaterial 
-            color="#ffffff"
-            transparent
-            opacity={0.15}
-            wireframe
-          />
-        </Sphere>
-      )}
-      
-      {/* Visual de seleção simples */}
-      {isSelected && (
-        <Sphere args={[point.radius * 1.2, 16, 16]}>
-          <meshBasicMaterial 
-            color="#00ff00"
-            transparent
-            opacity={0.2}
-            wireframe
-          />
-        </Sphere>
-      )}
     </group>
   );
 });
@@ -141,8 +119,19 @@ export const NavigationSystemStable: React.FC<NavigationSystemStableProps> = ({
     clickDelay: isMobileDevice ? 50 : 150      // Mobile: click mais rápido
   });
   
-  // Controle de cursor
+  // Controle de cursor e atualização da store
   useNavigationCursor(!!hoveredPoint);
+  
+  // Atualiza o planeta hover na store
+  const setHoveredPlanet = useNavigationStore(state => state.setHoveredPlanet);
+  
+  React.useEffect(() => {
+    if (hoveredPoint) {
+      setHoveredPlanet(hoveredPoint.name);
+    } else {
+      setHoveredPlanet(null);
+    }
+  }, [hoveredPoint, setHoveredPlanet]);
   
   // Sincronização suave com astronauta
   useFrame(() => {
