@@ -5,6 +5,7 @@ import * as THREE from 'three';
 
 interface CameraControllerZustandProps {
   astronautRef: React.RefObject<THREE.Group>;
+  astronautScale?: number; // NOVO: Recebe escala dinâmica
 }
 
 /**
@@ -30,49 +31,71 @@ interface OrbitConfig {
   rotationSpeed: number;
 }
 
-const ORBIT_CONFIG: Record<string, OrbitConfig> = {
-  MAIN: {
-    radius: 5,
-    height: 1.8,
-    fov: 75,
-    rotationSpeed: 0.02
-  },
-  about: {
-    radius: 2.5,
-    height: 0.6,
-    fov: 65,
-    zoomRadius: 0.6,
-    rotationSpeed: 0.03
-  },
-  projects: {
-    radius: 2.0,
-    height: 0.4,
-    fov: 65,
-    zoomRadius: 0.4,
-    rotationSpeed: 0.03
-  },
-  experience: {
-    radius: 2.5,
-    height: 0.5,
-    fov: 65,
-    zoomRadius: 0.5,
-    rotationSpeed: 0.03
-  },
-  contact: {
-    radius: 2.5,
-    height: 0.5,
-    fov: 65,
-    zoomRadius: 0.5,
-    rotationSpeed: 0.03
-  },
-  testimonials: {
-    radius: 2.2,
-    height: 0.4,
-    fov: 65,
-    zoomRadius: 0.4,
-    rotationSpeed: 0.03
-  }
+// MOBILE FIX: Configurações adaptativas com ajuste de altura para centralização
+const getOrbitConfig = (): Record<string, OrbitConfig> => {
+  const isMobile = window.innerWidth < 768;
+  const aspectRatio = window.innerWidth / window.innerHeight;
+  const isPortrait = aspectRatio < 1;
+  
+  // Ajusta altura baseado na orientação do dispositivo
+  const getHeightAdjustment = (baseHeight: number): number => {
+    if (!isMobile) return baseHeight;
+    
+    // Portrait: reduz altura mais agressivamente
+    // Landscape: mantém altura mais próxima do original
+    if (isPortrait) {
+      return baseHeight * 0.4; // 40% da altura original em portrait
+    } else {
+      return baseHeight * 0.7; // 70% da altura original em landscape
+    }
+  };
+  
+  return {
+    MAIN: {
+      radius: isMobile ? 4 : 5,
+      height: isMobile ? 1.5 : 1.8,
+      fov: isMobile ? 65 : 75,
+      rotationSpeed: 0.02
+    },
+    about: {
+      radius: isMobile ? 2.0 : 2.5,
+      height: getHeightAdjustment(0.6),
+      fov: isMobile ? 60 : 65,
+      zoomRadius: isMobile ? 0.5 : 0.6,
+      rotationSpeed: 0.03
+    },
+    projects: {
+      radius: isMobile ? 1.8 : 2.0,
+      height: getHeightAdjustment(0.4),
+      fov: isMobile ? 60 : 65,
+      zoomRadius: isMobile ? 0.35 : 0.4,
+      rotationSpeed: 0.03
+    },
+    experience: {
+      radius: isMobile ? 2.0 : 2.5,
+      height: getHeightAdjustment(0.5),
+      fov: isMobile ? 60 : 65,
+      zoomRadius: isMobile ? 0.4 : 0.5,
+      rotationSpeed: 0.03
+    },
+    contact: {
+      radius: isMobile ? 2.0 : 2.5,
+      height: getHeightAdjustment(0.5),
+      fov: isMobile ? 60 : 65,
+      zoomRadius: isMobile ? 0.4 : 0.5,
+      rotationSpeed: 0.03
+    },
+    testimonials: {
+      radius: isMobile ? 1.8 : 2.2,
+      height: getHeightAdjustment(0.4),
+      fov: isMobile ? 60 : 65,
+      zoomRadius: isMobile ? 0.35 : 0.4,
+      rotationSpeed: 0.03
+    }
+  };
 };
+
+const ORBIT_CONFIG = getOrbitConfig();
 
 interface CameraState {
   // Órbita
@@ -111,7 +134,7 @@ interface CameraState {
  * CameraController usando Zustand
  * Acessa o estado diretamente do store, evitando re-renders desnecessários
  */
-export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = ({ astronautRef }) => {
+export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = ({ astronautRef, astronautScale = 0.4 }) => {
   const { camera } = useThree();
   
   // Monitora mudanças no currentSection, targetSection e zoomOutProgress
@@ -153,22 +176,38 @@ export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = (
     transitionSpeed: 0.1                       // Velocidade da transição
   });
   
-  // Escala total aplicada ao modelo
-  const totalScale = 0.01 * 0.4; // 0.004
+  // FIX: Usa escala dinâmica passada como prop
+  const totalScale = 0.01 * astronautScale;
   
   /**
    * Calcula posição mundial de um elemento
-   * considerando rotação atual do astronauta
+   * considerando rotação atual do astronauta e aspect ratio
    */
   const calculateWorldPosition = (modelCoords: [number, number, number], section: string): THREE.Vector3 => {
     if (!modelCoords || section === 'MAIN') {
       return new THREE.Vector3(0, 0, 0);
     }
     
-    // Aplica escala do modelo
+    // MOBILE FIX: Considera aspect ratio para centralização correta
+    const isMobileDevice = window.innerWidth < 768;
+    const aspectRatio = window.innerWidth / window.innerHeight;
+    
+    // Ajuste vertical baseado no aspect ratio (portrait vs landscape)
+    let verticalOffset = 0;
+    if (isMobileDevice) {
+      // Portrait mode (aspect < 1): precisa subir um pouco
+      // Landscape mode (aspect > 1): mantém ou desce
+      if (aspectRatio < 1) {
+        verticalOffset = 0.08 * (1 - aspectRatio); // Mais offset em telas mais altas
+      } else {
+        verticalOffset = -0.02; // Pequeno offset negativo para landscape
+      }
+    }
+    
+    // Aplica escala dinâmica do modelo
     const scaled = new THREE.Vector3(
       modelCoords[0] * totalScale,
-      modelCoords[1] * totalScale,
+      modelCoords[1] * totalScale + verticalOffset,
       modelCoords[2] * totalScale
     );
     
@@ -197,8 +236,9 @@ export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = (
       state.current.isTransitioning = true;
       state.current.transitionProgress = 0;
       
-      // Configuração da seção
-      const config = ORBIT_CONFIG[activeSection] || ORBIT_CONFIG.MAIN;
+      // MOBILE FIX: Usa configuração atualizada
+      const currentConfig = getOrbitConfig();
+      const config = currentConfig[activeSection] || currentConfig.MAIN;
       state.current.targetRadius = config.radius;
       state.current.targetHeight = config.height;
       state.current.targetFov = config.fov;
@@ -261,7 +301,9 @@ export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = (
     // LÓGICA ORBITAL: Só executa se NÃO for transição direta
     // ========================================
     const section = state.current.activeSection;
-    const config = ORBIT_CONFIG[section] || ORBIT_CONFIG.MAIN;
+    // MOBILE FIX: Recalcula config a cada frame para garantir valores corretos
+    const currentConfig = getOrbitConfig();
+    const config = currentConfig[section] || currentConfig.MAIN;
     
     
     // ========================================
@@ -270,8 +312,12 @@ export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = (
     if (section !== 'MAIN') {
       const modelPos = MODEL_POSITIONS[section];
       if (modelPos) {
-        // Recalcula posição a cada frame para seguir rotação
+        // CRITICAL FIX: Recalcula posição mundial A CADA FRAME
+        // Isso garante que o centro orbital siga a rotação do astronauta
         const worldPos = calculateWorldPosition(modelPos, section);
+        
+        // Atualiza o target center para todos os dispositivos
+        // Removido o comportamento diferente para mobile que causava transições bruscas
         state.current.targetCenter.copy(worldPos);
       }
     } else {
@@ -288,21 +334,23 @@ export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = (
     // 3. TRANSIÇÃO NORMAL (para navegação regular)
     // ========================================
     if (state.current.isTransitioning) {
-      const transitionSpeed = 0.8;
+      // MOBILE FIX: Velocidade de transição adaptativa
+      const isMobileDevice = window.innerWidth < 768;
+      const transitionSpeed = isMobileDevice ? 0.6 : 0.8; // Mobile um pouco mais lento para suavidade
       
       state.current.transitionProgress += delta * transitionSpeed;
       
       if (state.current.transitionProgress >= 1) {
         state.current.transitionProgress = 1;
         state.current.isTransitioning = false;
-
       }
       
       const t = state.current.transitionProgress;
+      // Easing suave para mobile e desktop
       const eased = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-      const lerpSpeed = 0.1;
+      const lerpSpeed = isMobileDevice ? 0.08 : 0.1; // Mobile um pouco mais suave
       
-      // Interpola valores normalmente
+      // Interpola valores com suavidade
       state.current.orbitCenter.lerp(state.current.targetCenter, eased * lerpSpeed);
       state.current.currentRadius = THREE.MathUtils.lerp(
         state.current.currentRadius,
@@ -320,22 +368,28 @@ export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = (
         eased * lerpSpeed
       );
     } else {
+      // Interpolação contínua normal (quando não está em transição)
+      const isMobileDevice = window.innerWidth < 768;
+      // Valores mais moderados para evitar movimentos bruscos
+      const lerpSpeed = isMobileDevice ? 6 : 8;  // Reduzido de 12 para 6 no mobile
+      const radiusSpeed = isMobileDevice ? 4 : 5; // Reduzido de 8 para 4 no mobile
+      
       // Interpolação contínua para seguir movimento suave
-      state.current.orbitCenter.lerp(state.current.targetCenter, delta * 8);
+      state.current.orbitCenter.lerp(state.current.targetCenter, delta * lerpSpeed);
       state.current.currentRadius = THREE.MathUtils.lerp(
         state.current.currentRadius,
         state.current.targetRadius,
-        delta * 5
+        delta * radiusSpeed
       );
       state.current.currentHeight = THREE.MathUtils.lerp(
         state.current.currentHeight,
         state.current.targetHeight,
-        delta * 5
+        delta * radiusSpeed
       );
       state.current.currentFov = THREE.MathUtils.lerp(
         state.current.currentFov,
         state.current.targetFov,
-        delta * 5
+        delta * radiusSpeed
       );
     }
     
@@ -397,12 +451,35 @@ export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = (
               Math.sin(state.current.orbitAngle) * effectiveRadius;
     
     // ========================================
-    // 6. APLICA TRANSFORMAÇÕES
+    // 6. APLICA TRANSFORMAÇÕES COM CORREÇÃO MOBILE
     // ========================================
     camera.position.set(x, y, z);
-    camera.lookAt(state.current.orbitCenter);
+    
+    // MOBILE FIX: Ajusta lookAt considerando aspect ratio
+    const isMobileDevice = window.innerWidth < 768;
+    if (isMobileDevice && section !== 'MAIN') {
+      // Verifica projeção do centro para garantir centralização
+      const projectedCenter = state.current.orbitCenter.clone();
+      projectedCenter.project(camera);
+      
+      // Se não está centralizado (deve ser próximo de 0,0)
+      if (Math.abs(projectedCenter.x) > 0.1 || Math.abs(projectedCenter.y) > 0.1) {
+        // Aplica correção baseada no offset detectado
+        const correctedCenter = state.current.orbitCenter.clone();
+        correctedCenter.x -= projectedCenter.x * 0.1;
+        correctedCenter.y -= projectedCenter.y * 0.1;
+        camera.lookAt(correctedCenter);
+      } else {
+        camera.lookAt(state.current.orbitCenter);
+      }
+    } else {
+      camera.lookAt(state.current.orbitCenter);
+    }
+    
     if (camera instanceof THREE.PerspectiveCamera) {
       camera.fov = effectiveFov;
+      // MOBILE FIX: Força atualização da matriz de projeção
+      camera.aspect = window.innerWidth / window.innerHeight;
     }
     camera.updateProjectionMatrix();
     
@@ -420,12 +497,19 @@ export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = (
           transicionando: state.current.isTransitioning
         });
       } else {
+        // DEBUG MELHORADO: Inclui informações de projeção
+        const projectedCenter = state.current.orbitCenter.clone();
+        projectedCenter.project(camera);
+        
         console.log(`📍 Órbita ${section}:`, {
           centro: state.current.orbitCenter.toArray().map(n => n.toFixed(2)),
+          projeção: [projectedCenter.x.toFixed(3), projectedCenter.y.toFixed(3)],
           raio: effectiveRadius.toFixed(2),
           zoom: `${(zoomProgress * 100).toFixed(0)}%`,
           estado: navigationState,
-          rotação: astronautRef?.current?.rotation.y.toFixed(2) || '0'
+          rotação: astronautRef?.current?.rotation.y.toFixed(2) || '0',
+          aspectRatio: (window.innerWidth / window.innerHeight).toFixed(2),
+          isMobile: window.innerWidth < 768
         });
       }
     }

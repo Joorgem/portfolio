@@ -124,7 +124,10 @@ export const NavigationSystemStable: React.FC<NavigationSystemStableProps> = ({
 }) => {
   const groupRef = useRef<THREE.Group>(null!);
   
-  // Hook de interação
+  // MOBILE FIX: Detecta dispositivo móvel
+  const isMobileDevice = window.innerWidth < 768;
+  
+  // Hook de interação com delays adaptados para mobile
   const {
     hoveredPoint,
     selectedPoint,
@@ -134,8 +137,8 @@ export const NavigationSystemStable: React.FC<NavigationSystemStableProps> = ({
   } = useNavigationInteraction({
     onNavigate,
     debugMode,
-    hoverDelay: 50,
-    clickDelay: 150
+    hoverDelay: isMobileDevice ? 0 : 50,      // Mobile: sem delay no hover
+    clickDelay: isMobileDevice ? 50 : 150      // Mobile: click mais rápido
   });
   
   // Controle de cursor

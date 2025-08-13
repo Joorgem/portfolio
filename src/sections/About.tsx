@@ -1,12 +1,20 @@
 import { useRef } from "react";
 import Card from "../components/Card";
 import CopyEmailButton from "../components/CopyEmailButton";
+import { Particles } from "../components/Particles";
 
 const About: React.FC = () => {
   const grid2Container = useRef<HTMLDivElement>(null);
   
   return (
-    <section className="c-space section-spacing" id="about">
+    <section className="relative c-space section-spacing" id="about">
+      <Particles
+        className="absolute inset-0 -z-50"
+        quantity={100}
+        ease={80}
+        color={"#ffffff"}
+        refresh
+      />
       <h2 className="text-heading">About Me</h2>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-6 md:auto-rows-[18rem] mt-12">
         {/* Grid 1 */}

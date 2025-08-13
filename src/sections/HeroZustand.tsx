@@ -9,6 +9,7 @@ import NavigationSystemStable from "../components/NavigationSystemStable";
 import CameraControllerZustand from "../components/CameraController.Zustand";
 import { useNavigationStore } from "../stores/navigation.store";
 import type { NavigationPoint } from "../constants/navigationPoints";
+import { Particles } from "../components/Particles";
 
 /**
  * Hero Section com Zustand
@@ -17,8 +18,19 @@ const HeroZustand: React.FC = () => {
   const isMobile = useMediaQuery({ maxWidth: 853 });
   const astronautRef = useRef<THREE.Group>(null!);
   
-  const astronautScale = isMobile ? 0.25 : 0.4;
-  const astronautPosition: [number, number, number] = [-0.08, -0.5, 0];
+  // MOBILE FIX: Escala adaptativa baseada no viewport
+  const getAstronautScale = () => {
+    const width = window.innerWidth;
+    if (width < 375) return 0.3;   // Phones muito pequenos
+    if (width < 414) return 0.32;   // iPhone padrão
+    if (width < 768) return 0.35;   // Tablets pequenos
+    if (width < 853) return 0.38;   // Tablets
+    return 0.4;                     // Desktop
+  };
+  
+  const astronautScale = getAstronautScale();
+  // MOBILE FIX: Ajuste de posição vertical para centralizar melhor no mobile
+  const astronautPosition: [number, number, number] = isMobile ? [-0.08, -0.45, 0] : [-0.08, -0.5, 0];
   
   // Estados do store
   const navigationState = useNavigationStore(state => state.navigationState);
@@ -34,7 +46,7 @@ const HeroZustand: React.FC = () => {
   const handleScroll = useNavigationStore(state => state.handleScroll);
   const canInteract = useNavigationStore(state => state.canInteract);
   
-  // Handler de navegação
+  // Handler de navegação - MOBILE E DESKTOP IGUAIS
   const handleNavigate = useCallback((point: NavigationPoint) => {
     if (!canInteract()) {
       console.log('⚠️ Navegação bloqueada - Estado:', navigationState);
@@ -42,12 +54,20 @@ const HeroZustand: React.FC = () => {
     }
     
     console.log('🎯 Navegando para:', point.name);
+    
+    // Comportamento unificado: sempre entra em órbita primeiro
+    // O usuário controla o zoom via scroll/touch
     startNavigation(point.id);
   }, [startNavigation, canInteract, navigationState]);
   
   
   // Setup de event listeners
   useEffect(() => {
+    // MOBILE SUPPORT: Variáveis para touch
+    let touchStartY = 0;
+    let touchStartTime = 0;
+    let lastTouchY = 0;
+    
     // Handler de wheel
     const handleWheel = (e: WheelEvent) => {
       const state = useNavigationStore.getState().navigationState;
@@ -72,6 +92,67 @@ const HeroZustand: React.FC = () => {
         // Outros estados (orbiting, zooming, etc)
         e.preventDefault();
         handleScroll(e.deltaY, false);
+      }
+    };
+    
+    // MOBILE: Touch handlers melhorados
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        touchStartY = e.touches[0].clientY;
+        lastTouchY = touchStartY;
+        touchStartTime = Date.now();
+        
+        console.log('📱 Touch Start:', touchStartY);
+      }
+    };
+    
+    const handleTouchMove = (e: TouchEvent) => {
+      const state = useNavigationStore.getState().navigationState;
+      
+      // Só processa se estiver em estado que aceita scroll
+      if (state !== 'orbiting' && state !== 'zooming_in' && state !== 'in_section') {
+        return;
+      }
+      
+      if (e.touches.length === 1) {
+        const currentY = e.touches[0].clientY;
+        const deltaY = lastTouchY - currentY;
+        
+        // Verifica se está em conteúdo scrollável
+        const target = e.target as Element;
+        const isInsideContent = target.closest('.overflow-y-auto, .overflow-y-scroll, .overflow-auto, .overflow-scroll');
+        
+        if (state === 'in_section' && isInsideContent) {
+          // Permite scroll normal do conteúdo
+          return;
+        }
+        
+        // Previne scroll padrão do browser
+        if (Math.abs(deltaY) > 2) { // Threshold mínimo para evitar touches acidentais
+          e.preventDefault();
+          
+          // Usa o handler de scroll com delta amplificado para mobile
+          // Inverte o deltaY para mobile (swipe up = zoom in)
+          handleScroll(deltaY * 3, false);
+          
+          console.log('📱 Touch Move - Delta:', deltaY);
+        }
+        
+        lastTouchY = currentY;
+      }
+    };
+    
+    const handleTouchEnd = (e: TouchEvent) => {
+      const deltaTime = Date.now() - touchStartTime;
+      const totalDeltaY = touchStartY - lastTouchY;
+      
+      console.log('📱 Touch End - Total Delta:', totalDeltaY, 'Time:', deltaTime);
+      
+      // Detecta swipe rápido e forte
+      if (deltaTime < 300 && Math.abs(totalDeltaY) > 50) {
+        // Swipe forte detectado - amplifica ainda mais
+        handleScroll(totalDeltaY * 5, false);
+        console.log('📱 Swipe detectado!');
       }
     };
     
@@ -106,76 +187,43 @@ const HeroZustand: React.FC = () => {
       }
     };
     
+    // Adiciona event listeners
     window.addEventListener('wheel', handleWheel, { passive: false });
     window.addEventListener('keydown', handleKeyDown);
+    
+    // MOBILE: Adiciona listeners de touch
+    window.addEventListener('touchstart', handleTouchStart, { passive: false });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', handleTouchEnd, { passive: false });
     
     return () => {
       window.removeEventListener('wheel', handleWheel);
       window.removeEventListener('keydown', handleKeyDown);
+      
+      // MOBILE: Remove listeners de touch
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+      
       // Cleanup do store
       useNavigationStore.getState().cleanup();
     };
   }, [handleScroll]);
   
-  // Monitor de desenvolvimento
+  // Monitor de desenvolvimento - DESATIVADO
   const DevMonitor: React.FC = () => {
-    if (process.env.NODE_ENV !== 'production') {
-      return (
-        <div className="fixed top-4 right-4 z-50 
-                        bg-black/90 backdrop-blur-sm rounded-lg 
-                        border border-white/20 p-3 
-                        font-mono text-xs text-white/90
-                        min-w-[280px] pointer-events-none">
-          <div className="font-bold mb-2 text-white">
-            Estado: {navigationState.toUpperCase()}
-          </div>
-          <div className="space-y-1 text-white/70">
-            <div>Seção Atual: {currentSection}</div>
-            {targetSection && <div>Destino: {targetSection}</div>}
-            <div>Canvas: {canvas3DActive ? '✅ Ativo' : '⏸️ Pausado'}</div>
-            <div>Pode Interagir: {canInteract() ? '✅' : '❌'}</div>
-            {zoomProgress > 0 && (
-              <div>
-                Zoom: {Math.round(zoomProgress * 100)}%
-                <div className="w-full h-1 bg-white/20 rounded mt-1">
-                  <div 
-                    className="h-full bg-blue-500 rounded transition-all"
-                    style={{ width: `${zoomProgress * 100}%` }}
-                  />
-                </div>
-              </div>
-            )}
-            {fadeProgress > 0 && (
-              <div>
-                Fade: {Math.round(fadeProgress * 100)}%
-                <div className="w-full h-1 bg-white/20 rounded mt-1">
-                  <div 
-                    className="h-full bg-purple-500 rounded transition-all"
-                    style={{ width: `${fadeProgress * 100}%` }}
-                  />
-                </div>
-              </div>
-            )}
-            {zoomOutProgress > 0 && (
-              <div>
-                Zoom Out: {Math.round(zoomOutProgress * 100)}%
-                <div className="w-full h-1 bg-white/20 rounded mt-1">
-                  <div 
-                    className="h-full bg-orange-500 rounded transition-all"
-                    style={{ width: `${zoomOutProgress * 100}%` }}
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      );
-    }
-    return null;
+    return null; // Removido para produção
   };
   
   return (
     <section className="relative w-screen h-screen overflow-hidden bg-black">
+      <Particles
+        className="absolute inset-0 -z-50"
+        quantity={isMobile ? 50 : 100}  // Mobile: menos partículas para performance
+        ease={80}
+        color={"#ffffff"}
+        refresh
+      />
       {/* Texto Hero - Oculta durante navegação */}
       {(navigationState === 'idle' || navigationState === 'orbiting') && (
         <HeroTextFixed />
@@ -185,13 +233,13 @@ const HeroZustand: React.FC = () => {
       <div className="fixed inset-0 z-0">
         <Canvas 
           camera={{ 
-            position: [0, 0, 5], 
-            fov: 75, 
+            position: [0, 0, isMobile ? 4 : 5], // Mobile mais próximo
+            fov: isMobile ? 65 : 75, // FOV menor para mobile (mais zoom)
             near: 0.001, 
             far: 1000 
           }}
           frameloop={canvas3DActive ? 'always' : 'demand'}
-          dpr={[1, 2]}
+          dpr={[1, 2]} // QUALIDADE MÁXIMA: Mantém DPR alto para todos os dispositivos
         >
           <Suspense fallback={<Loader />}>
             {/* Iluminação */}
@@ -214,9 +262,10 @@ const HeroZustand: React.FC = () => {
               debugMode={false}
             />
             
-            {/* Controlador de Câmera com Zustand */}
+            {/* Controlador de Câmera com Zustand - PASSA ESCALA DINÂMICA */}
             <CameraControllerZustand
               astronautRef={astronautRef}
+              astronautScale={astronautScale}
             />
           </Suspense>
         </Canvas>

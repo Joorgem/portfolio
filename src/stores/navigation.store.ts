@@ -73,11 +73,16 @@ interface NavigationStoreActions {
 // Complete store type
 export type NavigationStore = NavigationStoreState & NavigationStoreActions;
 
-// Configurações do sistema
+// MOBILE FIX: Detecta se é dispositivo móvel
+const isMobileDevice = () => {
+  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 768;
+};
+
+// Configurações do sistema com suporte mobile
 const CONFIG: NavigationConfig = {
-  // Sensibilidades balanceadas para scroll suave
-  zoomInSensitivity: 0.0008,      // Zoom in normal
-  zoomOutSensitivity: 0.0010,     // AJUSTADO: meio termo entre suave e responsivo
+  // Sensibilidades adaptativas para mobile/desktop
+  zoomInSensitivity: isMobileDevice() ? 0.0015 : 0.0008,      // Mobile MAIS sensível ainda
+  zoomOutSensitivity: isMobileDevice() ? 0.0018 : 0.0010,     // Mobile MAIS sensível ainda
   
   // Velocidades de animação automática mais lentas
   zoomSpeed: 0.012,               // Reduzido de 0.015 para 0.012
@@ -87,14 +92,14 @@ const CONFIG: NavigationConfig = {
   zoomStartFade: 0.88,            // Aumentado de 0.85 para 0.88 (fade mais tarde)
   zoomComplete: 0.98,             // Mantido em 0.98
   fadePauseCanvas: 0.95,          // Mantido em 0.95
-  zoomAutoComplete: 0.65,         // AUMENTADO de 0.3 para 0.65 (65% = muito mais scroll manual)
+  zoomAutoComplete: 0.65,         // Mesmo valor para mobile e desktop agora
   
   // Thresholds para estados especiais
   zoomOutCompleteThreshold: 0.65, // AUMENTADO de 0.85 para 0.65 (ativa animação mais cedo - menos "vai e volta")
   exitScrollThreshold: -150,      // Mantido
   
   // Novos parâmetros para suavidade extra
-  scrollThrottle: 12,             // Throttle mais baixo (era 16ms, agora 12ms)
+  scrollThrottle: isMobileDevice() ? 5 : 12,        // Mobile AINDA mais responsivo
   maxScrollDelta: 120,            // Limita picos de deltaY para evitar saltos
 };
 
