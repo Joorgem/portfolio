@@ -1,42 +1,123 @@
-import React, { Suspense, lazy } from 'react';
+import React, { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigationStore } from '../stores/navigation.store';
 
-// Lazy load das seções existentes
-const About = lazy(() => import('../sections/About'));
-const Projects = lazy(() => import('../sections/Projects'));
-const Experiences = lazy(() => import('../sections/Experiences'));
-const Contact = lazy(() => import('../sections/Contact'));
-const Testimonial = lazy(() => import('../sections/Testimonial'));
+// Imports diretos das seções para carregamento instantâneo
+import About from '../sections/About';
+import Projects from '../sections/Projects';
+import Experiences from '../sections/Experiences';
+import Contact from '../sections/Contact';
+import Testimonial from '../sections/Testimonial';
 
-// Loading component
-const PageLoader = () => (
-  <div className="flex items-center justify-center min-h-screen">
-    <div className="relative">
-      <div className="w-16 h-16 border-4 border-white/20 border-t-white 
-                      rounded-full animate-spin" />
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-8 h-8 bg-white/10 rounded-full animate-pulse" />
-      </div>
-    </div>
-  </div>
-);
-
-// Componente simples de container de página
+// Container de página com animações suaves
 const PageContainer = ({ sectionId, backgroundColor = "#0a0a0a", children }) => {
   const currentSection = useNavigationStore(state => state.currentSection);
-  const navigationState = useNavigationStore(state => state.navigationState);
+  const pageVisible = useNavigationStore(state => state.pageVisible);
+  const fadeProgress = useNavigationStore(state => state.fadeProgress);
+  const initiateExit = useNavigationStore(state => state.initiateExit);
   
-  const isVisible = navigationState === 'in_section' && currentSection === sectionId.toUpperCase();
+  const [shouldRender, setShouldRender] = useState(false);
   
-  if (!isVisible) return null;
+  // Controla quando renderizar baseado no store
+  useEffect(() => {
+    const isActive = currentSection === sectionId && pageVisible;
+    setShouldRender(isActive);
+  }, [currentSection, sectionId, pageVisible]);
   
   return (
-    <div 
-      className="fixed inset-0 z-20 overflow-y-auto"
-      style={{ backgroundColor }}
-    >
-      {children}
-    </div>
+    <AnimatePresence mode="wait">
+      {shouldRender && (
+        <motion.div
+          key={`page-${sectionId}`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="fixed inset-0 z-40 overflow-y-auto"
+          style={{ backgroundColor }}
+        >
+          {/* Overlay de fade baseado no progresso */}
+          <motion.div
+            className="fixed inset-0 bg-black pointer-events-none z-30"
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 - fadeProgress }}
+            transition={{ duration: 0.1 }}
+          />
+          
+          {/* Botão de voltar com animação */}
+          <motion.button
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            transition={{ 
+              duration: 0.5,
+              delay: 0.3,
+              ease: [0.4, 0, 0.2, 1]
+            }}
+            onClick={initiateExit}
+            className="fixed top-6 left-6 z-50 flex items-center gap-3 px-6 py-3 
+                       bg-gradient-to-r from-white/10 to-white/5
+                       backdrop-blur-xl rounded-full 
+                       border border-white/20
+                       shadow-lg shadow-black/50
+                       transition-all duration-300
+                       hover:from-white/20 hover:to-white/10
+                       hover:scale-105"
+            aria-label="Voltar para navegação principal"
+          >
+            <svg 
+              width="20" 
+              height="20" 
+              viewBox="0 0 24 24" 
+              fill="none"
+            >
+              <path 
+                d="M19 12H5M5 12L12 19M5 12L12 5" 
+                stroke="white" 
+                strokeWidth="2.5" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+              />
+            </svg>
+            <span className="text-white font-medium text-sm tracking-wide">
+              Voltar
+            </span>
+          </motion.button>
+          
+          {/* Container do conteúdo com animação suave */}
+          <motion.div
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ 
+              opacity: 1, 
+              y: 0,
+              transition: {
+                duration: 0.8,
+                delay: 0.2,
+                ease: [0.25, 0.1, 0.25, 1]
+              }
+            }}
+            exit={{ 
+              opacity: 0,
+              y: 50,
+              transition: {
+                duration: 0.3
+              }
+            }}
+            className="relative min-h-screen w-full"
+          >
+            {children}
+          </motion.div>
+          
+          {/* Gradientes decorativos sutis */}
+          <div className="fixed top-0 left-0 right-0 h-24 
+                          bg-gradient-to-b from-black/30 to-transparent 
+                          pointer-events-none z-30" />
+          <div className="fixed bottom-0 left-0 right-0 h-24 
+                          bg-gradient-to-t from-black/30 to-transparent 
+                          pointer-events-none z-30" />
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 
@@ -51,11 +132,9 @@ const SectionPagesZustand = () => {
         sectionId="about" 
         backgroundColor="#0a0a0a"
       >
-        <Suspense fallback={<PageLoader />}>
-          <div className="min-h-screen pt-24 pb-10">
-            <About />
-          </div>
-        </Suspense>
+        <div className="min-h-screen pt-24 pb-10">
+          <About />
+        </div>
       </PageContainer>
       
       {/* Projects Page */}
@@ -63,11 +142,9 @@ const SectionPagesZustand = () => {
         sectionId="projects" 
         backgroundColor="#0a0a0a"
       >
-        <Suspense fallback={<PageLoader />}>
-          <div className="min-h-screen pt-24 pb-10">
-            <Projects />
-          </div>
-        </Suspense>
+        <div className="min-h-screen pt-24 pb-10">
+          <Projects />
+        </div>
       </PageContainer>
       
       {/* Experience Page */}
@@ -75,16 +152,14 @@ const SectionPagesZustand = () => {
         sectionId="experience" 
         backgroundColor="#0a0a0a"
       >
-        <Suspense fallback={<PageLoader />}>
-          <div className="min-h-screen pt-24 pb-10 flex items-center justify-center">
-            <div className="w-full max-w-6xl px-4">
-              <h2 className="text-heading text-white mb-12 text-center">
-                My Experience
-              </h2>
-              <Experiences />
-            </div>
+        <div className="min-h-screen pt-24 pb-10 flex items-center justify-center">
+          <div className="w-full max-w-6xl px-4">
+            <h2 className="text-heading text-white mb-12 text-center">
+              My Experience
+            </h2>
+            <Experiences />
           </div>
-        </Suspense>
+        </div>
       </PageContainer>
       
       {/* Contact Page */}
@@ -92,11 +167,9 @@ const SectionPagesZustand = () => {
         sectionId="contact" 
         backgroundColor="#0a0a0a"
       >
-        <Suspense fallback={<PageLoader />}>
-          <div className="min-h-screen pt-24 pb-10">
-            <Contact />
-          </div>
-        </Suspense>
+        <div className="min-h-screen pt-24 pb-10">
+          <Contact />
+        </div>
       </PageContainer>
       
       {/* Testimonials Page */}
@@ -104,11 +177,9 @@ const SectionPagesZustand = () => {
         sectionId="testimonials" 
         backgroundColor="#0a0a0a"
       >
-        <Suspense fallback={<PageLoader />}>
-          <div className="min-h-screen pt-24 pb-10">
-            <Testimonial />
-          </div>
-        </Suspense>
+        <div className="min-h-screen pt-24 pb-10">
+          <Testimonial />
+        </div>
       </PageContainer>
     </>
   );
