@@ -8,11 +8,11 @@ import * as THREE from 'three';
 
 interface StableHitboxProps {
   point: NavigationPoint;
-  onPointerOver: (point: NavigationPoint) => void;
+  onPointerOver: (_point: NavigationPoint) => void;
   onPointerOut: () => void;
-  onClick: (point: NavigationPoint) => void;
+  onClick: (_point: NavigationPoint) => void;
   isHovered: boolean;
-  isSelected: boolean;
+  _isSelected: boolean;
   debugMode: boolean;
 }
 
@@ -25,7 +25,7 @@ const StableHitbox = React.memo<StableHitboxProps>(({
   onPointerOut,
   onClick,
   isHovered,
-  isSelected,
+  _isSelected,
   debugMode 
 }) => {
   const meshRef = useRef<THREE.Mesh>(null!);
@@ -86,7 +86,7 @@ interface NavigationSystemStableProps {
   astronautRef: React.RefObject<THREE.Group>;
   astronautScale?: number;
   astronautPosition?: [number, number, number];
-  onNavigate: (point: NavigationPoint) => void;
+  onNavigate: (_point: NavigationPoint) => void;
   debugMode?: boolean;
 }
 

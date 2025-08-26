@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import type { NavigationPoint } from '../constants/navigationPoints';
 
 interface UseNavigationInteractionOptions {
-  onNavigate?: (point: NavigationPoint) => void;
+  onNavigate?: (_point: NavigationPoint) => void;
   debugMode?: boolean;
   hoverDelay?: number; // ms de delay para evitar hover acidental
   clickDelay?: number; // ms de delay para evitar cliques duplos
@@ -12,8 +12,8 @@ interface UseNavigationInteractionReturn {
   hoveredPoint: NavigationPoint | null;
   selectedPoint: NavigationPoint | null;
   isTransitioning: boolean;
-  handleHover: (point: NavigationPoint | null) => void;
-  handleClick: (point: NavigationPoint) => void;
+  handleHover: (_point: NavigationPoint | null) => void;
+  handleClick: (_point: NavigationPoint) => void;
   isHovering: boolean;
 }
 

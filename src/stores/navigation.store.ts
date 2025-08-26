@@ -58,8 +58,8 @@ interface NavigationStoreActions {
   isNavigating: () => boolean;
   isInSection: () => boolean;
   canInteract: () => boolean;
-  startNavigation: (sectionId: string) => string | void;
-  handleScroll: (deltaY: number, isInsideContent?: boolean) => void;
+  startNavigation: (_sectionId: string) => string | void;
+  handleScroll: (_deltaY: number, _isInsideContent?: boolean) => void;
   startZoomIn: () => void;
   initiateExit: () => void;
   goToInitialState: () => void;
@@ -69,7 +69,7 @@ interface NavigationStoreActions {
   enterSection: () => void;
   completeExit: () => void;
   cleanup: () => void;
-  setHoveredPlanet: (planet: string | null) => void;
+  setHoveredPlanet: (_planet: string | null) => void;
 }
 
 // Complete store type

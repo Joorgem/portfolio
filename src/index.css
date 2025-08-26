@@ -56,6 +56,78 @@ body {
   cursor: none;
 }
 
+/* Scroll Indicator Animations */
+@keyframes scroll-wheel-down {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  25% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(3px);
+    opacity: 0;
+  }
+}
+
+@keyframes scroll-wheel-up {
+  0%, 50% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  75% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-3px);
+    opacity: 0;
+  }
+}
+
+@keyframes scroll-arrows {
+  0% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0.25;
+  }
+}
+
+.animate-scroll-wheel-down {
+  animation: scroll-wheel-down 2s ease-in-out infinite;
+}
+
+.animate-scroll-wheel-up {
+  animation: scroll-wheel-up 2s ease-in-out infinite;
+}
+
+.animate-scroll-arrows {
+  animation: scroll-arrows 1.5s ease-in-out infinite;
+}
+
+/* Touch/Drag Animation for Mobile */
+@keyframes touch-drag {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-8px);
+  }
+  75% {
+    transform: translateY(8px);
+  }
+}
+
+.animate-touch-drag {
+  animation: touch-drag 2s ease-in-out infinite;
+}
+
 * {
   cursor: none !important;
 }

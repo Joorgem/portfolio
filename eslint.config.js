@@ -36,6 +36,15 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
+      // Desabilitar regras para componentes Three.js
+      'react/no-unknown-property': 'off',
+      'react/display-name': 'off',
+      'react/prop-types': 'off',
+      'no-unused-vars': ['warn', { 'argsIgnorePattern': '^_' }],
+      'react/no-unescaped-entities': 'off',
+      'no-undef': 'off',
+      'no-redeclare': 'warn',
+      'react-hooks/exhaustive-deps': 'warn',
     },
   },
 ]

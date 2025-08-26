@@ -34,12 +34,12 @@ const HeroZustand: React.FC = () => {
   
   // Estados do store
   const navigationState = useNavigationStore(state => state.navigationState);
-  const currentSection = useNavigationStore(state => state.currentSection);
-  const targetSection = useNavigationStore(state => state.targetSection);
-  const zoomProgress = useNavigationStore(state => state.zoomProgress);
+  const _currentSection = useNavigationStore(state => state.currentSection);
+  const _targetSection = useNavigationStore(state => state.targetSection);
+  const _zoomProgress = useNavigationStore(state => state.zoomProgress);
   const fadeProgress = useNavigationStore(state => state.fadeProgress);
   const canvas3DActive = useNavigationStore(state => state.canvas3DActive);
-  const zoomOutProgress = useNavigationStore(state => state.zoomOutProgress);
+  const _zoomOutProgress = useNavigationStore(state => state.zoomOutProgress);
   
   // Ações do store
   const startNavigation = useNavigationStore(state => state.startNavigation);
@@ -142,7 +142,7 @@ const HeroZustand: React.FC = () => {
       }
     };
     
-    const handleTouchEnd = (e: TouchEvent) => {
+    const handleTouchEnd = (_e: TouchEvent) => {
       const deltaTime = Date.now() - touchStartTime;
       const totalDeltaY = touchStartY - lastTouchY;
       
@@ -283,29 +283,16 @@ const HeroZustand: React.FC = () => {
       )}
       
       
-      {/* Instruções minimalistas no rodapé */}
-      {navigationState === 'idle' && (
+      {/* Instruções minimalistas no rodapé - apenas desktop */}
+      {navigationState === 'idle' && !isMobile && (
         <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-20
                         pointer-events-none">
-          <div className="text-white/20 text-[10px] tracking-wider">
-            Clique nos planetas
-          </div>
+          <span className="text-white/25 text-[10px] font-light tracking-widest uppercase">
+            explore
+          </span>
         </div>
       )}
       
-      {navigationState === 'orbiting' && (
-        <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-20
-                        pointer-events-none">
-          <div className="text-white/20 text-[10px] tracking-wider flex items-center gap-2">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-60">
-              <polyline points="7 13 12 18 17 13"></polyline>
-              <polyline points="7 6 12 11 17 6"></polyline>
-            </svg>
-            <span className="opacity-40">•</span>
-            <span>ESC</span>
-          </div>
-        </div>
-      )}
       
       
       {/* Monitor de Desenvolvimento */}

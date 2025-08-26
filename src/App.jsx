@@ -3,6 +3,7 @@ import HeroZustand from "./sections/HeroZustand";
 import SectionPagesZustand from "./pages/SectionPagesZustand";
 import CustomCursor from "./components/CustomCursor";
 import MobileBottomNav from "./components/MobileBottomNav";
+import ScrollIndicator from "./components/ScrollIndicator";
 
 const App = () => {
   return (
@@ -12,6 +13,9 @@ const App = () => {
       
       {/* Menu de navegação inferior para mobile */}
       <MobileBottomNav />
+      
+      {/* Indicador de scroll */}
+      <ScrollIndicator />
       
       {/* Cena 3D principal com navegação usando Zustand */}
       <HeroZustand />

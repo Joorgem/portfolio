@@ -28,7 +28,9 @@
       "Bash(npm run validate:*)",
       "Bash(git checkout:*)",
       "WebSearch",
-      "Bash(del \"C:\\Users\\jorge.molina\\OneDrive - Iteris Consultoria e Software\\Documents\\Pessoal\\Portfolio\\Portfolio\\src\\components\\MobilePlanetIndicator.tsx\")"
+      "Bash(del \"C:\\Users\\jorge.molina\\OneDrive - Iteris Consultoria e Software\\Documents\\Pessoal\\Portfolio\\Portfolio\\src\\components\\MobilePlanetIndicator.tsx\")",
+      "mcp__ide__getDiagnostics",
+      "Bash(del \".eslintrc.temp\")"
     ],
     "deny": []
   }

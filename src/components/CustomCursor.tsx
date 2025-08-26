@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigationStore } from '../stores/navigation.store';
 
 const CustomCursor: React.FC = () => {
-  const hoveredPlanet = useNavigationStore(state => state.hoveredPlanet, null);
+  const hoveredPlanet = useNavigationStore(state => state.hoveredPlanet);
   
   // Refs para manipulação direta do DOM
   const cursorDotRef = useRef<HTMLDivElement>(null);
@@ -10,17 +10,27 @@ const CustomCursor: React.FC = () => {
   const cursorTextRef = useRef<HTMLDivElement>(null);
   const mousePosition = useRef({ x: 0, y: 0 });
   const currentPosition = useRef({ x: 0, y: 0 });
-  const rafId = useRef<number>();
+  const rafId = useRef<number | undefined>(undefined);
   const isPointerRef = useRef(false);
   const isVisibleRef = useRef(false);
   
-  // Detecta se é dispositivo móvel
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-  
-  // Não renderiza em mobile
-  if (isMobile) return null;
+  // Hook para detectar dispositivo móvel
+  const [isMobile, setIsMobile] = useState(() => 
+    typeof window !== 'undefined' && window.innerWidth < 768
+  );
   
   useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
+  useEffect(() => {
+    // Skip effect if mobile
+    if (isMobile) return;
     const cursorDot = cursorDotRef.current;
     const cursorRing = cursorRingRef.current;
     const cursorText = cursorTextRef.current;
@@ -107,8 +117,8 @@ const CustomCursor: React.FC = () => {
     // Loop de animação otimizado
     let frameCount = 0;
     const animate = () => {
-      // Lerp reduzido para movimento mais suave e menos sensível
-      const lerp = 0.10; // Reduzido de 0.18 para 0.10 (menos sensível)
+      // Lerp otimizado para movimento suave e responsivo
+      const lerp = 0.15; // Balanceado entre suavidade e responsividade
       const dx = mousePosition.current.x - currentPosition.current.x;
       const dy = mousePosition.current.y - currentPosition.current.y;
       
@@ -174,7 +184,7 @@ const CustomCursor: React.FC = () => {
       document.body.style.cursor = 'auto';
       observer.disconnect();
     };
-  }, [hoveredPlanet]);
+  }, [hoveredPlanet, isMobile]);
   
   // Atualiza texto do planeta quando muda
   useEffect(() => {
@@ -186,6 +196,9 @@ const CustomCursor: React.FC = () => {
       }
     }
   }, [hoveredPlanet]);
+  
+  // Não renderiza em mobile
+  if (isMobile) return null;
   
   return (
     <div className="pointer-events-none fixed inset-0 z-[9999]">
