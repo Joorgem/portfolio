@@ -132,8 +132,8 @@ const HeroZustand: React.FC = () => {
           e.preventDefault();
           
           // Usa o handler de scroll com delta amplificado para mobile
-          // Inverte o deltaY para mobile (swipe up = zoom in)
-          handleScroll(deltaY * 3, false);
+          // Inverte o deltaY para mobile (swipe down = zoom in)
+          handleScroll(-deltaY * 3, false);
           
           console.log('📱 Touch Move - Delta:', deltaY);
         }
@@ -151,7 +151,7 @@ const HeroZustand: React.FC = () => {
       // Detecta swipe rápido e forte
       if (deltaTime < 300 && Math.abs(totalDeltaY) > 50) {
         // Swipe forte detectado - amplifica ainda mais
-        handleScroll(totalDeltaY * 5, false);
+        handleScroll(-totalDeltaY * 5, false);
         console.log('📱 Swipe detectado!');
       }
     };

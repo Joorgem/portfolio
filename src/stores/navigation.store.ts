@@ -214,9 +214,9 @@ export const useNavigationStore = create<NavigationStore>()(
       // ========================================
       if (currentState === NavigationStates.ORBITING) {
         
-        if (clampedDeltaY > 0) {
-          // ⬇️ SCROLL DOWN - Zoom IN ultra-suave
-          const increment = clampedDeltaY * CONFIG.zoomInSensitivity;
+        if (clampedDeltaY < 0) {
+          // ⬆️ SCROLL UP - Zoom IN ultra-suave
+          const increment = Math.abs(clampedDeltaY) * CONFIG.zoomInSensitivity;
           const newZoom = Math.min(1, Math.max(0, state.zoomProgress + increment));
           
           set({ 
@@ -234,7 +234,7 @@ export const useNavigationStore = create<NavigationStore>()(
           }
           
         } else {
-          // ⬆️ SCROLL UP - Zoom OUT ultra-suave
+          // ⬇️ SCROLL DOWN - Zoom OUT ultra-suave
           const increment = Math.abs(clampedDeltaY) * CONFIG.zoomOutSensitivity;
           const newZoomOut = Math.min(1, Math.max(0, state.zoomOutProgress + increment));
           
@@ -258,13 +258,13 @@ export const useNavigationStore = create<NavigationStore>()(
       else if (currentState === NavigationStates.ZOOMING_IN) {
         // Só permite controle manual até o ponto de auto-complete (agora 65%)
         if (state.zoomProgress < CONFIG.zoomAutoComplete) {
-          const increment = clampedDeltaY * CONFIG.zoomInSensitivity;
+          const increment = -clampedDeltaY * CONFIG.zoomInSensitivity;
           const newZoom = Math.max(0, Math.min(1, state.zoomProgress + increment));
           
           set({ zoomProgress: newZoom });
           
           // Se fez scroll reverso e chegou próximo de 0
-          if (newZoom < 0.03 && clampedDeltaY < 0) {
+          if (newZoom < 0.03 && clampedDeltaY > 0) {
             get().goToInitialState();
           }
           // Se chegou no auto-complete, ativa animação
@@ -279,8 +279,8 @@ export const useNavigationStore = create<NavigationStore>()(
       // ESTADO IN_SECTION - Saída por scroll
       // ========================================
       else if (currentState === NavigationStates.IN_SECTION && !isInsideContent) {
-        // Scroll reverso forte para sair
-        if (deltaY < -50) {
+        // Scroll para baixo forte para sair
+        if (deltaY > 50) {
           get().initiateExit();
         }
       }
