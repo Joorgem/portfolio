@@ -52,7 +52,7 @@ const getOrbitConfig = (): Record<string, OrbitConfig> => {
   
   return {
     MAIN: {
-      radius: isMobile ? 4 : 5,
+      radius: isMobile ? 3.5 : 4.2,
       height: isMobile ? 1.5 : 1.8,
       fov: isMobile ? 65 : 75,
       rotationSpeed: 0.02
@@ -146,7 +146,7 @@ export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = (
   const state = useRef<CameraState>({
     // Órbita
     orbitAngle: 0,
-    currentRadius: 5,
+    currentRadius: 4.2,
     currentHeight: 1.8,
     currentFov: 75,
     
@@ -155,12 +155,12 @@ export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = (
     
     // Para transições suaves de seção
     targetCenter: new THREE.Vector3(0, 0, 0),
-    targetRadius: 5,
+    targetRadius: 4.2,
     targetHeight: 1.8,
     targetFov: 75,
     
     // Para zoom suave (valores interpolados)
-    smoothRadius: 5,
+    smoothRadius: 4.2,
     smoothHeight: 1.8,
     smoothFov: 75,
     

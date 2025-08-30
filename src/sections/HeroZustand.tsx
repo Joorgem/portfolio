@@ -233,7 +233,7 @@ const HeroZustand: React.FC = () => {
       <div className="fixed inset-0 z-0">
         <Canvas 
           camera={{ 
-            position: [0, 0, isMobile ? 4 : 5], // Mobile mais próximo
+            position: [0, 0, isMobile ? 3.5 : 4.2], // Mobile mais próximo
             fov: isMobile ? 65 : 75, // FOV menor para mobile (mais zoom)
             near: 0.001, 
             far: 1000 
