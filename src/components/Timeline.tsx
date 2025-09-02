@@ -55,7 +55,7 @@ export const Timeline: React.FC<TimelineProps> = ({
             key={index}
             className="flex justify-start pt-20 md:pt-60 md:gap-10"
           >
-            <div className={`sticky z-40 flex flex-col items-center self-start max-w-xs md:flex-row lg:max-w-sm md:w-full`} style={{ top: index === timelineData.length - 1 ? '10rem' : `${10 + index * 6}rem` }}>
+            <div className={`sticky z-40 flex flex-col items-center self-start max-w-xs md:flex-row lg:max-w-sm md:w-full`} style={{ top: index === 0 ? '10rem' : `${10 + index * 6}rem` }}>
               <div className="absolute flex items-center justify-center w-10 h-10 rounded-full -left-[15px] bg-midnight">
                 <div className="w-4 h-4 p-2 border rounded-full bg-neutral-800 border-neutral-700" />
               </div>

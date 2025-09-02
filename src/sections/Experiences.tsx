@@ -6,10 +6,13 @@ import { useEffect } from "react";
 const Experiences: React.FC = () => {
   const { setLanguage } = useLanguage();
   
-  // Set English as default language when accessing experience page
+  // Set English as default language only on first visit, without overriding user choice
   useEffect(() => {
-    setLanguage('en');
-  }, [setLanguage]);
+    // Only set to English if no language preference exists yet
+    if (!localStorage.getItem('portfolio_language')) {
+      setLanguage('en');
+    }
+  }, []); // Empty dependency array - runs only once on mount
   return (
     <div className="relative w-full">
       <Particles
