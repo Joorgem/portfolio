@@ -229,20 +229,22 @@ const CustomCursor: React.FC = () => {
         }}
       />
       
-      {/* Planet text */}
+      {/* Planet text card */}
       {hoveredPlanet && (
         <div
           ref={cursorTextRef}
-          className="absolute left-6 -top-0.5 whitespace-nowrap"
+          className="absolute left-6 -top-1 whitespace-nowrap"
           style={{
             opacity: 0,
             willChange: 'transform',
             transition: 'opacity 0.15s ease-out',
           }}
         >
-          <span className="text-[11px] text-white/85 tracking-wider uppercase font-light drop-shadow-sm">
-            {hoveredPlanet}
-          </span>
+          <div className="bg-black/40 backdrop-blur-sm border border-white/20 px-3 py-1.5 rounded-lg shadow-lg">
+            <span className="text-[15px] text-white/95 tracking-wider uppercase font-normal">
+              {hoveredPlanet}
+            </span>
+          </div>
         </div>
       )}
     </div>

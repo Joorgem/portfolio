@@ -283,7 +283,7 @@ const HeroZustand: React.FC = () => {
       {navigationState === 'idle' && !isMobile && (
         <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-20
                         pointer-events-none">
-          <span className="text-white/40 text-[12px] font-light tracking-widest uppercase drop-shadow-sm">
+          <span className="text-white/50 text-[14px] font-light tracking-widest uppercase drop-shadow-sm">
             explore
           </span>
         </div>

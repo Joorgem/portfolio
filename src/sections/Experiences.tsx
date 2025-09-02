@@ -1,7 +1,15 @@
 import { Timeline } from "../components/Timeline";
 import { Particles } from "../components/Particles";
+import { useLanguage } from "../contexts/LanguageContext";
+import { useEffect } from "react";
 
 const Experiences: React.FC = () => {
+  const { setLanguage } = useLanguage();
+  
+  // Set English as default language when accessing experience page
+  useEffect(() => {
+    setLanguage('en');
+  }, [setLanguage]);
   return (
     <div className="relative w-full">
       <Particles
