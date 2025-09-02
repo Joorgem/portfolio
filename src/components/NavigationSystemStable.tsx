@@ -12,7 +12,7 @@ interface StableHitboxProps {
   onPointerOut: () => void;
   onClick: (_point: NavigationPoint) => void;
   isHovered: boolean;
-  _isSelected: boolean;
+  isSelected: boolean;
   debugMode: boolean;
 }
 
@@ -25,11 +25,12 @@ const StableHitbox = React.memo<StableHitboxProps>(({
   onPointerOut,
   onClick,
   isHovered,
-  _isSelected,
+  isSelected,
   debugMode 
 }) => {
   const meshRef = useRef<THREE.Mesh>(null!);
   const [localHover, setLocalHover] = useState(false);
+  console.log('isSelected:', isSelected); // Avoid unused variable warning
   
   // Handlers
   const handlePointerOver = React.useCallback((e: React.PointerEvent) => {
@@ -188,7 +189,7 @@ const getDebugColor = (pointId: string): string => {
     'projects': '#4ecdc4',
     'experience': '#45b7d1',
     'contact': '#96ceb4',
-    'testimonials': '#ffeaa7'
+    'courses': '#ffeaa7'
   };
   return colors[pointId] || '#ffffff';
 };

@@ -60,7 +60,7 @@ const ScrollIndicator: React.FC = () => {
             </div>
 
             {/* Text para mobile */}
-            <span className="text-white/25 text-[10px] font-light tracking-widest uppercase">
+            <span className="text-white/40 text-[12px] font-light tracking-widest uppercase drop-shadow-sm">
               swipe
             </span>
           </>
@@ -109,7 +109,7 @@ const ScrollIndicator: React.FC = () => {
             </svg>
 
             {/* Text para desktop */}
-            <span className="text-white/25 text-[10px] font-light tracking-widest uppercase">
+            <span className="text-white/40 text-[12px] font-light tracking-widest uppercase drop-shadow-sm">
               scroll
             </span>
           </>

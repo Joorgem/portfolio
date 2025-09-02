@@ -1,0 +1,236 @@
+/* Custom animations for Project Orbit system */
+
+/* Animated stars background */
+.stars-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, #fff, transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(0,255,136,0.3), transparent),
+    radial-gradient(1px 1px at 50px 50px, #fff, transparent),
+    radial-gradient(1px 1px at 80px 10px, rgba(0,200,255,0.4), transparent),
+    radial-gradient(2px 2px at 90px 40px, #fff, transparent),
+    radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.5), transparent);
+  background-size: 200px 200px;
+  animation: stars-move 120s linear infinite;
+}
+
+@keyframes stars-move {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 200px 200px;
+  }
+}
+
+/* Animation delays for staggered effects */
+.animation-delay-100 {
+  animation-delay: 100ms;
+}
+
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animation-delay-300 {
+  animation-delay: 300ms;
+}
+
+.animation-delay-500 {
+  animation-delay: 500ms;
+}
+
+/* Orbital motion keyframes */
+@keyframes orbit {
+  from {
+    transform: rotate(0deg) translateX(var(--orbit-radius, 100px)) rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(var(--orbit-radius, 100px)) rotate(-360deg);
+  }
+}
+
+@keyframes orbit-reverse {
+  from {
+    transform: rotate(0deg) translateX(var(--orbit-radius, 100px)) rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg) translateX(var(--orbit-radius, 100px)) rotate(360deg);
+  }
+}
+
+/* Floating animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes float-delayed {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+}
+
+/* Glow pulse animation */
+@keyframes glow-pulse {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+    opacity: 0.8;
+  }
+  50% { 
+    box-shadow: 0 0 40px rgba(0, 255, 136, 0.6);
+    opacity: 1;
+  }
+}
+
+/* Particle trail animation */
+@keyframes particle-trail {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.5) translateX(50px);
+  }
+}
+
+/* Scan line animation */
+@keyframes scan-line {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Utility classes */
+.orbit-slow {
+  animation: orbit 20s linear infinite;
+}
+
+.orbit-medium {
+  animation: orbit 15s linear infinite;
+}
+
+.orbit-fast {
+  animation: orbit 10s linear infinite;
+}
+
+.orbit-reverse-slow {
+  animation: orbit-reverse 25s linear infinite;
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+.float-delayed-animation {
+  animation: float-delayed 4s ease-in-out infinite;
+}
+
+.glow-pulse-animation {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* Responsive breakpoints for orbital adjustments */
+@media (max-width: 768px) {
+  :root {
+    --orbit-radius: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --orbit-radius: 40px;
+  }
+}
+
+/* Custom scrollbar for the constellation */
+.constellation-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.constellation-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+.constellation-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #00ff88, #0099ff);
+  border-radius: 2px;
+}
+
+.constellation-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #00ff88, #00ccff);
+}
+
+/* Hover effects for interactive elements */
+.orbital-hover:hover {
+  transform: scale(1.05) rotate(5deg);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gravitational-pull {
+  transition: transform 0.1s ease-out;
+}
+
+/* Loading skeleton for media */
+.media-skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .orbit-slow,
+  .orbit-medium,
+  .orbit-fast,
+  .orbit-reverse-slow,
+  .float-animation,
+  .float-delayed-animation,
+  .glow-pulse-animation {
+    animation: none;
+  }
+  
+  .orbital-hover:hover {
+    transform: scale(1.02);
+  }
+}
+
+/* Print styles */
+@media print {
+  .orbit-slow,
+  .orbit-medium,
+  .orbit-fast,
+  .orbit-reverse-slow,
+  .float-animation,
+  .float-delayed-animation,
+  .glow-pulse-animation,
+  .orbital-hover {
+    animation: none;
+    transform: none;
+  }
+}

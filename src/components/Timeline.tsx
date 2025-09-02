@@ -2,12 +2,31 @@
 import { useScroll, useTransform, motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import { Experience } from "../constants/index";
+import { useLanguage } from "../contexts/LanguageContext";
+import { useTranslations, ExperienceTranslation } from "../locales/translations";
 
 interface TimelineProps {
-  data: Experience[];
+  data?: Experience[]; // Made optional to allow for translated data
+  useTranslatedData?: boolean; // Flag to use translations instead of props data
+  sectionTitle?: string; // Optional custom title
 }
 
-export const Timeline: React.FC<TimelineProps> = ({ data }) => {
+export const Timeline: React.FC<TimelineProps> = ({ 
+  data, 
+  useTranslatedData = false,
+  sectionTitle 
+}) => {
+  const { language } = useLanguage();
+  const translations = useTranslations(language);
+  
+  // Use translated data if flag is set, otherwise use props data
+  const timelineData: Experience[] | ExperienceTranslation[] = useTranslatedData 
+    ? translations.experiences.experiences 
+    : (data || []);
+    
+  const timelineTitle = useTranslatedData 
+    ? translations.experiences.sectionTitle 
+    : (sectionTitle || "My Work Experience");
   const ref = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState<number>(0);
@@ -21,7 +40,7 @@ export const Timeline: React.FC<TimelineProps> = ({ data }) => {
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start 10%", "end 50%"],
+    offset: ["start 10%", "end 90%"],
   });
 
   const heightTransform = useTransform(scrollYProgress, [0, 1], [0, height]);
@@ -29,21 +48,21 @@ export const Timeline: React.FC<TimelineProps> = ({ data }) => {
 
   return (
     <div className="c-space section-spacing" ref={containerRef}>
-      <h2 className="text-heading">My Work Experience</h2>
-      <div ref={ref} className="relative pb-20">
-        {data.map((item, index) => (
+      <h2 className="text-heading">{timelineTitle}</h2>
+      <div ref={ref} className="relative pb-40">
+        {timelineData.map((item, index) => (
           <div
             key={index}
-            className="flex justify-start pt-10 md:pt-40 md:gap-10"
+            className="flex justify-start pt-20 md:pt-60 md:gap-10"
           >
-            <div className="sticky z-40 flex flex-col items-center self-start max-w-xs md:flex-row top-40 lg:max-w-sm md:w-full">
+            <div className={`sticky z-40 flex flex-col items-center self-start max-w-xs md:flex-row lg:max-w-sm md:w-full`} style={{ top: index === timelineData.length - 1 ? '10rem' : `${10 + index * 6}rem` }}>
               <div className="absolute flex items-center justify-center w-10 h-10 rounded-full -left-[15px] bg-midnight">
                 <div className="w-4 h-4 p-2 border rounded-full bg-neutral-800 border-neutral-700" />
               </div>
               <div className="flex-col hidden gap-2 text-xl font-bold md:flex md:pl-20 md:text-4xl text-neutral-300">
                 <h3>{item.date}</h3>
                 <h3 className="text-3xl text-neutral-400">{item.title}</h3>
-                <h3 className="text-3xl text-neutral-500">{item.job}</h3>
+                <h3 className="text-xl text-neutral-500">{item.job}</h3>
               </div>
             </div>
 

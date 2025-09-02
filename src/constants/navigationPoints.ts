@@ -1,11 +1,11 @@
 /**
- * Coordenadas 3D dos pontos de navegação interativos no modelo space_boi.glb
+ * 3D coordinates of interactive navigation points in the space_boi.glb model
  * 
- * IMPORTANTE: As coordenadas aqui são as posições dentro do grupo interno do modelo
- * Elas precisam passar por todas as transformações aplicadas:
- * 1. scale={0.01} do grupo interno
- * 2. scale do componente Astronaut (0.25 mobile / 0.4 desktop)
- * 3. position do componente Astronaut
+ * IMPORTANT: The coordinates here are the positions within the model's internal group
+ * They need to go through all applied transformations:
+ * 1. scale={0.01} of the internal group
+ * 2. scale of the Astronaut component (0.25 mobile / 0.4 desktop)
+ * 3. position of the Astronaut component
  */
 
 // Types for navigation points
@@ -40,7 +40,7 @@ export interface NavigationConfig {
 }
 
 export const NAVIGATION_POINTS: Record<string, NavigationPoint> = {
-  // Cabeça do astronauta - Seção About Me
+  // Astronaut's head - About Me Section
   HEAD: {
     id: 'about',
     name: 'About Me',
@@ -48,11 +48,11 @@ export const NAVIGATION_POINTS: Record<string, NavigationPoint> = {
     position: [0, 350, 0], // Centro aproximado da cabeça no espaço do modelo
     radius: 65, // Raio de detecção ajustado
     color: '#000000', // Cor de transição (preto)
-    description: 'Conheça mais sobre mim',
+    description: 'Learn more about me',
     meshName: 'body' // Nome do objeto no modelo
   },
 
-  // Planeta 1 - Seção Projects
+  // Planet 1 - Projects Section
   PLANET_1: {
     id: 'projects',
     name: 'Projects',
@@ -60,11 +60,11 @@ export const NAVIGATION_POINTS: Record<string, NavigationPoint> = {
     position: [-357.404, 392.646, 0], // Posição no espaço do modelo (Y e Z trocados por rotação)
     radius: 45,
     color: '#FFFFFF', // Cor de transição (branco)
-    description: 'Veja meus projetos',
+    description: 'View my projects',
     meshName: 'Sphere.002'
   },
 
-  // Planeta 2 - Seção Experience
+  // Planet 2 - Experience Section
   PLANET_2: {
     id: 'experience',
     name: 'Experience',
@@ -72,11 +72,11 @@ export const NAVIGATION_POINTS: Record<string, NavigationPoint> = {
     position: [375.469, 427.948, 0], // Posição no espaço do modelo
     radius: 65,
     color: '#FFFFFF',
-    description: 'Minha experiência profissional', 
+    description: 'My professional experience', 
     meshName: 'Sphere.001'
   },
 
-  // Planeta 3 - Seção Contact
+  // Planet 3 - Contact Section
   PLANET_3: {
     id: 'contact',
     name: 'Contact',
@@ -84,38 +84,38 @@ export const NAVIGATION_POINTS: Record<string, NavigationPoint> = {
     position: [-341.988, 460.196, -117.028], // Posição no espaço do modelo
     radius: 65,
     color: '#FFFFFF',
-    description: 'Entre em contato',
+    description: 'Get in touch',
     meshName: 'Sphere.005'
   },
 
-  // Planeta 4 - Seção Testimonials
+  // Planet 4 - Courses Section
   PLANET_4: {
-    id: 'testimonials',
-    name: 'Testimonials',
-    section: 'testimonials',
+    id: 'courses',
+    name: 'Courses',
+    section: 'courses',
     position: [199.634, 566.883, -221.001], // Posição no espaço do modelo
     radius: 45,
     color: '#000000',
-    description: 'O que dizem sobre meu trabalho',
+    description: 'Courses, certifications and extracurricular experiences',
     meshName: 'Sphere.008'
   }
 };
 
 /**
- * Configurações globais para navegação 3D
+ * Global configurations for 3D navigation
  */
 export const NAVIGATION_CONFIG: NavigationConfig = {
-  // Escala aplicada no componente Astronaut
+  // Scale applied in the Astronaut component
   MODEL_SCALE: 0.01,
   
-  // Configurações de hover
+  // Hover configurations
   HOVER_GLOW_INTENSITY: 0.5,
   HOVER_ANIMATION_DURATION: 0.3,
   
-  // Configurações de transição de câmera (SIMPLIFICADO)
+  // Camera transition configurations (SIMPLIFIED)
   TRANSITION_DURATION: 1.0,
   
-  // Estados da aplicação
+  // Application states
   STATES: {
     MAIN_SCENE: 'main_scene',
     HOVERING: 'hovering', 
@@ -123,20 +123,20 @@ export const NAVIGATION_CONFIG: NavigationConfig = {
     SECTION_VIEW: 'section_view'
   },
   
-  // Posições da câmera
+  // Camera positions
   CAMERA_POSITIONS: {
     MAIN: { position: [0, 20, 100], fov: 75 },
     ABOUT: { position: [0, 0, 10], fov: 50 },
     PROJECTS: { position: [-20, 10, 30], fov: 45 },
     EXPERIENCE: { position: [20, 10, 30], fov: 45 },
     CONTACT: { position: [-15, 25, 35], fov: 45 },
-    TESTIMONIALS: { position: [10, 35, 40], fov: 45 }
+    COURSES: { position: [10, 35, 40], fov: 45 }
   }
 };
 
 /**
- * Converte coordenadas do modelo para coordenadas do mundo 3D
- * Aplica a escala do componente Astronaut
+ * Converts model coordinates to 3D world coordinates
+ * Applies the Astronaut component scale
  */
 export const convertToWorldCoordinates = (modelPosition: [number, number, number]): [number, number, number] => {
   return [
@@ -147,21 +147,21 @@ export const convertToWorldCoordinates = (modelPosition: [number, number, number
 };
 
 /**
- * Retorna todos os pontos de navegação como array
+ * Returns all navigation points as an array
  */
 export const getAllNavigationPoints = (): NavigationPoint[] => {
   return Object.values(NAVIGATION_POINTS);
 };
 
 /**
- * Encontra ponto de navegação por ID
+ * Finds navigation point by ID
  */
 export const getNavigationPointById = (id: string): NavigationPoint | undefined => {
   return Object.values(NAVIGATION_POINTS).find(point => point.id === id);
 };
 
 /**
- * Calcula a distância entre duas posições 3D
+ * Calculates the distance between two 3D positions
  */
 export const calculateDistance = (pos1: [number, number, number], pos2: [number, number, number]): number => {
   const dx = pos1[0] - pos2[0];

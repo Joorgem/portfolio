@@ -5,14 +5,25 @@ export interface ProjectTag {
   path: string;
 }
 
+export interface ProjectMedia {
+  type: 'image' | 'gif' | 'video';
+  src: string;
+  alt: string;
+  thumbnail?: string; // For videos
+  description?: string;
+  category: 'web' | 'mobile' | 'admin' | 'features' | 'api' | 'architecture';
+  priority?: number; // For ordering within the category
+}
+
 export interface Project {
   id: number;
   title: string;
-  description: string;
   subDescription: string[];
   href: string;
+  repositoryUrl?: string;
   logo: string;
-  image: string;
+  image: string; // Maintained for compatibility
+  media: ProjectMedia[]; // Array of media (GIFs, videos, images)
   tags: ProjectTag[];
 }
 
@@ -36,229 +47,140 @@ export interface Review {
   img: string;
 }
 
+export interface Course {
+  title: string;
+  institution: string;
+  period: string;
+  description: string;
+  type: 'course' | 'certification' | 'extracurricular';
+  technologies?: string[];
+  link?: string;
+  logo: string;
+}
+
 export const myProjects: Project[] = [
   {
     id: 1,
-    title: "E-commerce Platform",
-    description:
-      "Facilitates purchases from international websites like Amazon and eBay, allowing customers to shop from these sites and have products delivered domestically.",
+    title: "SOLTO®",
     subDescription: [
-      "Built a scalable application with ASP.NET Core MVC, integrating global platforms like Amazon for domestic delivery.",
-      "Implemented secure authentication and database management using ASP.NET Core Identity and Entity Framework Core.",
-      "Designed a responsive frontend with Tailwind CSS, enhancing user experience.",
-      "Added payment systems, localization, and product filtering for functionality improvements.",
+      "E-commerce platform built with Next.js 14, TypeScript and Drizzle ORM.",
+      "Complete administrative panel with product, order, customer, promotion, collection management and real-time analytics.",
+      "Optimized checkout with multiple payment methods and automatic shipping calculation.",
+      "Responsive and modern design with Tailwind CSS, optimized for all devices.",
+      "Scalable architecture with SSR/SSG, intelligent caching and React Query."
     ],
-    href: "",
-    logo: "",
-    image: "/assets/projects/accessories.jpg",
+    href: "https://solto-shop.vercel.app/",
+    repositoryUrl: "#",
+    logo: "/assets/logos/solto-logo.png",
+    image: "/assets/projects/solto-homepage.jpg",
+    media: [
+      {
+        type: "gif",
+        src: "/assets/projects/solto-demo.gif",
+        alt: "SOLTO Demo - complete navigation",
+        category: "web",
+        priority: 1
+      },
+      {
+        type: "gif",
+        src: "/assets/projects/solto-mobile.gif",
+        alt: "Responsive mobile interface",
+        category: "mobile",
+        priority: 1
+      },
+      {
+        type: "gif", 
+        src: "/assets/projects/solto-admin.gif",
+        alt: "SOLTO administrative panel",
+        category: "admin",
+        priority: 1
+      }
+    ],
     tags: [
-      {
-        id: 1,
-        name: "C#",
-        path: "/assets/logos/csharp.svg",
-      },
-      {
-        id: 2,
-        name: ".Net",
-        path: "/assets/logos/dotnet.svg",
-      },
-      {
-        id: 3,
-        name: "Ef Core",
-        path: "/assets/logos/efcore.png",
-      },
-      {
-        id: 4,
-        name: "TailwindCSS",
-        path: "/assets/logos/tailwindcss.svg",
-      },
-    ],
+      { id: 1, name: "Next.js", path: "/assets/logos/nextjs.svg" },
+      { id: 2, name: "TypeScript", path: "/assets/logos/typescript.svg" },
+      { id: 3, name: "Drizzle ORM", path: "/assets/logos/drizzle.svg" },
+      { id: 4, name: "React Query", path: "/assets/logos/react-query.svg" },
+      { id: 5, name: "Tailwind", path: "/assets/logos/tailwindcss.svg" },
+      { id: 6, name: "PostgreSQL", path: "/assets/logos/postgresql.svg" },
+      { id: 7, name: "Vercel", path: "/assets/logos/vercel.svg" },
+      { id: 8, name: "Stripe", path: "/assets/logos/stripe.svg" }
+    ]
   },
   {
     id: 2,
-    title: "Authentication & Authorization System",
-    description:
-      "A secure authentication and authorization system using Auth0 for seamless user management.",
+    title: "Interactive 3D Portfolio",
     subDescription: [
-      "Integrated Auth0 for authentication, supporting OAuth, JWT, and multi-factor authentication.",
-      "Implemented role-based access control (RBAC) for fine-grained user permissions.",
-      "Developed a React-based frontend with Tailwind CSS for a sleek user experience.",
-      "Connected to a secure SQLite database for user data storage.",
+      "3D interactive portfolio with spatial navigation using Three.js and React Three Fiber.",
+      "Complex state management system with Zustand for seamless transitions between sections.",
+      "Advanced animations with Framer Motion, GSAP and custom interactive particles.",
+      "Modern TypeScript architecture with Vite, Tailwind CSS 4.0 and mobile-first responsive design."
     ],
-    href: "",
+    href: "https://jorgemolina.dev/",
+    repositoryUrl: "#",
     logo: "",
-    image: "/assets/projects/auth-system.jpg",
-    tags: [
+    image: "/assets/projects/portfolio-3d.jpg",
+    media: [
       {
-        id: 1,
-        name: "Auth0",
-        path: "/assets/logos/auth0.svg",
+        type: "gif",
+        src: "/assets/projects/portifolio3d-demo.gif",
+        alt: "3D Portfolio navigation demo",
+        category: "web",
+        priority: 1
       },
       {
-        id: 2,
-        name: "React",
-        path: "/assets/logos/react.svg",
-      },
-      {
-        id: 3,
-        name: "SQLite",
-        path: "/assets/logos/sqlite.svg",
-      },
-      {
-        id: 4,
-        name: "TailwindCSS",
-        path: "/assets/logos/tailwindcss.svg",
-      },
+        type: "gif",
+        src: "/assets/projects/portifolio3d-mobile.gif",
+        alt: "3D Portfolio mobile interface",
+        category: "mobile",
+        priority: 1
+      }
     ],
+    tags: [
+      { id: 17, name: "React 19", path: "/assets/logos/react.svg" },
+      { id: 18, name: "TypeScript", path: "/assets/logos/typescript.svg" },
+      { id: 19, name: "Three.js", path: "/assets/logos/threejs.svg" },
+      { id: 20, name: "Vite", path: "/assets/logos/vite.svg" },
+      { id: 21, name: "Tailwind CSS", path: "/assets/logos/tailwindcss.svg" },
+      { id: 22, name: "Framer Motion", path: "/assets/logos/framer.svg" },
+      { id: 23, name: "Zustand", path: "/assets/logos/zustand.svg" },
+      { id: 24, name: "EmailJS", path: "/assets/logos/emailjs.svg" }
+    ]
   },
   {
     id: 3,
-    title: "Blazor Web App",
-    description:
-      "A modern, interactive web application built with Blazor WebAssembly and .NET Core.",
+    title: "StoreHub",
     subDescription: [
-      "Developed a fully interactive Single Page Application (SPA) using Blazor WebAssembly.",
-      "Implemented API interactions using .NET Core for a robust backend.",
-      "Designed responsive UI components with Tailwind CSS for an enhanced UX.",
-      "Integrated SQLite for efficient client-side database storage.",
+      "Corporate system for CNPJ consultation and registration developed for Reckitt with React 18, TypeScript and Vite.",
+      "Hybrid authentication system with Microsoft MSAL (Azure AD) for production and mock provider for development.",
+      "Individual and batch CNPJ consultation, new client registration, existing data editing and CSV import functionality.",
+      "Backend API with Node.js handling data validation with Zod and comprehensive error handling middleware.",
+      "Azure Static Web Apps deployment with CI/CD pipeline, automated testing suite with Playwright and PowerShell scripts."
     ],
-    href: "",
+    href: "#",
+    repositoryUrl: "#",
     logo: "",
-    image: "/assets/projects/blazor-app.jpg",
+    image: "/assets/projects/storehub-dashboard.jpg",
+    media: [
+      {
+        type: "gif",
+        src: "/assets/projects/storehub-demo.gif",
+        alt: "StoreHub system demonstration",
+        category: "web",
+        priority: 1
+      }
+    ],
     tags: [
-      {
-        id: 1,
-        name: "Blazor",
-        path: "/assets/logos/blazor.svg",
-      },
-      {
-        id: 2,
-        name: ".NET Core",
-        path: "/assets/logos/dotnetcore.svg",
-      },
-      {
-        id: 3,
-        name: "SQLite",
-        path: "/assets/logos/sqlite.svg",
-      },
-      {
-        id: 4,
-        name: "TailwindCSS",
-        path: "/assets/logos/tailwindcss.svg",
-      },
-    ],
-  },
-  {
-    id: 4,
-    title: "C++ Game Engine",
-    description:
-      "A lightweight C++ game engine designed for 2D and 3D game development.",
-    subDescription: [
-      "Built a powerful rendering engine using OpenGL and C++.",
-      "Developed a physics engine with collision detection and particle effects.",
-      "Implemented a scripting system for easy game customization.",
-      "Optimized performance with multi-threading and efficient memory management.",
-    ],
-    href: "",
-    logo: "",
-    image: "/assets/projects/game-engine.jpg",
-    tags: [
-      {
-        id: 1,
-        name: "C++",
-        path: "/assets/logos/cplusplus.svg",
-      },
-      {
-        id: 2,
-        name: "C#",
-        path: "/assets/logos/csharp.svg",
-      },
-      {
-        id: 3,
-        name: "Git",
-        path: "/assets/logos/git.svg",
-      },
-      {
-        id: 4,
-        name: "Microsoft",
-        path: "/assets/logos/microsoft.svg",
-      },
-    ],
-  },
-  {
-    id: 5,
-    title: "WordPress Custom Theme",
-    description:
-      "A fully customizable WordPress theme optimized for performance and SEO.",
-    subDescription: [
-      "Developed a responsive WordPress theme using HTML5, CSS3, and JavaScript.",
-      "Integrated Tailwind CSS for modern styling and UI enhancements.",
-      "Optimized SEO and page speed using Vite.js for fast builds.",
-      "Implemented custom widgets and plugin compatibility for extended functionality.",
-    ],
-    href: "",
-    logo: "",
-    image: "/assets/projects/wordpress-theme.jpg",
-    tags: [
-      {
-        id: 1,
-        name: "WordPress",
-        path: "/assets/logos/wordpress.svg",
-      },
-      {
-        id: 2,
-        name: "HTML5",
-        path: "/assets/logos/html5.svg",
-      },
-      {
-        id: 3,
-        name: "CSS3",
-        path: "/assets/logos/css3.svg",
-      },
-      {
-        id: 4,
-        name: "Vite.js",
-        path: "/assets/logos/vitejs.svg",
-      },
-    ],
-  },
-  {
-    id: 6,
-    title: "Online Learning Platform",
-    description:
-      "A web application that allows users to enroll in courses, watch video lectures, and take quizzes.",
-    subDescription: [
-      "Built using Blazor WebAssembly for a seamless SPA experience.",
-      "Implemented video streaming with Azure Media Services.",
-      "Added a quiz system with dynamic question generation and real-time grading.",
-      "Integrated Stripe API for secure payment processing.",
-    ],
-    href: "",
-    logo: "",
-    image: "/assets/projects/elearning.jpg",
-    tags: [
-      {
-        id: 1,
-        name: "Blazor",
-        path: "/assets/logos/blazor.svg",
-      },
-      {
-        id: 2,
-        name: "Azure",
-        path: "/assets/logos/azure.svg",
-      },
-      {
-        id: 3,
-        name: "Stripe",
-        path: "/assets/logos/stripe.svg",
-      },
-      {
-        id: 4,
-        name: "TailwindCSS",
-        path: "/assets/logos/tailwindcss.svg",
-      },
-    ],
-  },
+      { id: 13, name: "React 18", path: "/assets/logos/react.svg" },
+      { id: 14, name: "TypeScript", path: "/assets/logos/typescript.svg" },
+      { id: 26, name: "Vite", path: "/assets/logos/vite.svg" },
+      { id: 16, name: "Azure AD", path: "/assets/logos/azure.svg" },
+      { id: 29, name: "Node.js", path: "/assets/logos/nodejs.svg" },
+      { id: 30, name: "Tailwind", path: "/assets/logos/tailwindcss.svg" },
+      { id: 31, name: "Playwright", path: "/assets/logos/playwright.svg" },
+      { id: 32, name: "Axios", path: "/assets/logos/axios.svg" }
+    ]
+  }
 ];
 
 export const mySocials: Social[] = [
@@ -281,36 +203,67 @@ export const mySocials: Social[] = [
 
 export const experiences: Experience[] = [
   {
-    title: "Software Developer",
-    job: "Security & Defense Projects",
-    date: "2021-2023",
+    title: "Engenharia Química",
+    job: "Universidade de São Paulo (USP)",
+    date: "2017-2023",
     contents: [
-      "Enhanced application security and developed new features, adhering to standards set by the Passive Defense Organization and National Cyberspace Center.",
-      "Designed and implemented intuitive map interfaces using MapsUI, enhancing user experience and enabling seamless interactive map integration.",
-      "Developed applications for industrial automation, leveraging C++ and the Fatek API for PLC communication.",
-      "Enhanced responsiveness and usability of applications using Windows Forms and WPF frameworks.",
-      "Executed XML to SVG conversions using X-DOM, ensuring dynamic and efficient data visualization.",
+      "Formação em análise de processos industriais, modelagem matemática e otimização de sistemas.",
+      "Primeiros projetos pessoais com automações Python para análise de dados e relatórios automatizados.",
+      "Experiência em controle de qualidade e metodologias de validação em laboratórios.",
+      "Base sólida em pensamento sistemático e resolução de problemas complexos.",
     ],
   },
   {
-    title: "Back-End Developer",
-    job: "Car Manufacture",
-    date: "2023-2024",
+    title: "Summer Finance Internship",
+    job: "Isaac - Fintech",
+    date: "Jan - Mar 2021",
     contents: [
-      "Engineered systems for large-scale data ingestion and analysis, ensuring efficient data processing and storage.",
-      "Developed back-end systems enabling vehicle-to-cloud communication for telemetry, diagnostics, and remote control:",
-      "✅ Implemented secure APIs, following ISO 26262 automotive safety standards.",
-      "✅ Ensured data privacy for customers and partners through industry-compliant protocols.",
-      "✅ Delivered remote features like over-the-air updates, real-time tracking, and remote start capabilities.",
+      "Primeiras automações em Python para processos ETL em bases de dados financeiros de escolas particulares.",
+      "Normalização e transformação de dados para integração com sistemas ERP corporativos.",
+      "Início da jornada em programação através de análise de dados e manipulação de grandes volumes de informações.",
     ],
   },
   {
-    title: "Freelance Developer",
-    job: "Self-Employed",
-    date: "2025-Present",
+    title: "Estagiário em Excelência Operacional",
+    job: "Novelis",
+    date: "2021 - 2022",
     contents: [
-      "Created a personal portfolio using Three.js, React, Vite, and WebAPI to showcase technical expertise.",
-      "Continuously enhancing technical skills and expanding expertise in modern web development and back-end technologies.",
+      "Desenvolvimento de dashboards automatizados em Python para monitoramento do sistema WCM (World Class Manufacturing).",
+      "Integração de múltiplas fontes de dados para geração de relatórios em tempo real sobre performance operacional.",
+      "Automação de processos de coleta e análise de dados para suporte aos times de manutenção autônoma.",
+    ],
+  },
+  {
+    title: "Analista de Business Intelligence Jr",
+    job: "Mobyan",
+    date: "2022 - 2024",
+    contents: [
+      "Desenvolvimento de relatórios interativos em Python integrando Web, SAP, DataLake, APIs e bancos SQL.",
+      "Processamento de Big Data com PySpark e PySparkSQL no Azure Synapse Analytics.",
+      "Automações com Python, SQL, NoSQL e integração de APIs para otimização de processos financeiros e operacionais.",
+    ],
+  },
+  {
+    title: "Desenvolvedor Full-Stack",
+    job: "Projetos Pessoais & Freelance", 
+    date: "2023 - Present",
+    contents: [
+      "E-commerce completo com Next.js, TypeScript e painel administrativo avançado",
+      "Arquitetura de microserviços escalável com Redis e SQL Server",
+      "Portfolio 3D interativo com Three.js e cálculos matemáticos complexos",
+      "Sistemas de processamento batch e filas assíncronas",
+      "Pipelines CI/CD automatizados com Docker e deploy em nuvem",
+    ],
+  },
+  {
+    title: "Data Engineer sSr",
+    job: "Globant",
+    date: "2024 - Present",
+    contents: [
+      "Desenvolvimento de soluções full-stack com Python/Flask e Azure Databricks para processamento de milhões de registros em escala nacional.",
+      "Implementação de pipelines otimizados e queries SQL para análise em tempo real de auditorias comerciais.",
+      "Criação de aplicações React/TypeScript com arquitetura enterprise, autenticação Azure AD (MSAL) e APIs Node.js/Express.",
+      "Arquitetura backend escalável com Node.js/Express, implementação de JWT, rate limiting e middleware de segurança para aplicações empresariais.",
     ],
   },
 ];
@@ -365,3 +318,114 @@ export const reviews: Review[] = [
     img: "https://robohash.org/eve",
   },
 ];
+
+export const courses: Course[] = [
+  {
+    title: "Node.js - The Complete Guide",
+    institution: "Udemy - Maximilian Schwarzmüller", 
+    period: "2025",
+    description: "Desenvolvimento backend completo com Node.js, Express, MongoDB, autenticação JWT, APIs RESTful e deployment em produção.",
+    type: "course",
+    technologies: ["Node.js", "Express", "MongoDB", "JWT"],
+    link: "https://udemy.com",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg"
+  },
+  {
+    title: "AI-Powered React Applications",
+    institution: "Udemy - JavaScript Mastery",
+    period: "2025",
+    description: "Desenvolvimento de aplicações React integradas com IA, utilizando OpenAI API, ChatGPT, machine learning e processamento de linguagem natural no frontend.",
+    type: "course",
+    technologies: ["React", "OpenAI API", "AI/ML", "TypeScript"],
+    link: "https://udemy.com",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
+  },
+  {
+    title: "Bootcamp E-commerce Next.js",
+    institution: "Fullstack Club",
+    period: "2025",
+    description: "Bootcamp intensivo focado no desenvolvimento de aplicações e-commerce completas usando Next.js, TypeScript, Stripe e deploy em produção.",
+    type: "extracurricular",
+    technologies: ["Next.js", "TypeScript", "E-commerce"],
+    link: "https://www.fullstackclub.com.br/bootcampecommerce",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg"
+  },
+  {
+    title: "Open Source Contributor",
+    institution: "GitHub Community",
+    period: "2024-Present",
+    description: "Contribuições ativas para projetos open source, incluindo bibliotecas React, tools de desenvolvimento e documentação técnica.",
+    type: "extracurricular",
+    technologies: ["Open Source", "Git", "Community"],
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
+  },
+  {
+    title: "Advanced TypeScript Patterns",
+    institution: "Frontend Masters",
+    period: "2024",
+    description: "Padrões avançados em TypeScript para desenvolvimento de bibliotecas, utility types, conditional types e meta-programming.",
+    type: "course",
+    technologies: ["TypeScript", "Advanced Patterns"],
+    link: "https://frontendmasters.com",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg"
+  },
+  {
+    title: "Docker & Kubernetes: The Complete Guide",
+    institution: "Udemy - Stephen Grider",
+    period: "2024",
+    description: "Curso completo de containerização com Docker, orquestração com Kubernetes, CI/CD pipelines e deploy de aplicações em clusters de produção.",
+    type: "course",
+    technologies: ["Docker", "Kubernetes", "DevOps"],
+    link: "https://udemy.com",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg"
+  },
+  {
+    title: "Ultimate AWS Certified Cloud Practitioner",
+    institution: "Udemy - Stephane Maarek",
+    period: "2024",
+    description: "Curso completo de fundamentos AWS cobrindo EC2, S3, RDS, Lambda, IAM, CloudFormation e preparação para certificação Cloud Practitioner com hands-on labs.",
+    type: "course",
+    technologies: ["AWS", "Cloud Computing", "EC2", "S3"],
+    link: "https://udemy.com",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg"
+  },
+  {
+    title: "Three.js for Beginners",
+    institution: "Udemy - Chris Courses",
+    period: "2024",
+    description: "Introdução ao Three.js para desenvolvimento web 3D, criação de geometrias, materiais, iluminação e animações básicas para sites interativos.",
+    type: "course",
+    technologies: ["Three.js", "JavaScript", "WebGL"],
+    link: "https://udemy.com",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg"
+  },
+  {
+    title: "Inteligência Artificial e Agentes Inteligentes",
+    institution: "Alura",
+    period: "2024",
+    description: "Curso completo sobre IA, criação de agentes inteligentes, redes neurais, processamento de linguagem natural e implementação de chatbots com Python.",
+    type: "course",
+    technologies: ["Python", "IA", "Agentes", "NLP"],
+    link: "https://alura.com.br",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
+  },
+  {
+    title: "Python para Ciência de Dados",
+    institution: "Alura",
+    period: "2022",
+    description: "Formação completa em Python focada em análise de dados, pandas, numpy, matplotlib e machine learning com scikit-learn para projetos reais.",
+    type: "course",
+    technologies: ["Python", "Pandas", "NumPy", "Machine Learning"],
+    link: "https://alura.com.br",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
+  },
+  {
+    title: "Complete Python Bootcamp",
+    institution: "Udemy - Jose Portilla",
+    period: "2021",
+    description: "Curso completo de Python cobrindo fundamentos, programação orientada a objetos, manipulação de dados, APIs e desenvolvimento web com Flask/Django.",
+    type: "course",
+    technologies: ["Python", "Django", "Flask", "Data Analysis"],
+    link: "https://udemy.com",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
+  }];

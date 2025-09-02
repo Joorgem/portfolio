@@ -1,5 +1,4 @@
 import { Timeline } from "../components/Timeline";
-import { experiences } from "../constants";
 import { Particles } from "../components/Particles";
 
 const Experiences: React.FC = () => {
@@ -12,7 +11,7 @@ const Experiences: React.FC = () => {
         color={"#ffffff"}
         refresh
       />
-      <Timeline data={experiences} />
+      <Timeline useTranslatedData={true} />
     </div>
   );
 };

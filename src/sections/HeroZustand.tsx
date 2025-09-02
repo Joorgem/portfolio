@@ -34,12 +34,8 @@ const HeroZustand: React.FC = () => {
   
   // Estados do store
   const navigationState = useNavigationStore(state => state.navigationState);
-  const _currentSection = useNavigationStore(state => state.currentSection);
-  const _targetSection = useNavigationStore(state => state.targetSection);
-  const _zoomProgress = useNavigationStore(state => state.zoomProgress);
   const fadeProgress = useNavigationStore(state => state.fadeProgress);
   const canvas3DActive = useNavigationStore(state => state.canvas3DActive);
-  const _zoomOutProgress = useNavigationStore(state => state.zoomOutProgress);
   
   // Ações do store
   const startNavigation = useNavigationStore(state => state.startNavigation);
@@ -287,7 +283,7 @@ const HeroZustand: React.FC = () => {
       {navigationState === 'idle' && !isMobile && (
         <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-20
                         pointer-events-none">
-          <span className="text-white/25 text-[10px] font-light tracking-widest uppercase">
+          <span className="text-white/40 text-[12px] font-light tracking-widest uppercase drop-shadow-sm">
             explore
           </span>
         </div>

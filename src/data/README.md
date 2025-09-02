@@ -1,116 +1,116 @@
-# Como Editar os Dados do Portfólio
+# How to Edit Portfolio Data
 
-Este diretório contém todos os dados dinâmicos do seu portfólio em formato JSON.
+This directory contains all dynamic portfolio data in JSON format.
 
-## Estrutura dos Arquivos
+## File Structure
 
-- **projects.json** - Seus projetos e trabalhos
-- **experiences.json** - Suas experiências profissionais
-- **reviews.json** - Depoimentos e avaliações
-- **socials.json** - Links para redes sociais
+- **projects.json** - Your projects and work
+- **experiences.json** - Your professional experiences
+- **reviews.json** - Testimonials and reviews
+- **socials.json** - Social media links
 
-## Como Editar
+## How to Edit
 
-### 1. Editando Projetos (projects.json)
+### 1. Editing Projects (projects.json)
 
-Para adicionar um novo projeto, copie a estrutura existente:
+To add a new project, copy the existing structure:
 
 ```json
 {
-  "id": 7,  // ID único, incremente o último
-  "title": "Nome do Projeto",
-  "description": "Descrição breve do projeto",
+  "id": 7,  // Unique ID, increment the last one
+  "title": "Project Name",
+  "description": "Brief project description",
   "subDescription": [
-    "Detalhe 1 do que foi feito",
-    "Detalhe 2 do que foi implementado",
-    "Tecnologias utilizadas"
+    "Detail 1 of what was done",
+    "Detail 2 of what was implemented",
+    "Technologies used"
   ],
-  "href": "https://link-do-projeto.com",  // Link externo (opcional)
-  "logo": "",  // Logo do projeto (opcional)
-  "image": "/assets/projects/nome-imagem.jpg",  // Imagem do projeto
+  "href": "https://project-link.com",  // External link (optional)
+  "logo": "",  // Project logo (optional)
+  "image": "/assets/projects/image-name.jpg",  // Project image
   "tags": [
     {
       "id": 1,
       "name": "React",
-      "path": "/assets/logos/react.svg"  // Logo da tecnologia
+      "path": "/assets/logos/react.svg"  // Technology logo
     }
   ]
 }
 ```
 
-### 2. Editando Experiências (experiences.json)
+### 2. Editing Experiences (experiences.json)
 
 ```json
 {
-  "title": "Cargo",
-  "job": "Empresa ou Tipo de Projeto",
+  "title": "Position",
+  "job": "Company or Project Type",
   "date": "2024-2025",
   "contents": [
-    "Responsabilidade ou conquista 1",
-    "Responsabilidade ou conquista 2",
-    "Tecnologias utilizadas"
+    "Responsibility or achievement 1",
+    "Responsibility or achievement 2",
+    "Technologies used"
   ]
 }
 ```
 
-### 3. Editando Reviews (reviews.json)
+### 3. Editing Reviews (reviews.json)
 
 ```json
 {
-  "name": "Nome da Pessoa",
-  "username": "@usuario",
-  "body": "Depoimento sobre seu trabalho",
-  "img": "https://url-da-foto.com/foto.jpg"
+  "name": "Person Name",
+  "username": "@username",
+  "body": "Testimonial about your work",
+  "img": "https://photo-url.com/photo.jpg"
 }
 ```
 
-### 4. Editando Redes Sociais (socials.json)
+### 4. Editing Social Media (socials.json)
 
 ```json
 {
-  "name": "Nome da Rede",
-  "href": "https://link-do-seu-perfil.com",
-  "icon": "/assets/socials/icone.svg"
+  "name": "Social Network Name",
+  "href": "https://your-profile-link.com",
+  "icon": "/assets/socials/icon.svg"
 }
 ```
 
-## Dicas Importantes
+## Important Tips
 
-1. **Sempre mantenha a estrutura JSON válida**
-   - Use vírgulas entre itens (exceto no último)
-   - Mantenha as aspas duplas
-   - Não deixe vírgulas sobrando
+1. **Always maintain valid JSON structure**
+   - Use commas between items (except the last one)
+   - Keep double quotes
+   - Don't leave trailing commas
 
-2. **IDs únicos**
-   - Cada projeto deve ter um ID único
-   - Incremente baseado no último ID usado
+2. **Unique IDs**
+   - Each project must have a unique ID
+   - Increment based on the last ID used
 
-3. **Imagens**
-   - Coloque as imagens em `/public/assets/projects/`
-   - Use caminhos relativos começando com `/assets/`
+3. **Images**
+   - Place images in `/public/assets/projects/`
+   - Use relative paths starting with `/assets/`
 
-4. **Validação**
-   - Após editar, teste localmente com `npm run dev`
-   - Verifique o console do navegador para erros
+4. **Validation**
+   - After editing, test locally with `npm run dev`
+   - Check browser console for errors
 
 5. **Backup**
-   - Sempre faça commit das alterações no Git
-   - Mantenha um backup antes de grandes mudanças
+   - Always commit changes to Git
+   - Keep a backup before major changes
 
-## Exemplo de Fluxo de Edição
+## Example Editing Flow
 
-1. Abra o arquivo JSON desejado no VS Code
-2. Faça suas alterações seguindo a estrutura
-3. Salve o arquivo (Ctrl+S)
-4. Teste com `npm run dev`
-5. Se tudo estiver ok, faça commit:
+1. Open the desired JSON file in VS Code
+2. Make your changes following the structure
+3. Save the file (Ctrl+S)
+4. Test with `npm run dev`
+5. If everything is ok, commit:
    ```bash
    git add .
-   git commit -m "Atualização de projetos/experiências"
+   git commit -m "Update projects/experiences"
    ```
 
-## Ferramentas Úteis
+## Useful Tools
 
-- **VS Code** - Editor recomendado
-- **JSON Validator** - jsonlint.com para validar JSON
-- **Prettier** - Para formatar automaticamente
+- **VS Code** - Recommended editor
+- **JSON Validator** - jsonlint.com to validate JSON
+- **Prettier** - For automatic formatting

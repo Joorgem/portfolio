@@ -42,29 +42,29 @@ const Contact: React.FC = () => {
     try {
       console.log("From submitted:", formData);
       await emailjs.send(
-        "service_79b0nyj",
-        "template_17us8im",
+        "service_ea205oa",
+        "template_o2y5538",
         {
           from_name: formData.name,
-          to_name: "Ali",
+          to_name: "Jorge",
           from_email: formData.email,
-          to_email: "AliSanatiDev@gmail.com",
+          to_email: "contato@jorgemolina.dev",
           message: formData.message,
         },
-        "pn-Bw_mS1_QQdofuV"
+        "i2duMx6NvyyeZvrwf"
       );
       setIsLoading(false);
       setFormData({ name: "", email: "", message: "" });
-      showAlertMessage("success", "You message has been sent!");
+      showAlertMessage("success", "Your message has been sent!");
     } catch (error) {
       setIsLoading(false);
       console.log(error);
-      showAlertMessage("danger", "Somthing went wrong!");
+      showAlertMessage("danger", "Something went wrong!");
     }
   };
 
   return (
-    <section className="relative flex items-center c-space section-spacing">
+    <section className="relative min-h-screen flex items-center justify-center c-space">
       <Particles
         className="absolute inset-0 -z-50"
         quantity={100}
@@ -73,12 +73,13 @@ const Contact: React.FC = () => {
         refresh
       />
       {showAlert && <Alert type={alertType} text={alertMessage} />}
-      <div className="flex flex-col items-center justify-center max-w-md p-5 mx-auto border border-white/10 rounded-2xl bg-primary">
+      <div className="flex flex-col items-center justify-center max-w-md p-8 mx-auto border border-white/10 rounded-2xl bg-black/30 backdrop-blur-sm">
         <div className="flex flex-col items-start w-full gap-5 mb-10">
           <h2 className="text-heading">Let's Talk</h2>
           <p className="font-normal text-neutral-400">
-            Whether you're loking to build a new website, improve your existing
-            platform, or bring a unique project to life, I'm here to help
+            From full-stack web development and mobile applications to custom software solutions, 
+            API integrations, database design, and cloud deployments - let's turn your ideas into 
+            innovative digital experiences.
           </p>
         </div>
         <form className="w-full" onSubmit={handleSubmit}>
@@ -91,7 +92,7 @@ const Contact: React.FC = () => {
               name="name"
               type="text"
               className="field-input field-input-focus"
-              placeholder="John Doe"
+              placeholder=""
               autoComplete="name"
               value={formData.name}
               onChange={handleChange}
@@ -107,7 +108,7 @@ const Contact: React.FC = () => {
               name="email"
               type="email"
               className="field-input field-input-focus"
-              placeholder="JohnDoe@email.com"
+              placeholder=""
               autoComplete="email"
               value={formData.email}
               onChange={handleChange}
@@ -123,7 +124,7 @@ const Contact: React.FC = () => {
               name="message"
               rows={4}
               className="field-input field-input-focus"
-              placeholder="Share your thoughts..."
+              placeholder=""
               autoComplete="message"
               value={formData.message}
               onChange={handleChange}
@@ -132,7 +133,7 @@ const Contact: React.FC = () => {
           </div>
           <button
             type="submit"
-            className="w-full px-1 py-3 text-lg text-center rounded-md cursor-pointer bg-radial from-lavender to-royal hover-animation"
+            className="w-full px-1 py-3 text-lg text-center rounded-md cursor-pointer bg-gradient-to-r from-neutral-800 to-neutral-700 border border-white/10 hover:from-neutral-700 hover:to-neutral-600 hover:border-white/20 transition-all duration-300 hover-animation"
           >
             {!isLoading ? "Send" : "Sending..."}
           </button>

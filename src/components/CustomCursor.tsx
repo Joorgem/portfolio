@@ -240,7 +240,7 @@ const CustomCursor: React.FC = () => {
             transition: 'opacity 0.15s ease-out',
           }}
         >
-          <span className="text-[9px] text-white/70 tracking-wider uppercase">
+          <span className="text-[11px] text-white/85 tracking-wider uppercase font-light drop-shadow-sm">
             {hoveredPlanet}
           </span>
         </div>

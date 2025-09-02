@@ -1,47 +1,143 @@
-import { useState, MouseEvent } from "react";
-import Project from "../components/Project";
+import React from "react";
+import ProjectShowcase from "../components/ProjectShowcase";
 import { myProjects } from "../constants";
-import { motion, useMotionValue, useSpring } from "motion/react";
+import { motion } from "framer-motion";
 import { Particles } from "../components/Particles";
+import { useLanguage } from "../contexts/LanguageContext";
+import { useTranslations } from "../locales/translations";
 
 const Projects: React.FC = () => {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const springX = useSpring(x, { damping: 10, stiffness: 50 });
-  const springY = useSpring(y, { damping: 10, stiffness: 50 });
-  
-  const handleMouseMove = (e: MouseEvent<HTMLElement>) => {
-    x.set(e.clientX + 20);
-    y.set(e.clientY + 20);
-  };
-  
-  const [preview, setPreview] = useState<string | null>(null);
-  
+  const { language } = useLanguage();
+  const translations = useTranslations(language);
+  const projectsData = translations.projects;
+
   return (
-    <section
-      onMouseMove={handleMouseMove}
-      className="relative c-space section-spacing"
-    >
-      <Particles
-        className="absolute inset-0 -z-50"
-        quantity={100}
-        ease={80}
-        color={"#ffffff"}
-        refresh
-      />
-      <h2 className="text-heading">My Selected Projects</h2>
-      <div className="bg-gradient-to-r from-transparent via-neutral-700 to-transparent mt-12 h-[1px] w-full" />
-      {myProjects.map((project) => (
-        <Project key={project.id} {...project} setPreview={setPreview} />
-      ))}
-      {preview && (
-        <motion.img
-          className="fixed top-0 left-0 z-50 object-cover h-56 rounded-lg shadow-lg pointer-events-none w-80"
-          src={preview}
-          alt="Project preview"
-          style={{ x: springX, y: springY }}
+    <section className="relative bg-black">
+      {/* Background with particles - behind content */}
+      <div className="fixed inset-0 z-0">
+        <Particles
+          className="absolute inset-0 w-full h-full"
+          quantity={100}
+          ease={80}
+          color={"#ffffff"}
+          refresh
         />
-      )}
+      </div>
+      
+      {/* Minimalist Header - Full Screen */}
+      <div className="relative z-10 min-h-screen flex flex-col justify-center text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <h2 className="text-5xl lg:text-7xl font-bold text-white mb-6">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60">
+              {projectsData.sectionTitle}
+            </span>
+          </h2>
+          
+          <p className="text-lg text-gray-200 max-w-2xl mx-auto leading-relaxed">
+            {projectsData.sectionSubtitle}
+          </p>
+        </motion.div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 0.6 }}
+        >
+          <div className="flex items-center gap-2">
+            {/* Mouse Icon */}
+            <svg
+              className="w-5 h-8 text-white/30"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1"
+              viewBox="0 0 24 36"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              {/* Mouse body */}
+              <rect
+                x="6"
+                y="4"
+                width="12"
+                height="20"
+                rx="6"
+                ry="6"
+                className="stroke-white/30"
+                fill="none"
+              />
+              
+              {/* Scroll wheel com animação */}
+              <line
+                x1="12"
+                y1="11"
+                x2="12"
+                y2="13"
+                className="stroke-white/50 animate-scroll-wheel-up"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <line
+                x1="12"
+                y1="11"
+                x2="12"
+                y2="13"
+                className="stroke-white/50 animate-scroll-wheel-down"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+            </svg>
+
+            {/* Text */}
+            <span className="text-white/40 text-[12px] font-light tracking-widest uppercase drop-shadow-sm">
+              {projectsData.scrollText}
+            </span>
+          </div>
+        </motion.div>
+      </div>
+      
+      {/* Projects List with new minimalist design */}
+      <div className="relative z-10">
+        {myProjects.map((project, index) => {
+          const translatedProject = projectsData.projects[index] || {
+            title: project.title,
+            subDescription: project.subDescription,
+            tags: project.tags
+          };
+          
+          return (
+            <ProjectShowcase
+              key={project.id}
+              {...project}
+              title={translatedProject.title}
+              subDescription={translatedProject.subDescription}
+              tags={translatedProject.tags}
+              index={index}
+              labels={projectsData.labels}
+            />
+          );
+        })}
+      </div>
+
+      {/* Minimalist Footer */}
+      <div className="relative z-10 py-32 text-center">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="space-y-4"
+        >
+          <div className="w-16 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mx-auto" />
+          <p className="text-sm text-gray-500 font-light tracking-widest uppercase">
+            {projectsData.endText}
+          </p>
+        </motion.div>
+      </div>
     </section>
   );
 };

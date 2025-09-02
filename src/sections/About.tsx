@@ -1,13 +1,37 @@
-import { useRef } from "react";
-import Card from "../components/Card";
-import CopyEmailButton from "../components/CopyEmailButton";
+import { useMemo } from "react";
 import { Particles } from "../components/Particles";
+import LogoLoop from "../components/LogoLoop";
+import { 
+  SiReact, 
+  SiNextdotjs, 
+  SiTypescript, 
+  SiNodedotjs,
+  SiPython,
+  SiTailwindcss,
+  SiDocker,
+  SiPostgresql,
+  SiMongodb,
+  SiExpress,
+  SiJavascript
+} from 'react-icons/si';
 
 const About: React.FC = () => {
-  const grid2Container = useRef<HTMLDivElement>(null);
-  
+  const techLogos = useMemo(() => [
+    { node: <SiNextdotjs className="text-2xl text-gray-400" />, title: "Next.js" },
+    { node: <SiReact className="text-2xl text-gray-400" />, title: "React" },
+    { node: <SiTypescript className="text-2xl text-gray-400" />, title: "TypeScript" },
+    { node: <SiNodedotjs className="text-2xl text-gray-400" />, title: "Node.js" },
+    { node: <SiPython className="text-2xl text-gray-400" />, title: "Python" },
+    { node: <SiTailwindcss className="text-2xl text-gray-400" />, title: "Tailwind CSS" },
+    { node: <SiDocker className="text-2xl text-gray-400" />, title: "Docker" },
+    { node: <SiPostgresql className="text-2xl text-gray-400" />, title: "PostgreSQL" },
+    { node: <SiMongodb className="text-2xl text-gray-400" />, title: "MongoDB" },
+    { node: <SiExpress className="text-2xl text-gray-400" />, title: "Express" },
+    { node: <SiJavascript className="text-2xl text-gray-400" />, title: "JavaScript" },
+  ], []);
+
   return (
-    <section className="relative c-space section-spacing" id="about">
+    <section className="relative c-space min-h-screen" id="about">
       <Particles
         className="absolute inset-0 -z-50"
         quantity={100}
@@ -16,112 +40,71 @@ const About: React.FC = () => {
         refresh
       />
       <h2 className="text-heading">About Me</h2>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-6 md:auto-rows-[18rem] mt-12">
-        {/* Grid 1 */}
-        <div className="flex items-end grid-default-color grid-1">
-          <img
-            src="assets/coding-pov.png"
-            alt="Coding POV"
-            className="absolute scale-[1.75] -right-[5rem] -top-[1rem] md:scale-[3] md:left-50 md:inset-y-10 lg:scale-[2.5]"
-          />
-          <div className="z-10">
-            <p className="headtext">Hi, I'm Ali Sanati</p>
-            <p className="subtext">
-              Over the last 4 years, I developed my frontend and backend dev
-              skills to deliver dynamic and software and web applications.
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-4 mt-12">
+        {/* Grid 1 - Apresentação Principal */}
+        <div className="group relative p-8 md:col-span-2 h-[14rem] rounded-2xl bg-black/20 backdrop-blur-md border border-gray-800/50 hover:border-gray-700/50 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 to-black/30 rounded-2xl"></div>
+          <div className="relative z-10 h-full flex flex-col justify-end">
+            <h3 className="text-2xl font-bold text-gray-100 mb-2">
+              Jorge Molina
+            </h3>
+            <p className="text-gray-400 text-sm leading-relaxed">
+              Full-Stack Developer with 4+ years building scalable solutions from data pipelines to enterprise applications
             </p>
           </div>
-          <div className="absolute inset-x-0 pointer-evets-none -bottom-4 h-1/2 sm:h-1/3 bg-gradient-to-t from-indigo" />
+          {/* Subtle accent line */}
+          <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent"></div>
         </div>
-        {/* Grid 2 */}
-        <div className="grid-default-color grid-2">
-          <div
-            ref={grid2Container}
-            className="flex items-center justify-center w-full h-full"
-          >
-            <p className="flex items-end text-5xl text-gray-500">
-              CODE IS CRAFT
-            </p>
-            <Card
-              style={{ rotate: "75deg", top: "30%", left: "20%" }}
-              text="GRASP"
-              containerRef={grid2Container}
-            />
-            <Card
-              style={{ rotate: "-30deg", top: "60%", left: "45%" }}
-              text="SOLID"
-              containerRef={grid2Container}
-            />
-            <Card
-              style={{ rotate: "90deg", bottom: "30%", left: "70%" }}
-              text="Design Patterns"
-              containerRef={grid2Container}
-            />
-            <Card
-              style={{ rotate: "-45deg", top: "55%", left: "0%" }}
-              text="Design Principles"
-              containerRef={grid2Container}
-            />
-            <Card
-              style={{ rotate: "20deg", top: "10%", left: "38%" }}
-              text="SRP"
-              containerRef={grid2Container}
-            />
-            <Card
-              style={{ rotate: "30deg", top: "70%", left: "70%" }}
-              image="assets/logos/csharp-pink.png"
-              containerRef={grid2Container}
-            />
-            <Card
-              style={{ rotate: "-45deg", top: "70%", left: "25%" }}
-              image="assets/logos/dotnet-pink.png"
-              containerRef={grid2Container}
-            />
-            <Card
-              style={{ rotate: "-45deg", top: "5%", left: "10%" }}
-              image="assets/logos/blazor-pink.png"
-              containerRef={grid2Container}
-            />
-          </div>
-        </div>
-        {/* Grid 3 */}
-        <div className="grid-black-color grid-3">
-          <div className="z-10 w-[50%]">
-            <p className="headtext">Time Zone</p>
-            <p className="subtext">
-              I'm based in Mars, and open to remote work worldwide
-            </p>
-          </div>
-          <figure className="absolute left-[30%] top-[10%]">
-            <div className="w-32 h-32 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full opacity-20"></div>
-          </figure>
-        </div>
-        {/* Grid 4 */}
-        <div className="grid-special-color grid-4">
-          <div className="flex flex-col items-center justify-center gap-4 size-full">
-            <p className="text-center headtext">
-              Do you want to start a project together?
-            </p>
-            <CopyEmailButton />
-          </div>
-        </div>
-        {/* Grid 5 */}
-        <div className="grid-default-color grid-5">
-          <div className="z-10 w-[50%]">
-            <p className="headText">Teck Stack</p>
-            <p className="subtext">
-              I specialize in a variety of languages, frameworks, and tools taht
-              allow me to build robust and scalable applications
-            </p>
-          </div>
-          <div className="absolute inset-y-0 md:inset-y-9 w-full h-full start-[50%] md:scale-125">
-            <div className="flex flex-wrap gap-4 p-4">
-              <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold">React</div>
-              <div className="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center text-white font-bold">JS</div>
-              <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">TS</div>
-              <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center text-white font-bold">Node</div>
+
+        {/* Grid 2 - Tech Stack with LogoLoop */}
+        <div className="group relative p-8 md:col-span-2 h-[14rem] rounded-2xl bg-black/20 backdrop-blur-md border border-gray-800/50 hover:border-gray-700/50 transition-all duration-300 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 to-black/30 rounded-2xl"></div>
+          <div className="relative z-10 h-full flex flex-col">
+            <h3 className="text-xl font-semibold text-gray-100 mb-6">
+              Core Technologies
+            </h3>
+            <div className="flex-grow flex items-center">
+              <LogoLoop
+                logos={techLogos}
+                speed={30}
+                direction="left"
+                logoHeight={32}
+                gap={48}
+                pauseOnHover
+                fadeOut
+                fadeOutColor="rgba(0, 0, 0, 0.2)"
+                className="w-full"
+              />
             </div>
           </div>
+          {/* Subtle accent line */}
+          <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent"></div>
+        </div>
+
+        {/* Grid 3 - Remote Location */}
+        <div className="group relative p-8 md:col-span-4 h-[10rem] rounded-2xl bg-black/20 backdrop-blur-md border border-gray-800/50 hover:border-gray-700/50 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 to-black/30 rounded-2xl"></div>
+          <div className="relative z-10 h-full flex items-center justify-between">
+            <div>
+              <h3 className="text-xl font-semibold text-gray-100 mb-2">
+                Remote First 🌍
+              </h3>
+              <p className="text-gray-400 text-sm">
+                Available worldwide for remote collaboration and international projects
+              </p>
+            </div>
+            <div className="hidden md:block">
+              <div className="text-gray-600 text-4xl opacity-20">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+          {/* Subtle accent line */}
+          <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent"></div>
         </div>
       </div>
     </section>

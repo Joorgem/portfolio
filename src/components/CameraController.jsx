@@ -103,7 +103,7 @@ const getOrbitCenters = (astronautRotation, astronautPosition) => {
         elementSize: 0.65 // Planeta médio
       }
     },
-    testimonials: { 
+    courses: { 
       orbitCenter: transformPoint([199.634, 566.883, -221.001]), // Planeta 4
       orbitRadius: 3,
       orbitHeight: 1,

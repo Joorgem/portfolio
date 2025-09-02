@@ -17,7 +17,7 @@ const MODEL_POSITIONS: Record<string, [number, number, number]> = {
   projects: [-357.404, 392.646, 0],          // Planeta 1 (esquerda)
   experience: [375.469, 427.948, 0],         // Planeta 2 (direita)
   contact: [-341.988, 460.196, -117.028],    // Planeta 3 (esquerda-trás)
-  testimonials: [199.634, 566.883, -221.001] // Planeta 4 (direita-trás)
+  courses: [199.634, 566.883, -221.001] // Planeta 4 (direita-trás)
 };
 
 /**
@@ -85,7 +85,7 @@ const getOrbitConfig = (): Record<string, OrbitConfig> => {
       zoomRadius: isMobile ? 0.4 : 0.5,
       rotationSpeed: 0.03
     },
-    testimonials: {
+    courses: {
       radius: isMobile ? 1.8 : 2.2,
       height: getHeightAdjustment(0.4),
       fov: isMobile ? 60 : 65,

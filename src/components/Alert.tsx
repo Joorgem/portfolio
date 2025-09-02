@@ -25,12 +25,14 @@ const Alert: React.FC<AlertProps> = ({ type, text }) => {
       >
         <div
           className={`p-2 ${
-            type === "danger" ? "bg-red-800" : "bg-royal"
-          } items-center text-indigo-100 leading-none lg:rounded-full flex lg:inline-flex rounded-md p-5`}
+            type === "danger" ? "bg-neutral-900/90" : "bg-neutral-800/90"
+          } items-center text-white leading-none lg:rounded-full flex lg:inline-flex rounded-md p-5 backdrop-blur-sm border ${
+            type === "danger" ? "border-red-500/20" : "border-green-500/20"
+          }`}
         >
           <p
             className={`flex rounded-full ${
-              type === "danger" ? "bg-red-500" : "bg-lavender"
+              type === "danger" ? "bg-red-500/20 text-red-300" : "bg-green-500/20 text-green-300"
             } uppercase px-2 py-1 text-xs font-semibold mr-3`}
           >
             {type === "danger" ? "Failed" : "Success"}

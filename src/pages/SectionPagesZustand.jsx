@@ -7,7 +7,8 @@ import About from '../sections/About';
 import Projects from '../sections/Projects';
 import Experiences from '../sections/Experiences';
 import Contact from '../sections/Contact';
-import Testimonial from '../sections/Testimonial';
+import Courses from '../sections/Courses';
+import { LanguageToggle } from '../components/LanguageToggle';
 
 // Container de página com animações suaves
 const PageContainer = ({ sectionId, backgroundColor = "#0a0a0a", children }) => {
@@ -46,42 +47,38 @@ const PageContainer = ({ sectionId, backgroundColor = "#0a0a0a", children }) => 
           
           {/* Botão de voltar com animação */}
           <motion.button
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
             transition={{ 
-              duration: 0.5,
+              duration: 0.4,
               delay: 0.3,
               ease: [0.4, 0, 0.2, 1]
             }}
             onClick={initiateExit}
-            className="fixed top-6 left-6 z-50 flex items-center gap-3 px-6 py-3 
-                       bg-gradient-to-r from-white/10 to-white/5
-                       backdrop-blur-xl rounded-full 
-                       border border-white/20
-                       shadow-lg shadow-black/50
+            className="fixed top-6 left-6 z-50 w-12 h-12 flex items-center justify-center
+                       bg-black/20 backdrop-blur-md rounded-full 
+                       border border-white/10
                        transition-all duration-300
-                       hover:from-white/20 hover:to-white/10
-                       hover:scale-105"
+                       hover:bg-black/40 hover:border-white/20
+                       hover:scale-110 group"
             aria-label="Voltar para navegação principal"
           >
             <svg 
-              width="20" 
-              height="20" 
+              width="18" 
+              height="18" 
               viewBox="0 0 24 24" 
               fill="none"
+              className="transition-transform duration-300 group-hover:-translate-x-0.5"
             >
               <path 
                 d="M19 12H5M5 12L12 19M5 12L12 5" 
                 stroke="white" 
-                strokeWidth="2.5" 
+                strokeWidth="2" 
                 strokeLinecap="round" 
                 strokeLinejoin="round"
               />
             </svg>
-            <span className="text-white font-medium text-sm tracking-wide">
-              Voltar
-            </span>
           </motion.button>
           
           {/* Container do conteúdo com animação suave */}
@@ -140,9 +137,12 @@ const SectionPagesZustand = () => {
       {/* Projects Page */}
       <PageContainer 
         sectionId="projects" 
-        backgroundColor="#0a0a0a"
+        backgroundColor="transparent"
       >
-        <div className="min-h-screen pt-24 pb-10">
+        {/* Language Toggle - only visible in Projects section */}
+        <LanguageToggle />
+        
+        <div className="min-h-full">
           <Projects />
         </div>
       </PageContainer>
@@ -152,11 +152,11 @@ const SectionPagesZustand = () => {
         sectionId="experience" 
         backgroundColor="#0a0a0a"
       >
+        {/* Language Toggle - only visible in Experience section */}
+        <LanguageToggle />
+        
         <div className="min-h-screen pt-24 pb-10 flex items-center justify-center">
           <div className="w-full max-w-6xl px-4">
-            <h2 className="text-heading text-white mb-12 text-center">
-              My Experience
-            </h2>
             <Experiences />
           </div>
         </div>
@@ -172,13 +172,16 @@ const SectionPagesZustand = () => {
         </div>
       </PageContainer>
       
-      {/* Testimonials Page */}
+      {/* Courses Page */}
       <PageContainer 
-        sectionId="testimonials" 
+        sectionId="courses" 
         backgroundColor="#0a0a0a"
       >
+        {/* Language Toggle - only visible in Courses section */}
+        <LanguageToggle />
+        
         <div className="min-h-screen pt-24 pb-10">
-          <Testimonial />
+          <Courses />
         </div>
       </PageContainer>
     </>

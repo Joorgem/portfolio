@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigationStore } from '../stores/navigation.store';
-import { NAVIGATION_POINTS } from '../constants/navigationPoints';
 
 interface NavItem {
   id: string;
@@ -12,7 +11,7 @@ const navItems: NavItem[] = [
   { id: 'projects', label: 'Projects' },
   { id: 'experience', label: 'Experience' },
   { id: 'contact', label: 'Contact' },
-  { id: 'testimonials', label: 'Testimonials' },
+  { id: 'courses', label: 'Courses' },
 ];
 
 const MobileBottomNav: React.FC = () => {
