@@ -1,8 +1,13 @@
 {
   "redirects": [
     {
-      "source": "/:path*",
-      "destination": "https://www.jorgemolina.dev/:path*",
+      "source": "/",
+      "destination": "https://www.jorgemolina.dev/",
+      "permanent": true
+    },
+    {
+      "source": "/:path((?!assets).*)",
+      "destination": "https://www.jorgemolina.dev/:path",
       "permanent": true
     }
   ]
