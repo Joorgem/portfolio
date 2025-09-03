@@ -1,18 +1,18 @@
 import { Timeline } from "../components/Timeline";
 import { Particles } from "../components/Particles";
-import { useLanguage } from "../contexts/LanguageContext";
+import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
 
 const Experiences: React.FC = () => {
-  const { setLanguage } = useLanguage();
+  const { i18n } = useTranslation();
   
   // Set English as default language only on first visit, without overriding user choice
   useEffect(() => {
     // Only set to English if no language preference exists yet
     if (!localStorage.getItem('portfolio_language')) {
-      setLanguage('en');
+      i18n.changeLanguage('en');
     }
-  }, []); // Empty dependency array - runs only once on mount
+  }, [i18n]); // Empty dependency array - runs only once on mount
   return (
     <div className="relative w-full">
       <Particles

@@ -27,6 +27,12 @@ export const FlipWords: React.FC<FlipWordsProps> = ({ words, duration = 3000, cl
       }, duration);
   }, [isAnimating, duration, startAnimation]);
 
+  // Force immediate update when words array changes (language switch)
+  useEffect(() => {
+    setCurrentWord(words[0]);
+    setIsAnimating(true);
+  }, [words]);
+
   return (
     <AnimatePresence
       onExitComplete={() => {

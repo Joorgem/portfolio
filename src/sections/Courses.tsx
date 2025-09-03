@@ -1,6 +1,4 @@
-import { Course } from "../constants";
-import { useLanguage } from "../contexts/LanguageContext";
-import { useTranslations, CourseTranslation } from "../locales/translations";
+import { useTranslation } from "react-i18next";
 import { Particles } from "../components/Particles";
 
 interface CourseCardProps {
@@ -18,7 +16,7 @@ interface CourseCardProps {
     certification: string;
     extracurricular: string;
   };
-  coursesData: Course[] | CourseTranslation[];
+  coursesData: any[];
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({ 
@@ -129,10 +127,9 @@ const CourseCard: React.FC<CourseCardProps> = ({
 };
 
 const Courses: React.FC = () => {
-  const { language } = useLanguage();
-  const translations = useTranslations(language);
-  const coursesData = translations.courses.courses;
-  const typeLabels = translations.courses.typeLabels;
+  const { t } = useTranslation('courses');
+  const coursesData = t('courses', { returnObjects: true }) as any[];
+  const typeLabels = t('typeLabels', { returnObjects: true }) as any;
 
   return (
     <section className="relative min-h-screen flex flex-col justify-center c-space py-12 md:py-20">

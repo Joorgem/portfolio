@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Particles } from "../components/Particles";
 import LogoLoop from "../components/LogoLoop";
 import { 
@@ -16,6 +17,7 @@ import {
 } from 'react-icons/si';
 
 const About: React.FC = () => {
+  const { t } = useTranslation('about');
   const techLogos = useMemo(() => [
     { node: <SiNextdotjs className="text-2xl text-gray-400" />, title: "Next.js" },
     { node: <SiReact className="text-2xl text-gray-400" />, title: "React" },
@@ -39,17 +41,17 @@ const About: React.FC = () => {
         color={"#ffffff"}
         refresh
       />
-      <h2 className="text-heading">About Me</h2>
+      <h2 className="text-heading">{t('title')}</h2>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-4 mt-12">
         {/* Grid 1 - Apresentação Principal */}
         <div className="group relative p-8 md:col-span-2 h-[14rem] rounded-2xl bg-black/20 backdrop-blur-md border border-gray-800/50 hover:border-gray-700/50 transition-all duration-300">
           <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 to-black/30 rounded-2xl"></div>
           <div className="relative z-10 h-full flex flex-col justify-end">
             <h3 className="text-2xl font-bold text-gray-100 mb-2">
-              Jorge Molina
+              {t('name')}
             </h3>
             <p className="text-gray-400 text-sm leading-relaxed">
-              Full-Stack Developer with 4+ years building scalable solutions from data pipelines to enterprise applications
+              {t('description')}
             </p>
           </div>
           {/* Subtle accent line */}
@@ -61,7 +63,7 @@ const About: React.FC = () => {
           <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 to-black/30 rounded-2xl"></div>
           <div className="relative z-10 h-full flex flex-col">
             <h3 className="text-xl font-semibold text-gray-100 mb-6">
-              Core Technologies
+              {t('techStack')}
             </h3>
             <div className="flex-grow flex items-center">
               <LogoLoop
@@ -87,10 +89,10 @@ const About: React.FC = () => {
           <div className="relative z-10 h-full flex items-center justify-between">
             <div>
               <h3 className="text-xl font-semibold text-gray-100 mb-2">
-                Remote First 🌍
+                {t('remote.title')}
               </h3>
               <p className="text-gray-400 text-sm">
-                Available worldwide for remote collaboration and international projects
+                {t('remote.description')}
               </p>
             </div>
             <div className="hidden md:block">

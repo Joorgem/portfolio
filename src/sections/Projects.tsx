@@ -1,35 +1,62 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ProjectShowcase from "../components/ProjectShowcase";
 import { myProjects } from "../constants";
 import { motion } from "framer-motion";
 import { Particles } from "../components/Particles";
-import { useLanguage } from "../contexts/LanguageContext";
-import { useTranslations } from "../locales/translations";
+import { useTranslation } from "react-i18next";
 
 const Projects: React.FC = () => {
-  const { language } = useLanguage();
-  const translations = useTranslations(language);
-  const projectsData = translations.projects;
+  const { t } = useTranslation('projects');
+  const projectsData = {
+    sectionTitle: t('sectionTitle'),
+    sectionSubtitle: t('sectionSubtitle'),
+    scrollText: t('scrollText'),
+    endText: t('endText'),
+    labels: {
+      technologies: t('labels.technologies'),
+      links: t('labels.links'),
+      viewProject: t('labels.viewProject'),
+      code: t('labels.code'),
+      viewDetails: t('labels.viewDetails'),
+      projectDetails: t('labels.projectDetails')
+    },
+    projects: t('projects', { returnObjects: true }) as any[]
+  };
+  const [showParticles, setShowParticles] = useState(false);
+
+  // Delay particles to avoid initial render lag
+  useEffect(() => {
+    const timer = setTimeout(() => setShowParticles(true), 400);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <section className="relative bg-black">
       {/* Background with particles - behind content */}
-      <div className="fixed inset-0 z-0">
-        <Particles
-          className="absolute inset-0 w-full h-full"
-          quantity={100}
-          ease={80}
-          color={"#ffffff"}
-          refresh
-        />
-      </div>
+      {showParticles && (
+        <div className="fixed inset-0 z-0">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
+          >
+            <Particles
+              className="absolute inset-0 w-full h-full"
+              quantity={100}
+              ease={80}
+              color={"#ffffff"}
+              refresh
+            />
+          </motion.div>
+        </div>
+      )}
       
       {/* Minimalist Header - Full Screen */}
       <div className="relative z-10 min-h-screen flex flex-col justify-center text-center">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
         >
           <h2 className="text-5xl lg:text-7xl font-bold text-white mb-6">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60">
@@ -47,7 +74,7 @@ const Projects: React.FC = () => {
       {/* Projects List with new minimalist design */}
       <div className="relative z-10">
         {myProjects.map((project, index) => {
-          const translatedProject = projectsData.projects[index] || {
+          const translatedProject = (projectsData.projects as any[])[index] || {
             title: project.title,
             subDescription: project.subDescription,
             tags: project.tags

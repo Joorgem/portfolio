@@ -2,6 +2,7 @@ import { useState, FormEvent, ChangeEvent } from "react";
 import emailjs from "@emailjs/browser";
 import Alert from "../components/Alert";
 import { Particles } from "../components/Particles";
+import { useTranslation } from "react-i18next";
 
 interface FormData {
   name: string;
@@ -12,6 +13,7 @@ interface FormData {
 type AlertType = "danger" | "success";
 
 const Contact: React.FC = () => {
+  const { t } = useTranslation('contact');
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
@@ -55,11 +57,11 @@ const Contact: React.FC = () => {
       );
       setIsLoading(false);
       setFormData({ name: "", email: "", message: "" });
-      showAlertMessage("success", "Your message has been sent!");
+      showAlertMessage("success", t('form.successMessage'));
     } catch (error) {
       setIsLoading(false);
       console.log(error);
-      showAlertMessage("danger", "Something went wrong!");
+      showAlertMessage("danger", t('form.errorMessage'));
     }
   };
 
@@ -75,17 +77,15 @@ const Contact: React.FC = () => {
       {showAlert && <Alert type={alertType} text={alertMessage} />}
       <div className="flex flex-col items-center justify-center max-w-md p-8 mx-auto border border-white/10 rounded-2xl bg-black/30 backdrop-blur-sm">
         <div className="flex flex-col items-start w-full gap-5 mb-10">
-          <h2 className="text-heading">Let's Talk</h2>
+          <h2 className="text-heading">{t('title')}</h2>
           <p className="font-normal text-neutral-400">
-            From full-stack web development and mobile applications to custom software solutions, 
-            API integrations, database design, and cloud deployments - let's turn your ideas into 
-            innovative digital experiences.
+            {t('description')}
           </p>
         </div>
         <form className="w-full" onSubmit={handleSubmit}>
           <div className="mb-5">
             <label htmlFor="name" className="feild-label">
-              Full Name
+              {t('form.fields.name')}
             </label>
             <input
               id="name"
@@ -101,7 +101,7 @@ const Contact: React.FC = () => {
           </div>
           <div className="mb-5">
             <label htmlFor="email" className="feild-label">
-              Email
+              {t('form.fields.email')}
             </label>
             <input
               id="email"
@@ -117,7 +117,7 @@ const Contact: React.FC = () => {
           </div>
           <div className="mb-5">
             <label htmlFor="message" className="feild-label">
-              Message
+              {t('form.fields.message')}
             </label>
             <textarea
               id="message"
@@ -135,7 +135,7 @@ const Contact: React.FC = () => {
             type="submit"
             className="w-full px-1 py-3 text-lg text-center rounded-md cursor-pointer bg-gradient-to-r from-neutral-800 to-neutral-700 border border-white/10 hover:from-neutral-700 hover:to-neutral-600 hover:border-white/20 transition-all duration-300 hover-animation"
           >
-            {!isLoading ? "Send" : "Sending..."}
+            {!isLoading ? t('form.submit') : t('form.sending')}
           </button>
         </form>
       </div>

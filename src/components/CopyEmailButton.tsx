@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { useTranslation } from "react-i18next";
 
 const CopyEmailButton: React.FC = () => {
+  const { t } = useTranslation('common');
   const [copied, setCopied] = useState<boolean>(false);
-  const email = "Your Email Address";
+  const email = t('copyEmail.emailPlaceholder');
 
   const copyToClipboard = (): void => {
     navigator.clipboard.writeText(email);
@@ -32,7 +34,7 @@ const CopyEmailButton: React.FC = () => {
             transition={{ duration: 0.1, ease: "easeInOut" }}
           >
             <img src="assets/copy-done.svg" className="w-5" alt="copy Icon" />
-            Email has Copied
+            {t('copyEmail.copied')}
           </motion.p>
         ) : (
           <motion.p
@@ -44,7 +46,7 @@ const CopyEmailButton: React.FC = () => {
             transition={{ duration: 0.1 }}
           >
             <img src="assets/copy.svg" className="w-5" alt="copy icon" />
-            Copy Email Address
+            {t('copyEmail.copy')}
           </motion.p>
         )}
       </AnimatePresence>

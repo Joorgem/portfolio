@@ -145,6 +145,7 @@ const ProjectShowcase: React.FC<ProjectShowcaseProps> = ({
                         target="_blank"
                         rel="noopener noreferrer"
                         className="group relative px-4 py-2 bg-white text-black font-medium text-sm rounded-lg overflow-hidden text-center"
+                        data-white-bg="true"
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                       >

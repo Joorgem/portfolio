@@ -2,8 +2,7 @@
 import { useScroll, useTransform, motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import { Experience } from "../constants/index";
-import { useLanguage } from "../contexts/LanguageContext";
-import { useTranslations, ExperienceTranslation } from "../locales/translations";
+import { useTranslation } from "react-i18next";
 
 interface TimelineProps {
   data?: Experience[]; // Made optional to allow for translated data
@@ -16,16 +15,15 @@ export const Timeline: React.FC<TimelineProps> = ({
   useTranslatedData = false,
   sectionTitle 
 }) => {
-  const { language } = useLanguage();
-  const translations = useTranslations(language);
+  const { t } = useTranslation('experiences');
   
   // Use translated data if flag is set, otherwise use props data
-  const timelineData: Experience[] | ExperienceTranslation[] = useTranslatedData 
-    ? translations.experiences.experiences 
+  const timelineData = useTranslatedData 
+    ? t('experiences', { returnObjects: true }) as Experience[]
     : (data || []);
     
   const timelineTitle = useTranslatedData 
-    ? translations.experiences.sectionTitle 
+    ? t('sectionTitle')
     : (sectionTitle || "My Work Experience");
   const ref = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);

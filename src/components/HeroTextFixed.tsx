@@ -2,9 +2,11 @@ import React from "react";
 import { FlipWords } from "./FlipWords";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigationStore } from "../stores/navigation.store";
+import { useTranslation } from "react-i18next";
 
 const HeroTextFixed: React.FC = () => {
-  const words = ["Secure", "Modern", "Scalable"];
+  const { t } = useTranslation('hero');
+  const words = t('words', { returnObjects: true }) as string[];
   const navigationState = useNavigationStore(state => state.navigationState);
   const fadeProgress = useNavigationStore(state => state.fadeProgress);
   
@@ -39,7 +41,7 @@ const HeroTextFixed: React.FC = () => {
               exit="exit"
               transition={{ delay: 0.5 }}
             >
-              Hi I'm Jorge
+              {t('greeting')}
             </motion.h1>
             <div className="space-y-1">
               <motion.p
@@ -50,7 +52,7 @@ const HeroTextFixed: React.FC = () => {
                 exit="exit"
                 transition={{ delay: 0.7 }}
               >
-                A Developer <br /> Dedicated to Crafting
+                <span dangerouslySetInnerHTML={{ __html: t('tagline.desktop') }} />
               </motion.p>
               <motion.div
                 variants={variants}
@@ -72,7 +74,7 @@ const HeroTextFixed: React.FC = () => {
                 exit="exit"
                 transition={{ delay: 1.3 }}
               >
-                Web Solutions
+                {t('solutions.desktop')}
               </motion.p>
             </div>
           </div>
@@ -87,7 +89,7 @@ const HeroTextFixed: React.FC = () => {
               exit="exit"
               transition={{ delay: 0.5 }}
             >
-              Hi, I'm Jorge
+              {t('greetingMobile')}
             </motion.p>
             <div className="space-y-2">
               <motion.p
@@ -98,7 +100,7 @@ const HeroTextFixed: React.FC = () => {
                 exit="exit"
                 transition={{ delay: 0.7 }}
               >
-                Building
+                {t('tagline.mobile')}
               </motion.p>
               <motion.div
                 variants={variants}
@@ -120,7 +122,7 @@ const HeroTextFixed: React.FC = () => {
                 exit="exit"
                 transition={{ delay: 1.3 }}
               >
-                Web Applications
+                {t('solutions.mobile')}
               </motion.p>
             </div>
           </div>

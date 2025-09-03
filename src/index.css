@@ -264,3 +264,71 @@ body {
 .field-input-focus {
   @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20;
 }
+
+/* Fullscreen MediaPlayer Styles */
+.fullscreen-media:fullscreen {
+  @apply p-0 rounded-none bg-black;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+
+.fullscreen-media:fullscreen video {
+  @apply w-full h-full object-contain;
+}
+
+.fullscreen-media:fullscreen .absolute {
+  position: absolute !important;
+}
+
+/* Webkit fullscreen */
+.fullscreen-media:-webkit-full-screen {
+  @apply p-0 rounded-none bg-black;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+
+.fullscreen-media:-webkit-full-screen video {
+  @apply w-full h-full object-contain;
+}
+
+/* Custom Cursor in Fullscreen - Simplified */
+:fullscreen {
+  cursor: none !important;
+}
+
+:-webkit-full-screen {
+  cursor: none !important;
+}
+
+:-moz-full-screen {
+  cursor: none !important;
+}
+
+:-ms-fullscreen {
+  cursor: none !important;
+}
+
+/* Ensure fullscreen cursor works properly */
+.fullscreen-media:fullscreen .pointer-events-none {
+  pointer-events: none !important;
+  z-index: 999999 !important;
+}
+
+.fullscreen-media:-webkit-full-screen .pointer-events-none {
+  pointer-events: none !important;
+  z-index: 999999 !important;
+}
+
+.fullscreen-media:-moz-full-screen .pointer-events-none {
+  pointer-events: none !important;
+  z-index: 999999 !important;
+}
+
+.fullscreen-media:-ms-fullscreen .pointer-events-none {
+  pointer-events: none !important;
+  z-index: 999999 !important;
+}

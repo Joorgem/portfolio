@@ -1,0 +1,31 @@
+{
+  "points": {
+    "about": {
+      "name": "Sobre Mim",
+      "description": "Saiba mais sobre mim"
+    },
+    "projects": {
+      "name": "Projetos",
+      "description": "Veja meus projetos"
+    },
+    "experience": {
+      "name": "Experiência",
+      "description": "Minha experiência profissional"
+    },
+    "contact": {
+      "name": "Contato",
+      "description": "Entre em contato"
+    },
+    "courses": {
+      "name": "Cursos",
+      "description": "Educação e treinamentos"
+    }
+  },
+  "labels": {
+    "about": "Sobre",
+    "projects": "Projetos",
+    "experience": "Experiência",
+    "contact": "Contato",
+    "courses": "Cursos"
+  }
+}

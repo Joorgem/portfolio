@@ -10,11 +10,14 @@ import CameraControllerZustand from "../components/CameraController.Zustand";
 import { useNavigationStore } from "../stores/navigation.store";
 import type { NavigationPoint } from "../constants/navigationPoints";
 import { Particles } from "../components/Particles";
+import { LanguageToggle } from "../components/LanguageToggle";
+import { useTranslation } from "react-i18next";
 
 /**
  * Hero Section com Zustand
  */
 const HeroZustand: React.FC = () => {
+  const { t } = useTranslation('common');
   const isMobile = useMediaQuery({ maxWidth: 853 });
   const astronautRef = useRef<THREE.Group>(null!);
   
@@ -279,20 +282,20 @@ const HeroZustand: React.FC = () => {
       )}
       
       
-      {/* Instruções progressivas no rodapé */}
+      {/* Instruções progressivas no topo */}
       {!isMobile && (
-        <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-20
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-20
                         pointer-events-none transition-all duration-500">
           {navigationState === 'idle' && (
             <span className="text-white/50 text-[14px] font-light tracking-widest uppercase drop-shadow-sm">
-              Click planets to orbit
+              {t('footer.desktop.idle')}
             </span>
           )}
           {navigationState === 'orbiting' && (
             <div className="flex items-center gap-3 text-white/50 text-[12px] font-light tracking-widest uppercase drop-shadow-sm">
-              <span>Scroll ↑ enter</span>
+              <span>{t('footer.desktop.orbiting.enter')}</span>
               <span className="text-white/30">•</span>
-              <span>Scroll ↓ return</span>
+              <span>{t('footer.desktop.orbiting.return')}</span>
             </div>
           )}
         </div>
@@ -300,23 +303,28 @@ const HeroZustand: React.FC = () => {
       
       {/* Instruções mobile - mais visíveis */}
       {isMobile && (
-        <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-20
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-20
                         pointer-events-none transition-all duration-500">
           {navigationState === 'idle' && (
             <span className="text-white/60 text-[13px] font-light tracking-wider uppercase drop-shadow-sm">
-              Tap planets to orbit
+              {t('footer.mobile.idle')}
             </span>
           )}
           {navigationState === 'orbiting' && (
             <div className="flex flex-col items-center gap-1 text-white/60 text-[11px] font-light tracking-wider uppercase drop-shadow-sm">
-              <span>Swipe ↑ enter</span>
-              <span>Swipe ↓ return</span>
+              <span>{t('footer.mobile.orbiting.enter')}</span>
+              <span>{t('footer.mobile.orbiting.return')}</span>
             </div>
           )}
         </div>
       )}
       
-      
+      {/* Language Toggle - Principal (fixo) - Só aparece quando não estamos em uma seção */}
+      {navigationState !== 'in_section' && (
+        <div className="fixed top-6 right-6 z-50">
+          <LanguageToggle />
+        </div>
+      )}
       
       {/* Monitor de Desenvolvimento */}
       <DevMonitor />

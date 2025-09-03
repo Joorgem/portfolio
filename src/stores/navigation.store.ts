@@ -534,7 +534,7 @@ export const useNavigationStore = create<NavigationStore>()(
           pageVisible: true,
           navigationState: NavigationStates.IN_SECTION
         });
-      }, 200);
+      }, 100);
       
       // Atualiza URL
       if (typeof window !== 'undefined') {

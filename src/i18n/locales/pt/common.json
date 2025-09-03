@@ -1,0 +1,40 @@
+{
+  "languageToggle": {
+    "ariaLabel": "Alterar idioma"
+  },
+  "buttons": {
+    "back": "Voltar para navegação principal",
+    "close": "Fechar",
+    "submit": "Enviar",
+    "send": "Enviar",
+    "loading": "Carregando..."
+  },
+  "navigation": {
+    "backToMain": "Voltar para navegação principal"
+  },
+  "alert": {
+    "failed": "Falhou",
+    "success": "Sucesso"
+  },
+  "copyEmail": {
+    "copied": "Email copiado",
+    "copy": "Copiar endereço de email",
+    "emailPlaceholder": "Seu endereço de email"
+  },
+  "footer": {
+    "desktop": {
+      "idle": "Clique nos planetas para entrar em sua órbita",
+      "orbiting": {
+        "enter": "Scroll ↑ entrar",
+        "return": "Scroll ↓ voltar"
+      }
+    },
+    "mobile": {
+      "idle": "Toque nos planetas para entrar em sua órbita",
+      "orbiting": {
+        "enter": "Deslize ↑ entrar",
+        "return": "Deslize ↓ voltar"
+      }
+    }
+  }
+}

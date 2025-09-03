@@ -1,8 +1,26 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigationStore } from '../stores/navigation.store';
+import { useTranslation } from 'react-i18next';
 
 const CustomCursor: React.FC = () => {
   const hoveredPlanet = useNavigationStore(state => state.hoveredPlanet);
+  const { t } = useTranslation('navigation');
+  
+  // Helper function to translate planet names
+  const translatePlanetName = (planetName: string | null) => {
+    if (!planetName) return null;
+    
+    const nameMap: Record<string, string> = {
+      'About Me': t('points.about.name'),
+      'Projects': t('points.projects.name'),
+      'Experience': t('points.experience.name'),
+      'Contact': t('points.contact.name'),
+      'Courses': t('points.courses.name')
+    };
+    
+    return nameMap[planetName] || planetName;
+  };
   
   // Refs para manipulação direta do DOM
   const cursorDotRef = useRef<HTMLDivElement>(null);
@@ -13,6 +31,7 @@ const CustomCursor: React.FC = () => {
   const rafId = useRef<number | undefined>(undefined);
   const isPointerRef = useRef(false);
   const isVisibleRef = useRef(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   
   // Hook para detectar dispositivo móvel
   const [isMobile, setIsMobile] = useState(() => 
@@ -24,13 +43,22 @@ const CustomCursor: React.FC = () => {
       setIsMobile(window.innerWidth < 768);
     };
     
+    const checkFullscreen = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    
     window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    document.addEventListener('fullscreenchange', checkFullscreen);
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      document.removeEventListener('fullscreenchange', checkFullscreen);
+    };
   }, []);
   
   useEffect(() => {
-    // Skip effect if mobile
-    if (isMobile) return;
+    // Skip effect if mobile or in fullscreen (FullscreenCursor will handle it)
+    if (isMobile || isFullscreen) return;
     const cursorDot = cursorDotRef.current;
     const cursorRing = cursorRingRef.current;
     const cursorText = cursorTextRef.current;
@@ -85,6 +113,10 @@ const CustomCursor: React.FC = () => {
       const target = e.target as Element;
       const shouldShowPointer = isInteractive(target) || !!hoveredPlanet;
       
+      // Detecta elementos com fundo branco
+      const isOverWhiteBg = target.matches('[data-white-bg="true"]') || 
+                           target.closest('[data-white-bg="true"]');
+      
       if (shouldShowPointer !== isPointerRef.current) {
         isPointerRef.current = shouldShowPointer;
         
@@ -97,6 +129,15 @@ const CustomCursor: React.FC = () => {
           cursorDot.style.transform = 'translate(-50%, -50%) scale(1)';
           cursorRing.style.transform = 'translate(-50%, -50%) scale(0)';
           cursorRing.style.borderWidth = '0px';
+        }
+        
+        // Muda cor do cursor baseado no fundo
+        if (isOverWhiteBg) {
+          cursorDot.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+          cursorRing.style.borderColor = 'rgba(0, 0, 0, 0.5)';
+        } else {
+          cursorDot.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+          cursorRing.style.borderColor = 'rgba(255, 255, 255, 0.5)';
         }
       }
     };
@@ -144,6 +185,8 @@ const CustomCursor: React.FC = () => {
         if (elementAtCursor) {
           // Atualiza estado visual do cursor baseado em hover interativo ou planeta
           const shouldShowPointer = isInteractive(elementAtCursor) || !!hoveredPlanet;
+          const isOverWhiteBg = elementAtCursor.matches('[data-white-bg="true"]') || 
+                               elementAtCursor.closest('[data-white-bg="true"]');
           
           if (shouldShowPointer !== isPointerRef.current) {
             isPointerRef.current = shouldShowPointer;
@@ -158,16 +201,32 @@ const CustomCursor: React.FC = () => {
               cursorRing.style.borderWidth = '0px';
             }
           }
+          
+          // Atualiza cor do cursor
+          if (isOverWhiteBg) {
+            cursorDot.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+            cursorRing.style.borderColor = 'rgba(0, 0, 0, 0.5)';
+          } else {
+            cursorDot.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+            cursorRing.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+          }
         }
       }
       
       rafId.current = requestAnimationFrame(animate);
     };
     
-    // Event listeners
+    // Event listeners - attach to both document and fullscreen element
     document.addEventListener('mousemove', handleMouseMove, { passive: true });
     document.addEventListener('mouseleave', handleMouseLeave);
     document.addEventListener('mouseenter', handleMouseEnter);
+    
+    // Additional listeners for fullscreen compatibility
+    if (document.fullscreenElement) {
+      document.fullscreenElement.addEventListener('mousemove', handleMouseMove, { passive: true });
+      document.fullscreenElement.addEventListener('mouseleave', handleMouseLeave);
+      document.fullscreenElement.addEventListener('mouseenter', handleMouseEnter);
+    }
     
     // Inicia animação
     rafId.current = requestAnimationFrame(animate);
@@ -175,16 +234,35 @@ const CustomCursor: React.FC = () => {
     // Esconde cursor padrão
     document.body.style.cursor = 'none';
     
+    // Se estiver em fullscreen, esconde o cursor também no elemento fullscreen
+    if (document.fullscreenElement) {
+      (document.fullscreenElement as HTMLElement).style.cursor = 'none';
+    }
+    
     // Cleanup
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
       document.removeEventListener('mouseenter', handleMouseEnter);
+      
+      // Clean up fullscreen listeners if they exist
+      if (document.fullscreenElement) {
+        document.fullscreenElement.removeEventListener('mousemove', handleMouseMove);
+        document.fullscreenElement.removeEventListener('mouseleave', handleMouseLeave);
+        document.fullscreenElement.removeEventListener('mouseenter', handleMouseEnter);
+      }
+      
       if (rafId.current) cancelAnimationFrame(rafId.current);
       document.body.style.cursor = 'auto';
+      
+      // Restaura cursor no elemento fullscreen se existir
+      if (document.fullscreenElement) {
+        (document.fullscreenElement as HTMLElement).style.cursor = 'auto';
+      }
+      
       observer.disconnect();
     };
-  }, [hoveredPlanet, isMobile]);
+  }, [hoveredPlanet, isMobile, isFullscreen]);
   
   // Atualiza texto do planeta quando muda
   useEffect(() => {
@@ -197,11 +275,11 @@ const CustomCursor: React.FC = () => {
     }
   }, [hoveredPlanet]);
   
-  // Não renderiza em mobile
-  if (isMobile) return null;
+  // Não renderiza em mobile ou em fullscreen (FullscreenCursor cuida disso)
+  if (isMobile || isFullscreen) return null;
   
-  return (
-    <div className="pointer-events-none fixed inset-0 z-[9999]">
+  const cursorElements = (
+    <div className={`pointer-events-none fixed inset-0 ${isFullscreen ? 'z-[99999]' : 'z-[9999]'}`}>
       {/* Cursor dot */}
       <div
         ref={cursorDotRef}
@@ -242,13 +320,21 @@ const CustomCursor: React.FC = () => {
         >
           <div className="bg-black/40 backdrop-blur-sm border border-white/20 px-3 py-1.5 rounded-lg shadow-lg">
             <span className="text-[15px] text-white/95 tracking-wider uppercase font-normal">
-              {hoveredPlanet}
+              {translatePlanetName(hoveredPlanet)}
             </span>
           </div>
         </div>
       )}
     </div>
   );
+  
+  // Se estiver em fullscreen, renderiza no elemento fullscreen
+  if (isFullscreen && document.fullscreenElement) {
+    return createPortal(cursorElements, document.fullscreenElement);
+  }
+  
+  // Caso contrário, renderiza normalmente
+  return cursorElements;
 };
 
 export default CustomCursor;

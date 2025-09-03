@@ -1,6 +1,86 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ProjectMedia } from '../constants/index';
+import { Pause, Play, Maximize2, Minimize2 } from 'lucide-react';
+import FullscreenCursor from './FullscreenCursor';
+
+const LazyMP4 = ({ src, onLoad, className }: {
+  src: string;
+  onLoad?: () => void;
+  className?: string;
+}) => {
+  const [isInView, setIsInView] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Convert GIF path to MP4
+  const mp4Src = src.replace('.gif', '.mp4');
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.disconnect();
+        }
+      },
+      { 
+        threshold: 0.1, 
+        rootMargin: '200px' // Start loading earlier for video
+      }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  const handleLoadedData = useCallback(() => {
+    setIsLoaded(true);
+    onLoad?.();
+  }, [onLoad]);
+
+  const handleError = useCallback(() => {
+    setHasError(true);
+    setIsLoaded(true);
+  }, []);
+
+  return (
+    <div ref={containerRef} className={`relative ${className}`}>
+      {!isLoaded && (
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 animate-pulse flex items-center justify-center z-10">
+          <div className="text-white/60">
+            {hasError ? (
+              <div className="text-sm">⚠️ Erro no carregamento</div>
+            ) : (
+              <div className="w-8 h-8 border-2 border-white/60 border-t-transparent rounded-full animate-spin"></div>
+            )}
+          </div>
+        </div>
+      )}
+      
+      {isInView && (
+        <video
+          ref={videoRef}
+          src={mp4Src}
+          onLoadedData={handleLoadedData}
+          onError={handleError}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata" // Only load metadata initially
+          className={`${className} ${!isLoaded ? 'opacity-0' : 'opacity-100'} transition-opacity duration-500`}
+          style={{ aspectRatio: '16/9' }}
+        />
+      )}
+    </div>
+  );
+};
 
 interface MediaPlayerProps {
   media: ProjectMedia[];
@@ -9,6 +89,7 @@ interface MediaPlayerProps {
   showControls?: boolean;
   showIndicators?: boolean;
 }
+
 
 const MediaPlayer: React.FC<MediaPlayerProps> = ({
   media,
@@ -20,9 +101,28 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(autoPlay);
   const [isLoading, setIsLoading] = useState(true);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const currentMedia = media[currentIndex];
+
+  // Preload next MP4 for smooth transitions
+  useEffect(() => {
+    if (media.length > 1) {
+      const nextIndex = (currentIndex + 1) % media.length;
+      const nextMedia = media[nextIndex];
+      
+      if (nextMedia?.type === 'gif') {
+        const mp4Src = nextMedia.src.replace('.gif', '.mp4');
+        const video = document.createElement('video');
+        video.src = mp4Src;
+        video.preload = 'metadata';
+        video.muted = true;
+        // Don't append to DOM, just trigger preload
+      }
+    }
+  }, [currentIndex, media]);
 
   // Auto-advance for multiple media items
   useEffect(() => {
@@ -66,6 +166,35 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
     setIsLoading(true);
   };
 
+  // Fullscreen API handlers
+  const toggleFullscreen = async () => {
+    if (!containerRef.current) return;
+
+    try {
+      if (!document.fullscreenElement) {
+        await containerRef.current.requestFullscreen();
+        setIsFullscreen(true);
+      } else {
+        await document.exitFullscreen();
+        setIsFullscreen(false);
+      }
+    } catch (error) {
+      console.warn('Fullscreen not supported:', error);
+    }
+  };
+
+  // Listen for fullscreen changes
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
+  }, []);
+
   const renderMedia = () => {
     switch (currentMedia.type) {
       case 'video':
@@ -80,14 +209,14 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
             muted
             loop={media.length === 1}
             className="w-full h-full object-cover"
+            preload="metadata"
           />
         );
       
       case 'gif':
         return (
-          <img
+          <LazyMP4
             src={currentMedia.src}
-            alt={currentMedia.alt}
             onLoad={handleMediaLoad}
             className="w-full h-full object-cover"
           />
@@ -100,13 +229,21 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
             alt={currentMedia.alt}
             onLoad={handleMediaLoad}
             className="w-full h-full object-cover"
+            loading="lazy"
           />
         );
     }
   };
 
   return (
-    <div className={`relative bg-black rounded-lg overflow-hidden ${className}`}>
+    <div 
+      ref={containerRef} 
+      className={`relative bg-black rounded-lg overflow-hidden ${className} ${isFullscreen ? 'fullscreen-media' : ''}`}
+      data-white-bg="true"
+    >
+      {/* Fullscreen Cursor - only render when in fullscreen */}
+      {isFullscreen && <FullscreenCursor />}
+      
       {/* Loading Spinner */}
       <AnimatePresence>
         {isLoading && (
@@ -133,30 +270,39 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
       </motion.div>
 
       {/* Media Controls */}
-      {showControls && currentMedia.type === 'video' && (
+      <div className="absolute bottom-4 right-4 flex gap-2">
+        {showControls && currentMedia.type === 'video' && (
+          <motion.button
+            onClick={handlePlay}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors backdrop-blur-sm"
+          >
+            {isPlaying ? (
+              <Pause className="w-6 h-6" />
+            ) : (
+              <Play className="w-6 h-6" />
+            )}
+          </motion.button>
+        )}
+        
+        {/* Fullscreen Button */}
         <motion.button
-          onClick={handlePlay}
+          onClick={toggleFullscreen}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className="absolute bottom-4 left-4 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors backdrop-blur-sm"
+          className="bg-black/50 hover:bg-black/70 text-white p-1.5 rounded-full transition-colors backdrop-blur-sm"
         >
-          {isPlaying ? (
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
-            </svg>
+          {isFullscreen ? (
+            <Minimize2 className="w-4 h-4" />
           ) : (
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M8 5v14l11-7z"/>
-            </svg>
+            <Maximize2 className="w-4 h-4" />
           )}
         </motion.button>
-      )}
-
-      {/* Media Type Badge */}
-      <div className="absolute top-4 right-4 bg-black/50 text-white px-2 py-1 rounded text-xs font-medium backdrop-blur-sm">
-        {currentMedia.type.toUpperCase()}
       </div>
 
       {/* Navigation Indicators */}
@@ -178,8 +324,10 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
 
       {/* Media Description */}
       {currentMedia.description && (
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-          <p className="text-white text-sm">{currentMedia.description}</p>
+        <div className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent ${isFullscreen ? 'p-8' : 'p-4'}`}>
+          <p className={`text-white ${isFullscreen ? 'text-lg font-medium' : 'text-sm'}`}>
+            {currentMedia.description}
+          </p>
         </div>
       )}
     </div>

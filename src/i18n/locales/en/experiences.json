@@ -1,0 +1,69 @@
+{
+  "sectionTitle": "My Work Experience",
+  "experiences": [
+    {
+      "title": "Full-Stack Developer",
+      "job": "Personal Projects & Freelance",
+      "date": "Present",
+      "contents": [
+        "Complete e-commerce with admin panel, product management and payment systems",
+        "Executive dashboards with real-time analytics and automated reporting",
+        "Interactive 3D web applications and advanced visual experiences", 
+        "Automation systems, scalable APIs and external service integrations",
+        "Cloud architecture with automated deployment and performance monitoring"
+      ]
+    },
+    {
+      "title": "sSr Data Engineer",
+      "job": "Globant",
+      "date": "2024 - Present",
+      "contents": [
+        "Development of full-stack solutions with Python/Flask and Azure Databricks for processing millions of records at national scale.",
+        "Implementation of optimized pipelines and SQL queries for real-time commercial audit analysis.",
+        "Creation of React/TypeScript applications with enterprise architecture, Azure AD (MSAL) authentication, and Node.js/Express APIs.",
+        "Scalable backend architecture with Node.js/Express, JWT implementation, rate limiting, and security middleware for enterprise applications."
+      ]
+    },
+    {
+      "title": "Jr. Business Intelligence Analyst",
+      "job": "Mobyan",
+      "date": "2022 - 2024",
+      "contents": [
+        "Development of interactive reports in Python integrating Web, SAP, DataLake, APIs, and SQL databases.",
+        "Big Data processing with PySpark and PySparkSQL in Azure Synapse Analytics.",
+        "Automations with Python, SQL, NoSQL, and API integration for financial and operational process optimization."
+      ]
+    },
+    {
+      "title": "Operational Excellence Intern",
+      "job": "Novelis",
+      "date": "2021 - 2022",
+      "contents": [
+        "Development of automated dashboards in Python for WCM (World Class Manufacturing) system monitoring.",
+        "Integration of multiple data sources for real-time reporting on operational performance.",
+        "Automation of data collection and analysis processes to support autonomous maintenance teams."
+      ]
+    },
+    {
+      "title": "Summer Finance Internship",
+      "job": "Isaac - Fintech",
+      "date": "Jan - Mar 2021",
+      "contents": [
+        "First Python automations for ETL processes in financial databases of private schools.",
+        "Data normalization and transformation for integration with corporate ERP systems.",
+        "Beginning of programming journey through data analysis and manipulation of large volumes of information."
+      ]
+    },
+    {
+      "title": "Chemical Engineering",
+      "job": "University of São Paulo (USP)",
+      "date": "2017-2023",
+      "contents": [
+        "Education in industrial process analysis, mathematical modeling, and system optimization.",
+        "First personal projects with Python automations for data analysis and automated reporting.",
+        "Experience in quality control and validation methodologies in laboratories.",
+        "Solid foundation in systematic thinking and complex problem solving."
+      ]
+    }
+  ]
+}

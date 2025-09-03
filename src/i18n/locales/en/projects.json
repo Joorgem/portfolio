@@ -1,0 +1,76 @@
+{
+  "sectionTitle": "Projects",
+  "sectionSubtitle": "A collection of work that demonstrates passion for clean code, intuitive design and innovative solutions",
+  "scrollText": "scroll",
+  "endText": "End of projects",
+  "labels": {
+    "technologies": "Technologies",
+    "links": "Links",
+    "viewProject": "View Project",
+    "code": "Code",
+    "viewDetails": "View Details",
+    "projectDetails": "Project Details"
+  },
+  "projects": [
+    {
+      "title": "SOLTO®",
+      "subDescription": [
+        "E-commerce platform built with Next.js 14, TypeScript and Drizzle ORM.",
+        "Complete administrative panel with product, order, customer, promotion, collection management and real-time analytics.",
+        "Optimized checkout with multiple payment methods and automatic shipping calculation.",
+        "Responsive and modern design with Tailwind CSS, optimized for all devices.",
+        "Scalable architecture with SSR/SSG, intelligent caching and React Query."
+      ],
+      "tags": [
+        { "name": "Next.js" },
+        { "name": "TypeScript" },
+        { "name": "Drizzle ORM" },
+        { "name": "React Query" },
+        { "name": "Tailwind" },
+        { "name": "PostgreSQL" },
+        { "name": "Vercel" },
+        { "name": "Stripe" }
+      ]
+    },
+    {
+      "title": "Interactive 3D Portfolio",
+      "subDescription": [
+        "Personal portfolio developed with Three.js and React, featuring immersive 3D navigation.",
+        "Planetary navigation system with smooth transitions and realistic physics animations.",
+        "Responsive interface adaptable for desktop and mobile with optimized controls.",
+        "Modular architecture with Zustand state management and Framer Motion animations.",
+        "Optimized performance with lazy loading, code splitting and efficient rendering."
+      ],
+      "tags": [
+        { "name": "Three.js" },
+        { "name": "React" },
+        { "name": "TypeScript" },
+        { "name": "Framer Motion" },
+        { "name": "Zustand" },
+        { "name": "Tailwind" },
+        { "name": "Vite" },
+        { "name": "WebGL" }
+      ]
+    },
+    {
+      "title": "StoreHub",
+      "subDescription": [
+        "Corporate system for CNPJ consultation and registration developed for Reckitt with React 18, TypeScript and Vite.",
+        "Hybrid authentication system with Microsoft MSAL (Azure AD) for production and mock provider for development.",
+        "Individual and batch CNPJ consultation, new client registration, existing data editing and CSV import functionality.",
+        "Backend API with Node.js handling data validation with Zod and comprehensive error handling middleware.",
+        "Azure Static Web Apps deployment with CI/CD pipeline, automated testing suite with Playwright and PowerShell scripts."
+      ],
+      "tags": [
+        { "name": "React 18" },
+        { "name": "TypeScript" },
+        { "name": "Vite" },
+        { "name": "Azure AD" },
+        { "name": "Node.js" },
+        { "name": "Tailwind" },
+        { "name": "Playwright" },
+        { "name": "Axios" }
+      ]
+    }
+  ]
+}

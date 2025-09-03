@@ -8,10 +8,12 @@ import Projects from '../sections/Projects';
 import Experiences from '../sections/Experiences';
 import Contact from '../sections/Contact';
 import Courses from '../sections/Courses';
+import { useTranslation } from 'react-i18next';
 import { LanguageToggle } from '../components/LanguageToggle';
 
 // Container de página com animações suaves
 const PageContainer = ({ sectionId, backgroundColor = "#0a0a0a", children }) => {
+  const { t } = useTranslation('common');
   const currentSection = useNavigationStore(state => state.currentSection);
   const pageVisible = useNavigationStore(state => state.pageVisible);
   const fadeProgress = useNavigationStore(state => state.fadeProgress);
@@ -33,7 +35,7 @@ const PageContainer = ({ sectionId, backgroundColor = "#0a0a0a", children }) => 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.2 }}
           className="fixed inset-0 z-40 overflow-y-auto"
           style={{ backgroundColor }}
         >
@@ -62,7 +64,7 @@ const PageContainer = ({ sectionId, backgroundColor = "#0a0a0a", children }) => 
                        transition-all duration-300
                        hover:bg-black/40 hover:border-white/20
                        hover:scale-110 group"
-            aria-label="Voltar para navegação principal"
+            aria-label={t('navigation.backToMain')}
           >
             <svg 
               width="18" 
@@ -81,6 +83,11 @@ const PageContainer = ({ sectionId, backgroundColor = "#0a0a0a", children }) => 
             </svg>
           </motion.button>
           
+          {/* Language Toggle - Rola com o conteúdo */}
+          <div className="absolute top-6 right-6 z-50">
+            <LanguageToggle />
+          </div>
+          
           {/* Container do conteúdo com animação suave */}
           <motion.div
             initial={{ opacity: 0, y: 100 }}
@@ -88,8 +95,8 @@ const PageContainer = ({ sectionId, backgroundColor = "#0a0a0a", children }) => 
               opacity: 1, 
               y: 0,
               transition: {
-                duration: 0.8,
-                delay: 0.2,
+                duration: 0.6,
+                delay: 0.1,
                 ease: [0.25, 0.1, 0.25, 1]
               }
             }}
@@ -139,9 +146,6 @@ const SectionPagesZustand = () => {
         sectionId="projects" 
         backgroundColor="transparent"
       >
-        {/* Language Toggle - only visible in Projects section */}
-        <LanguageToggle />
-        
         <div className="min-h-full">
           <Projects />
         </div>
@@ -152,9 +156,6 @@ const SectionPagesZustand = () => {
         sectionId="experience" 
         backgroundColor="#0a0a0a"
       >
-        {/* Language Toggle - only visible in Experience section */}
-        <LanguageToggle />
-        
         <div className="min-h-screen pt-24 pb-10 flex items-center justify-center">
           <div className="w-full max-w-6xl px-4">
             <Experiences />
@@ -177,9 +178,6 @@ const SectionPagesZustand = () => {
         sectionId="courses" 
         backgroundColor="#0a0a0a"
       >
-        {/* Language Toggle - only visible in Courses section */}
-        <LanguageToggle />
-        
         <div className="min-h-screen pt-24 pb-10">
           <Courses />
         </div>

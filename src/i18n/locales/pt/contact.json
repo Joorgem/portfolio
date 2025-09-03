@@ -1,0 +1,15 @@
+{
+  "title": "Vamos Conversar",
+  "description": "Do desenvolvimento web full-stack e aplicações mobile a soluções de software customizadas, integrações de API, design de banco de dados e implantações na nuvem - vamos transformar suas ideias em experiências digitais inovadoras.",
+  "form": {
+    "fields": {
+      "name": "Nome Completo",
+      "email": "Email",
+      "message": "Mensagem"
+    },
+    "submit": "Enviar",
+    "sending": "Enviando...",
+    "successMessage": "Sua mensagem foi enviada!",
+    "errorMessage": "Algo deu errado!"
+  }
+}

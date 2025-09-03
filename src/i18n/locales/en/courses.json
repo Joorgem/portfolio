@@ -1,0 +1,119 @@
+{
+  "sectionTitle": "Education & Training",
+  "typeLabels": {
+    "course": "Course",
+    "certification": "Certification",
+    "extracurricular": "Extracurricular"
+  },
+  "courses": [
+    {
+      "title": "Node.js - The Complete Guide",
+      "institution": "Udemy - Maximilian Schwarzmüller",
+      "period": "2025",
+      "description": "Complete backend development with Node.js, Express, MongoDB, JWT authentication, RESTful APIs and production deployment.",
+      "type": "course",
+      "technologies": ["Node.js", "Express", "MongoDB", "JWT"],
+      "link": "https://udemy.com",
+      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg"
+    },
+    {
+      "title": "AI-Powered React Applications",
+      "institution": "Udemy - JavaScript Mastery",
+      "period": "2025",
+      "description": "Development of React applications integrated with AI, using OpenAI API, ChatGPT, machine learning and natural language processing in frontend.",
+      "type": "course",
+      "technologies": ["React", "OpenAI API", "AI/ML", "TypeScript"],
+      "link": "https://udemy.com",
+      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
+    },
+    {
+      "title": "E-commerce Next.js Bootcamp",
+      "institution": "Fullstack Club",
+      "period": "2025",
+      "description": "Intensive bootcamp focused on developing complete e-commerce applications using Next.js, TypeScript, Stripe and production deployment.",
+      "type": "extracurricular",
+      "technologies": ["Next.js", "TypeScript", "E-commerce"],
+      "link": "https://www.fullstackclub.com.br/bootcampecommerce",
+      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg"
+    },
+    {
+      "title": "Open Source Contributor",
+      "institution": "GitHub Community",
+      "period": "2024-Present",
+      "description": "Active contributions to open source projects, including React libraries, development tools and technical documentation.",
+      "type": "extracurricular",
+      "technologies": ["Open Source", "Git", "Community"],
+      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
+    },
+    {
+      "title": "Advanced TypeScript Patterns",
+      "institution": "Frontend Masters",
+      "period": "2024",
+      "description": "Advanced TypeScript patterns for library development, utility types, conditional types and meta-programming.",
+      "type": "course",
+      "technologies": ["TypeScript", "Advanced Patterns"],
+      "link": "https://frontendmasters.com",
+      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg"
+    },
+    {
+      "title": "Docker & Kubernetes: The Complete Guide",
+      "institution": "Udemy - Stephen Grider",
+      "period": "2024",
+      "description": "Complete course on containerization with Docker, orchestration with Kubernetes, CI/CD pipelines and deployment of applications in production clusters.",
+      "type": "course",
+      "technologies": ["Docker", "Kubernetes", "DevOps"],
+      "link": "https://udemy.com",
+      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg"
+    },
+    {
+      "title": "Ultimate AWS Certified Cloud Practitioner",
+      "institution": "Udemy - Stephane Maarek",
+      "period": "2024",
+      "description": "Complete AWS fundamentals course covering EC2, S3, RDS, Lambda, IAM, CloudFormation and Cloud Practitioner certification preparation with hands-on labs.",
+      "type": "course",
+      "technologies": ["AWS", "Cloud Computing", "EC2", "S3"],
+      "link": "https://udemy.com",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg"
+    },
+    {
+      "title": "Three.js for Beginners",
+      "institution": "Udemy - Chris Courses",
+      "period": "2024",
+      "description": "Introduction to Three.js for 3D web development, creating geometries, materials, lighting and basic animations for interactive websites.",
+      "type": "course",
+      "technologies": ["Three.js", "JavaScript", "WebGL"],
+      "link": "https://udemy.com",
+      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg"
+    },
+    {
+      "title": "Artificial Intelligence and Intelligent Agents",
+      "institution": "Alura",
+      "period": "2024",
+      "description": "Complete course on AI, creation of intelligent agents, neural networks, natural language processing and chatbot implementation with Python.",
+      "type": "course",
+      "technologies": ["Python", "AI", "Agents", "NLP"],
+      "link": "https://alura.com.br",
+      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
+    },
+    {
+      "title": "Python for Data Science",
+      "institution": "Alura",
+      "period": "2022",
+      "description": "Complete Python training focused on data analysis, pandas, numpy, matplotlib and machine learning with scikit-learn for real projects.",
+      "type": "course",
+      "technologies": ["Python", "Pandas", "NumPy", "Machine Learning"],
+      "link": "https://alura.com.br",
+      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
+    },
+    {
+      "title": "Complete Python Bootcamp",
+      "institution": "Udemy - Jose Portilla",
+      "period": "2021",
+      "description": "Complete Python course covering fundamentals, object-oriented programming, data manipulation, APIs and web development with Flask/Django.",
+      "type": "course",
+      "technologies": ["Python", "Django", "Flask", "Data Analysis"],
+      "link": "https://udemy.com",
+      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
+    }
+  ]
+}

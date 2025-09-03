@@ -1,0 +1,40 @@
+{
+  "languageToggle": {
+    "ariaLabel": "Change language"
+  },
+  "buttons": {
+    "back": "Back to main navigation",
+    "close": "Close",
+    "submit": "Submit",
+    "send": "Send",
+    "loading": "Loading..."
+  },
+  "navigation": {
+    "backToMain": "Back to main navigation"
+  },
+  "alert": {
+    "failed": "Failed",
+    "success": "Success"
+  },
+  "copyEmail": {
+    "copied": "Email has Copied",
+    "copy": "Copy Email Address",
+    "emailPlaceholder": "Your Email Address"
+  },
+  "footer": {
+    "desktop": {
+      "idle": "Click planets to orbit",
+      "orbiting": {
+        "enter": "Scroll ↑ enter",
+        "return": "Scroll ↓ return"
+      }
+    },
+    "mobile": {
+      "idle": "Tap planets to orbit", 
+      "orbiting": {
+        "enter": "Swipe ↑ enter",
+        "return": "Swipe ↓ return"
+      }
+    }
+  }
+}

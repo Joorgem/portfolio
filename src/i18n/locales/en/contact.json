@@ -1,0 +1,15 @@
+{
+  "title": "Let's Talk",
+  "description": "From full-stack web development and mobile applications to custom software solutions, API integrations, database design, and cloud deployments - let's turn your ideas into innovative digital experiences.",
+  "form": {
+    "fields": {
+      "name": "Full Name",
+      "email": "Email",
+      "message": "Message"
+    },
+    "submit": "Send",
+    "sending": "Sending...",
+    "successMessage": "Your message has been sent!",
+    "errorMessage": "Something went wrong!"
+  }
+}

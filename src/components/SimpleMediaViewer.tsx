@@ -25,7 +25,6 @@ const SimpleMediaViewer: React.FC<SimpleMediaViewerProps> = ({
 }) => {
   const [internalCategory, setInternalCategory] = useState<string>('web');
   const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
   
   // Use external category if provided, otherwise use internal
   const selectedCategory = hideCategories ? externalCategory : internalCategory;
@@ -54,14 +53,8 @@ const SimpleMediaViewer: React.FC<SimpleMediaViewerProps> = ({
   const currentMedia = currentCategoryMedia[currentMediaIndex] || currentCategoryMedia[0];
 
   const handleCategoryChange = (category: string) => {
-    setIsLoading(true);
     setInternalCategory(category);
     setCurrentMediaIndex(0);
-    
-    // Hide loading after a short delay to prevent flicker
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 300);
   };
 
   // Determine aspect ratio based on category
@@ -93,11 +86,6 @@ const SimpleMediaViewer: React.FC<SimpleMediaViewerProps> = ({
 
         {/* Media Container */}
         <div className="relative w-full h-full">
-          {isLoading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-gray-900/50 z-10">
-              <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-            </div>
-          )}
           {currentMedia && (
             <MediaPlayer
               key={`${selectedCategory}-${currentMediaIndex}`}

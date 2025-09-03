@@ -1,20 +1,22 @@
 import React from 'react';
 import { useNavigationStore } from '../stores/navigation.store';
+import { useTranslation } from 'react-i18next';
 
 interface NavItem {
   id: string;
-  label: string;
+  labelKey: string;
 }
 
 const navItems: NavItem[] = [
-  { id: 'about', label: 'About' },
-  { id: 'projects', label: 'Projects' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'contact', label: 'Contact' },
-  { id: 'courses', label: 'Courses' },
+  { id: 'about', labelKey: 'labels.about' },
+  { id: 'projects', labelKey: 'labels.projects' },
+  { id: 'experience', labelKey: 'labels.experience' },
+  { id: 'contact', labelKey: 'labels.contact' },
+  { id: 'courses', labelKey: 'labels.courses' },
 ];
 
 const MobileBottomNav: React.FC = () => {
+  const { t } = useTranslation('navigation');
   const navigationState = useNavigationStore(state => state.navigationState);
   const targetSection = useNavigationStore(state => state.targetSection);
   const currentSection = useNavigationStore(state => state.currentSection);
@@ -98,7 +100,7 @@ const MobileBottomNav: React.FC = () => {
                     }
                   `}
                 >
-                  {item.label}
+                  {t(item.labelKey)}
                 </span>
 
                 {/* Indicador de ativo sutil */}

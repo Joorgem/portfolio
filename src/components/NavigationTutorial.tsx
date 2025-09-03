@@ -1,8 +1,10 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigationStore } from '../stores/navigation.store';
+import { useTranslation } from 'react-i18next';
 
 const NavigationTutorial: React.FC = () => {
+  const { t } = useTranslation('tutorial');
   const showTutorial = useNavigationStore(state => state.showTutorial);
   const completeTutorial = useNavigationStore(state => state.completeTutorial);
 
@@ -102,7 +104,7 @@ const NavigationTutorial: React.FC = () => {
                 transition={{ delay: 0.1 }}
               >
                 <h2 className="text-2xl font-light text-white mb-2 tracking-wide">
-                  Start Your Exploration
+                  {t('title')}
                 </h2>
                 <div className="w-12 h-px bg-white/20 mx-auto"></div>
               </motion.div>
@@ -121,9 +123,7 @@ const NavigationTutorial: React.FC = () => {
                     <span className="text-white/80 text-sm font-light">1</span>
                   </div>
                   <div>
-                    <p className="text-white/90 font-light">
-                      <span className="text-white font-medium">{isMobile ? 'Tap' : 'Select'}</span> any planet {isMobile ? 'or use the sidebar ' : ''}to orbit it
-                    </p>
+                    <p className="text-white/90 font-light" dangerouslySetInnerHTML={{ __html: t(isMobile ? 'steps.step1.mobile' : 'steps.step1.desktop') }} />
                   </div>
                 </motion.div>
 
@@ -139,9 +139,7 @@ const NavigationTutorial: React.FC = () => {
                     <span className="text-white/80 text-sm font-light">2</span>
                   </div>
                   <div>
-                    <p className="text-white/90 font-light">
-                      <span className="text-white font-medium">{isMobile ? 'Swipe' : 'Scroll'} {isMobile ? '↑' : '↑'}</span> to get inside!
-                    </p>
+                    <p className="text-white/90 font-light" dangerouslySetInnerHTML={{ __html: t(isMobile ? 'steps.step2.mobile' : 'steps.step2.desktop') }} />
                   </div>
                 </motion.div>
 
@@ -157,9 +155,7 @@ const NavigationTutorial: React.FC = () => {
                     <span className="text-white/80 text-sm font-light">3</span>
                   </div>
                   <div>
-                    <p className="text-white/90 font-light">
-                      <span className="text-white font-medium">{isMobile ? 'Swipe' : 'Scroll'} {isMobile ? '↓' : '↓'}</span> to return to space
-                    </p>
+                    <p className="text-white/90 font-light" dangerouslySetInnerHTML={{ __html: t(isMobile ? 'steps.step3.mobile' : 'steps.step3.desktop') }} />
                   </div>
                 </motion.div>
               </div>
@@ -175,7 +171,7 @@ const NavigationTutorial: React.FC = () => {
                 transition={{ delay: 1 }}
                 onClick={handleStartExploring}
               >
-                Click to continue
+                {t('clickToContinue')}
               </motion.p>
             </div>
           </motion.div>

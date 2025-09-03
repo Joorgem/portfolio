@@ -1,14 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useLanguage } from '../contexts/LanguageContext';
-import { useTranslations } from '../locales/translations';
+import { useTranslation } from 'react-i18next';
 
 export const LanguageToggle: React.FC = () => {
-  const { language, setLanguage } = useLanguage();
-  const translations = useTranslations(language);
+  const { i18n, t } = useTranslation('common');
 
   const toggleLanguage = () => {
-    setLanguage(language === 'pt' ? 'en' : 'pt');
+    const currentLang = i18n.language;
+    const newLang = currentLang === 'pt' ? 'en' : 'pt';
+    i18n.changeLanguage(newLang);
   };
 
   return (
@@ -24,25 +24,25 @@ export const LanguageToggle: React.FC = () => {
         ease: [0.4, 0, 0.2, 1]
       }}
       onClick={toggleLanguage}
-      className="fixed top-6 right-6 z-50 h-12 flex items-center justify-center px-4
+      className="h-12 flex items-center justify-center px-4
                  bg-black/20 backdrop-blur-md rounded-full 
                  border border-white/10
                  transition-all duration-300
                  hover:bg-black/40 hover:border-white/20
                  group"
-      aria-label={translations.common.languageToggle.ariaLabel}
+      aria-label={t('languageToggle.ariaLabel')}
     >
       {/* Language Text with Smooth Transition */}
       <motion.div 
         className="flex items-center text-sm font-medium text-white/90"
-        key={language} // Force re-render on language change
+        key={i18n.language} // Force re-render on language change
         initial={{ opacity: 0, x: 5 }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: -5 }}
         transition={{ duration: 0.2 }}
       >
         <span className={`transition-all duration-300 ${
-          language === 'pt' 
+          i18n.language === 'pt' 
             ? 'text-white font-semibold' 
             : 'text-white/50 hover:text-white/70'
         }`}>
@@ -52,7 +52,7 @@ export const LanguageToggle: React.FC = () => {
         <span className="mx-2 text-white/40">|</span>
         
         <span className={`transition-all duration-300 ${
-          language === 'en' 
+          i18n.language === 'en' 
             ? 'text-white font-semibold' 
             : 'text-white/50 hover:text-white/70'
         }`}>
