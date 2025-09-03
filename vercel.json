@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "https://jorgemolina.dev/:path*",
+      "destination": "https://www.jorgemolina.dev/:path*",
+      "permanent": true
+    }
+  ]
+}
