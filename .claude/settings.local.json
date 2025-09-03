@@ -56,7 +56,17 @@
       "Bash(python:*)",
       "Bash(npx playwright:*)",
       "WebFetch(domain:simpleicons.org)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Read(C:\\Users\\jorge.molina/**)",
+      "Read(C:\\Users\\jorge.molina\\.ssh/**)",
+      "Read(C:\\Users\\jorge.molina\\.ssh/**)",
+      "Bash(ssh:*)",
+      "Bash(git config:*)",
+      "Bash(git commit:*)",
+      "Bash(git add:*)",
+      "mcp__ide__getDiagnostics",
+      "WebFetch(domain:motion.dev)",
+      "WebFetch(domain:www.romaintrotard.com)"
     ],
     "deny": [],
     "ask": [],

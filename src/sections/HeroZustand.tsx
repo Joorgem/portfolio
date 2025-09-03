@@ -279,13 +279,40 @@ const HeroZustand: React.FC = () => {
       )}
       
       
-      {/* Instruções minimalistas no rodapé - apenas desktop */}
-      {navigationState === 'idle' && !isMobile && (
+      {/* Instruções progressivas no rodapé */}
+      {!isMobile && (
         <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-20
-                        pointer-events-none">
-          <span className="text-white/50 text-[14px] font-light tracking-widest uppercase drop-shadow-sm">
-            explore
-          </span>
+                        pointer-events-none transition-all duration-500">
+          {navigationState === 'idle' && (
+            <span className="text-white/50 text-[14px] font-light tracking-widest uppercase drop-shadow-sm">
+              Click planets to orbit
+            </span>
+          )}
+          {navigationState === 'orbiting' && (
+            <div className="flex items-center gap-3 text-white/50 text-[12px] font-light tracking-widest uppercase drop-shadow-sm">
+              <span>Scroll ↑ enter</span>
+              <span className="text-white/30">•</span>
+              <span>Scroll ↓ return</span>
+            </div>
+          )}
+        </div>
+      )}
+      
+      {/* Instruções mobile - mais visíveis */}
+      {isMobile && (
+        <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-20
+                        pointer-events-none transition-all duration-500">
+          {navigationState === 'idle' && (
+            <span className="text-white/60 text-[13px] font-light tracking-wider uppercase drop-shadow-sm">
+              Tap planets to orbit
+            </span>
+          )}
+          {navigationState === 'orbiting' && (
+            <div className="flex flex-col items-center gap-1 text-white/60 text-[11px] font-light tracking-wider uppercase drop-shadow-sm">
+              <span>Swipe ↑ enter</span>
+              <span>Swipe ↓ return</span>
+            </div>
+          )}
         </div>
       )}
       

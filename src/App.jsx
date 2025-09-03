@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import HeroZustand from "./sections/HeroZustand";
 import SectionPagesZustand from "./pages/SectionPagesZustand";
 import CustomCursor from "./components/CustomCursor";
 import MobileBottomNav from "./components/MobileBottomNav";
-import ScrollIndicator from "./components/ScrollIndicator";
+
+import NavigationTutorial from "./components/NavigationTutorial";
+import { useNavigationStore } from "./stores/navigation.store";
 
 const App = () => {
+  const initializeTutorial = useNavigationStore(state => state.initializeTutorial);
+
+  // Inicializa o tutorial na primeira renderização
+  useEffect(() => {
+    initializeTutorial();
+  }, [initializeTutorial]);
+
   return (
     <div className="bg-black h-screen w-screen fixed inset-0 overflow-hidden relative">
       {/* Cursor customizado */}
@@ -14,8 +23,10 @@ const App = () => {
       {/* Menu de navegação inferior para mobile */}
       <MobileBottomNav />
       
-      {/* Indicador de scroll */}
-      <ScrollIndicator />
+      
+      
+      {/* Tutorial de navegação */}
+      <NavigationTutorial />
       
       {/* Cena 3D principal com navegação usando Zustand */}
       <HeroZustand />

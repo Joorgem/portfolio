@@ -42,62 +42,6 @@ const Projects: React.FC = () => {
           </p>
         </motion.div>
 
-        {/* Scroll indicator */}
-        <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 0.6 }}
-        >
-          <div className="flex items-center gap-2">
-            {/* Mouse Icon */}
-            <svg
-              className="w-5 h-8 text-white/30"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1"
-              viewBox="0 0 24 36"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              {/* Mouse body */}
-              <rect
-                x="6"
-                y="4"
-                width="12"
-                height="20"
-                rx="6"
-                ry="6"
-                className="stroke-white/30"
-                fill="none"
-              />
-              
-              {/* Scroll wheel com animação */}
-              <line
-                x1="12"
-                y1="11"
-                x2="12"
-                y2="13"
-                className="stroke-white/50 animate-scroll-wheel-up"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-              <line
-                x1="12"
-                y1="11"
-                x2="12"
-                y2="13"
-                className="stroke-white/50 animate-scroll-wheel-down"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-            </svg>
-
-            {/* Text */}
-            <span className="text-white/40 text-[12px] font-light tracking-widest uppercase drop-shadow-sm">
-              {projectsData.scrollText}
-            </span>
-          </div>
-        </motion.div>
       </div>
       
       {/* Projects List with new minimalist design */}

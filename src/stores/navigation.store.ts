@@ -51,6 +51,9 @@ interface NavigationStoreState {
   _animation: AnimationState;
   zoomOutProgress: number;
   hoveredPlanet: string | null;
+  // Tutorial states
+  showTutorial: boolean;
+  tutorialCompleted: boolean;
 }
 
 // Store actions interface
@@ -70,6 +73,10 @@ interface NavigationStoreActions {
   completeExit: () => void;
   cleanup: () => void;
   setHoveredPlanet: (_planet: string | null) => void;
+  // Tutorial actions
+  initializeTutorial: () => void;
+  closeTutorial: () => void;
+  completeTutorial: () => void;
 }
 
 // Complete store type
@@ -131,6 +138,10 @@ export const useNavigationStore = create<NavigationStore>()(
     
     // Hover do planeta
     hoveredPlanet: null,
+    
+    // Tutorial states
+    showTutorial: false,
+    tutorialCompleted: false,
     
     // ===================================
     // GETTERS (HELPERS)
@@ -575,6 +586,30 @@ export const useNavigationStore = create<NavigationStore>()(
     // ===================================
     setHoveredPlanet: (planet: string | null) => {
       set({ hoveredPlanet: planet });
+    },
+    
+    // ===================================
+    // TUTORIAL
+    // ===================================
+    initializeTutorial: () => {
+      const hasSeenTutorial = localStorage.getItem('portfolio-tutorial-completed');
+      if (!hasSeenTutorial) {
+        set({ showTutorial: true });
+      } else {
+        set({ tutorialCompleted: true });
+      }
+    },
+    
+    closeTutorial: () => {
+      set({ showTutorial: false });
+    },
+    
+    completeTutorial: () => {
+      localStorage.setItem('portfolio-tutorial-completed', 'true');
+      set({ 
+        showTutorial: false, 
+        tutorialCompleted: true 
+      });
     }
   }))
 );
