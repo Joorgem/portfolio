@@ -164,19 +164,7 @@ const NavigationTutorial: React.FC = () => {
                 </motion.div>
               </div>
 
-              {/* Mobile specific tip */}
-              {isMobile && (
-                <motion.div
-                  className="bg-white/5 border border-white/10 rounded-lg p-4 mb-6"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.8 }}
-                >
-                  <p className="text-white/70 text-sm font-light text-center">
-                    💡 Use <span className="text-white font-medium">swipe gestures</span> to navigate
-                  </p>
-                </motion.div>
-              )}
+              
 
 
               {/* Click to continue */}
