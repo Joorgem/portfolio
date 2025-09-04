@@ -3,6 +3,7 @@ import HeroZustand from "./sections/HeroZustand";
 import SectionPagesZustand from "./pages/SectionPagesZustand";
 import CustomCursor from "./components/CustomCursor";
 import MobileBottomNav from "./components/MobileBottomNav";
+import NavigationProgress from "./components/NavigationProgress";
 
 import NavigationTutorial from "./components/NavigationTutorial";
 import { useNavigationStore } from "./stores/navigation.store";
@@ -23,7 +24,8 @@ const App = () => {
       {/* Menu de navegação inferior para mobile */}
       <MobileBottomNav />
       
-      
+      {/* Progress tracker para desktop */}
+      <NavigationProgress />
       
       {/* Tutorial de navegação */}
       <NavigationTutorial />

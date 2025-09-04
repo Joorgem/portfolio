@@ -54,6 +54,8 @@ interface NavigationStoreState {
   // Tutorial states
   showTutorial: boolean;
   tutorialCompleted: boolean;
+  // Progress tracking
+  visitedSections: string[];
 }
 
 // Store actions interface
@@ -77,6 +79,10 @@ interface NavigationStoreActions {
   initializeTutorial: () => void;
   closeTutorial: () => void;
   completeTutorial: () => void;
+  // Progress tracking actions
+  markSectionAsVisited: (_sectionId: string) => void;
+  loadVisitedSections: () => void;
+  saveVisitedSections: () => void;
 }
 
 // Complete store type
@@ -142,6 +148,9 @@ export const useNavigationStore = create<NavigationStore>()(
     // Tutorial states
     showTutorial: false,
     tutorialCompleted: false,
+    
+    // Progress tracking
+    visitedSections: [],
     
     // ===================================
     // GETTERS (HELPERS)
@@ -534,6 +543,9 @@ export const useNavigationStore = create<NavigationStore>()(
           pageVisible: true,
           navigationState: NavigationStates.IN_SECTION
         });
+        
+        // Mark section as visited
+        get().markSectionAsVisited(section.toLowerCase());
       }, 100);
       
       // Atualiza URL
@@ -598,6 +610,9 @@ export const useNavigationStore = create<NavigationStore>()(
       } else {
         set({ tutorialCompleted: true });
       }
+      
+      // Load visited sections from localStorage
+      get().loadVisitedSections();
     },
     
     closeTutorial: () => {
@@ -610,6 +625,43 @@ export const useNavigationStore = create<NavigationStore>()(
         showTutorial: false, 
         tutorialCompleted: true 
       });
+    },
+
+    // ===================================
+    // PROGRESS TRACKING
+    // ===================================
+    markSectionAsVisited: (sectionId: string) => {
+      const state = get();
+      const normalizedId = sectionId.toLowerCase();
+      
+      if (!state.visitedSections.includes(normalizedId)) {
+        const updatedSections = [...state.visitedSections, normalizedId];
+        set({ visitedSections: updatedSections });
+        
+        // Save to localStorage
+        get().saveVisitedSections();
+      }
+    },
+
+    loadVisitedSections: () => {
+      try {
+        const saved = localStorage.getItem('portfolio-visited-sections');
+        if (saved) {
+          const visitedSections = JSON.parse(saved);
+          set({ visitedSections });
+        }
+      } catch (error) {
+        console.warn('Failed to load visited sections from localStorage:', error);
+      }
+    },
+
+    saveVisitedSections: () => {
+      try {
+        const state = get();
+        localStorage.setItem('portfolio-visited-sections', JSON.stringify(state.visitedSections));
+      } catch (error) {
+        console.warn('Failed to save visited sections to localStorage:', error);
+      }
     }
   }))
 );

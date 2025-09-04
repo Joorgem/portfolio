@@ -23,7 +23,7 @@
   },
   "footer": {
     "desktop": {
-      "idle": "Clique nos planetas para entrar em sua órbita",
+      "idle": "Clique em um planeta para entrar em sua órbita",
       "orbiting": {
         "enter": "Scroll ↑ entrar",
         "return": "Scroll ↓ voltar"

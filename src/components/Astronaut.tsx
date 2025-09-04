@@ -79,7 +79,7 @@ export const Astronaut = forwardRef<THREE.Group, AstronautProps>((props, ref: Fo
   const handlePointerMove = (e: PointerEvent) => {
     if (isDragging) {
       const deltaX = e.clientX - lastX.current;
-      velocity.current = deltaX * 0.0003; // Sensibilidade reduzida: 0.0005 → 0.0003
+      velocity.current = deltaX * 0.0003;
       currentRotation.current += velocity.current;
       rotationY.set(currentRotation.current);
       lastX.current = e.clientX;
@@ -109,7 +109,7 @@ export const Astronaut = forwardRef<THREE.Group, AstronautProps>((props, ref: Fo
       if (!isDragging) {
         // Movimento de rotação inicial muito lento
         if (Math.abs(velocity.current) < 0.001) {
-          velocity.current = 0.0008; // Velocidade reduzida: 0.002 → 0.0008
+          velocity.current = -0.0008; // Velocidade reduzida: 0.002 → 0.0008 (invertida)
         }
         
         // Aplica a velocidade atual à rotação
