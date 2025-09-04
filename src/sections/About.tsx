@@ -46,19 +46,18 @@ const About: React.FC = () => {
         color={"#ffffff"}
         refresh
       />
-      <h2 className="text-heading">{t('title')}</h2>
       
-      {/* Large 3D Photo Gallery - Completely Transparent */}
+      {/* Large 3D Photo Gallery - Full Sphere Visible */}
       <div className="mt-12 mb-8">
-        <div className="relative p-4 h-[500px] md:h-[600px] overflow-hidden">
+        <div className="relative p-8 h-[800px] md:h-[900px]">
           {/* 3D Photo Dome Container - Full Height */}
-          <div className="relative z-10 h-full">
+          <div className="relative z-10 h-full flex items-end pb-40">
             <DomeGallery
               photos={photos}
-              fit={0.8}
-              minRadius={800}
+              fit={window.innerWidth < 768 ? 0.45 : 0.75}
+              minRadius={window.innerWidth < 768 ? 400 : 900}
               maxVerticalRotation={34}
-              segments={34}
+              segments={window.innerWidth < 768 ? 28 : 42}
               dragDampening={0.9}
               grayscale={false}
               overlayBlurColor="transparent"
@@ -68,22 +67,7 @@ const About: React.FC = () => {
       </div>
       
       <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
-        {/* Grid 1 - Apresentação Principal */}
-        <div className="group relative p-8 md:col-span-2 h-[14rem] rounded-2xl bg-black/20 backdrop-blur-md border border-gray-800/50 hover:border-gray-700/50 transition-all duration-300">
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 to-black/30 rounded-2xl"></div>
-          <div className="relative z-10 h-full flex flex-col justify-end">
-            <h3 className="text-2xl font-bold text-gray-100 mb-2">
-              {t('name')}
-            </h3>
-            <p className="text-gray-400 text-sm leading-relaxed">
-              {t('description')}
-            </p>
-          </div>
-          {/* Subtle accent line */}
-          <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent"></div>
-        </div>
-
-        {/* Grid 2 - What Moves Me */}
+        {/* Grid 1 - What Moves Me */}
         <div className="group relative p-8 md:col-span-2 h-[14rem] rounded-2xl bg-black/20 backdrop-blur-md border border-gray-800/50 hover:border-gray-700/50 transition-all duration-300 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 to-black/30 rounded-2xl"></div>
           <div className="relative z-10 h-full flex flex-col">
@@ -111,29 +95,20 @@ const About: React.FC = () => {
           <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent"></div>
         </div>
 
-        {/* Grid 3 - Currently */}
-        <div className="group relative p-8 md:col-span-4 h-[10rem] rounded-2xl bg-black/20 backdrop-blur-md border border-gray-800/50 hover:border-gray-700/50 transition-all duration-300">
+        {/* Grid 2 - Currently */}
+        <div className="group relative p-8 md:col-span-2 h-[14rem] rounded-2xl bg-black/20 backdrop-blur-md border border-gray-800/50 hover:border-gray-700/50 transition-all duration-300">
           <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 to-black/30 rounded-2xl"></div>
-          <div className="relative z-10 h-full flex items-center justify-between">
+          <div className="relative z-10 h-full flex flex-col justify-center">
             <div>
-              <h3 className="text-xl font-semibold text-gray-100 mb-2">
+              <h3 className="text-xl font-semibold text-gray-100 mb-4">
                 {t('currently.title')}
               </h3>
-              <p className="text-gray-400 text-sm mb-1">
+              <p className="text-gray-400 text-sm mb-2">
                 {t('currently.location')} • {t('currently.role')}
               </p>
               <p className="text-gray-400 text-xs">
                 {t('currently.scope')}
               </p>
-            </div>
-            <div className="hidden md:block">
-              <div className="text-gray-600 text-4xl opacity-20">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <line x1="2" y1="12" x2="22" y2="12"></line>
-                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                </svg>
-              </div>
             </div>
           </div>
           {/* Subtle accent line */}

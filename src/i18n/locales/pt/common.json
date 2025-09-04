@@ -32,8 +32,7 @@
     "mobile": {
       "idle": "Toque nos planetas para entrar em sua órbita",
       "orbiting": {
-        "enter": "Deslize ↑ entrar",
-        "return": "Deslize ↓ voltar"
+        "combined": "Deslize: ↑ entrar ou ↓ voltar"
       }
     }
   }

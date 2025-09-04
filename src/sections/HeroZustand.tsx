@@ -32,8 +32,8 @@ const HeroZustand: React.FC = () => {
   };
   
   const astronautScale = getAstronautScale();
-  // MOBILE FIX: Ajuste de posição vertical para centralizar melhor no mobile
-  const astronautPosition: [number, number, number] = isMobile ? [-0.08, -0.45, 0] : [-0.08, -0.5, 0];
+  // MOBILE FIX: Ajuste de posição vertical - abaixado para dar mais espaço ao texto
+  const astronautPosition: [number, number, number] = isMobile ? [-0.08, -1.4, 0] : [-0.08, -0.5, 0];
   
   // Estados do store
   const navigationState = useNavigationStore(state => state.navigationState);
@@ -282,7 +282,7 @@ const HeroZustand: React.FC = () => {
       )}
       
       
-      {/* Instruções progressivas no topo */}
+      {/* Instruções progressivas no topo centralizado */}
       {!isMobile && (
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-20
                         pointer-events-none transition-all duration-500">
@@ -301,7 +301,7 @@ const HeroZustand: React.FC = () => {
         </div>
       )}
       
-      {/* Instruções mobile - mais visíveis */}
+      {/* Instruções mobile - lado a lado */}
       {isMobile && (
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-20
                         pointer-events-none transition-all duration-500">
@@ -311,17 +311,16 @@ const HeroZustand: React.FC = () => {
             </span>
           )}
           {navigationState === 'orbiting' && (
-            <div className="flex flex-col items-center gap-1 text-white/60 text-[11px] font-light tracking-wider uppercase drop-shadow-sm">
-              <span>{t('footer.mobile.orbiting.enter')}</span>
-              <span>{t('footer.mobile.orbiting.return')}</span>
-            </div>
+            <span className="text-white/60 text-[11px] font-light tracking-wider uppercase drop-shadow-sm">
+              {t('footer.mobile.orbiting.combined')}
+            </span>
           )}
         </div>
       )}
       
       {/* Language Toggle - Principal (fixo) - Só aparece quando não estamos em uma seção */}
       {navigationState !== 'in_section' && (
-        <div className="fixed top-6 right-6 z-50">
+        <div className="fixed top-12 right-8 md:right-12 z-50 flex items-start">
           <LanguageToggle />
         </div>
       )}
