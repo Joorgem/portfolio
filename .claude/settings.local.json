@@ -71,7 +71,9 @@
       "Bash(for:*)",
       "Bash(nslookup:*)",
       "Bash(git push:*)",
-      "Bash(rg:*)"
+      "Bash(rg:*)",
+      "Bash(npx:*)",
+      "Bash(do echo \"Creating test image $i\")"
     ],
     "deny": [],
     "ask": [],

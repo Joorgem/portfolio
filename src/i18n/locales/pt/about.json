@@ -1,10 +1,20 @@
 {
   "title": "Sobre",
   "name": "Jorge Molina",
-  "description": "Desenvolvedor Full-Stack com mais de 4 anos construindo soluções escaláveis, desde pipelines de dados até aplicações empresariais",
-  "techStack": "Principais Tecnologias",
-  "remote": {
-    "title": "Trabalho Remoto 🌍",
-    "description": "Disponível globalmente para colaboração remota e projetos internacionais"
+  "description": "Transformando ideias em código desde 2020",
+  "whatMovesMe": {
+    "title": "O que Me Move",
+    "items": {
+      "learn": "Aprender algo novo todos os dias",
+      "exercise": "Ficar de ponta cabeça",
+      "nutrition": "Me alimentar bem",
+      "people": "Estar perto de pessoas que me inspiram"
+    }
+  },
+  "currently": {
+    "title": "Atualmente",
+    "location": "Brasil",
+    "role": "Engenheiro de Dados Sr. na Globant",
+    "scope": "Atuando globalmente, conectando dados ao redor do mundo"
   }
 }

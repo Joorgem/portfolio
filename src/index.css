@@ -1,5 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap");
+
+@plugin "tailwindcss-animate";
 @import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
 @theme {
   --color-primary: #000000;
   --color-midnight: #06091f;
@@ -332,3 +336,4 @@ body {
   pointer-events: none !important;
   z-index: 999999 !important;
 }
+
