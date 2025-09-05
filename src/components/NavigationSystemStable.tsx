@@ -4,6 +4,7 @@ import { Sphere } from '@react-three/drei';
 import { NAVIGATION_POINTS, NavigationPoint } from '../constants/navigationPoints';
 import { useNavigationInteraction, useNavigationCursor } from '../hooks/useNavigationInteraction';
 import { useNavigationStore } from '../stores/navigation.store';
+import { useTranslation } from 'react-i18next';
 import * as THREE from 'three';
 
 interface StableHitboxProps {
@@ -102,6 +103,12 @@ export const NavigationSystemStable: React.FC<NavigationSystemStableProps> = ({
   debugMode = false
 }) => {
   const groupRef = useRef<THREE.Group>(null!);
+  const { t } = useTranslation('navigation');
+  
+  // Function to get planet name from translation
+  const getPlanetName = (point: NavigationPoint) => {
+    return t(`points.${point.id}.name`, point.id);
+  };
   
   // MOBILE FIX: Detecta dispositivo móvel
   const isMobileDevice = window.innerWidth < 768;
@@ -128,11 +135,11 @@ export const NavigationSystemStable: React.FC<NavigationSystemStableProps> = ({
   
   React.useEffect(() => {
     if (hoveredPoint) {
-      setHoveredPlanet(hoveredPoint.name);
+      setHoveredPlanet(getPlanetName(hoveredPoint));
     } else {
       setHoveredPlanet(null);
     }
-  }, [hoveredPoint, setHoveredPlanet]);
+  }, [hoveredPoint, setHoveredPlanet, getPlanetName]);
   
   // Sincronização suave com astronauta
   useFrame(() => {

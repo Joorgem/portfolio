@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence, useSpring, Variants } from 'framer-motion';
 import { useNavigationStore } from '../stores/navigation.store';
 import { getAllNavigationPoints } from '../constants/navigationPoints';
+import { useTranslation } from 'react-i18next';
 
 // Variants para animações organizadas
 const dotVariants: Variants = {
@@ -59,7 +60,6 @@ const pulseRingVariants: Variants = {
 interface ProgressDotProps {
   section: {
     id: string;
-    name: string;
   };
   index: number;
   isVisited: boolean;
@@ -67,6 +67,7 @@ interface ProgressDotProps {
   isOrbiting: boolean;
   onClick: () => void;
   progress: number;
+  getSectionName: (id: string) => string;
 }
 
 const ProgressDot: React.FC<ProgressDotProps> = ({ 
@@ -76,7 +77,8 @@ const ProgressDot: React.FC<ProgressDotProps> = ({
   isActive, 
   isOrbiting,
   onClick,
-  progress
+  progress,
+  getSectionName
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   
@@ -99,7 +101,7 @@ const ProgressDot: React.FC<ProgressDotProps> = ({
       whileHover="hover"
       whileTap="tap"
       custom={index}
-      aria-label={`Navigate to ${section.name} section`}
+      aria-label={`Navigate to ${section.id} section`}
       role="button"
       tabIndex={0}
     >
@@ -188,7 +190,7 @@ const ProgressDot: React.FC<ProgressDotProps> = ({
             x: isHovered ? 2 : 0
           }}
         >
-          {section.name}
+          {getSectionName(section.id)}
         </motion.span>
 
       </div>
@@ -199,6 +201,7 @@ const ProgressDot: React.FC<ProgressDotProps> = ({
 
 
 const NavigationProgress: React.FC = () => {
+  const { t } = useTranslation('navigation');
   const navigationState = useNavigationStore(state => state.navigationState);
   const currentSection = useNavigationStore(state => state.currentSection);
   const targetSection = useNavigationStore(state => state.targetSection);
@@ -206,6 +209,11 @@ const NavigationProgress: React.FC = () => {
   const tutorialCompleted = useNavigationStore(state => state.tutorialCompleted);
   const canInteract = useNavigationStore(state => state.canInteract);
   const startNavigation = useNavigationStore(state => state.startNavigation);
+
+  // Function to get section name from translation
+  const getSectionName = (sectionId: string) => {
+    return t(`labels.${sectionId}`, sectionId);
+  };
 
   // Get navigation points
   const allNavigationPoints = getAllNavigationPoints();
@@ -319,8 +327,7 @@ const NavigationProgress: React.FC = () => {
                 >
                   <ProgressDot
                     section={{
-                      id: point.id,
-                      name: point.name
+                      id: point.id
                     }}
                     index={index}
                     isVisited={isVisited}
@@ -328,6 +335,7 @@ const NavigationProgress: React.FC = () => {
                     isOrbiting={isOrbiting}
                     onClick={() => handleDotClick(point.id)}
                     progress={getProgressForSection(index)}
+                    getSectionName={getSectionName}
                   />
                 </motion.div>
               );

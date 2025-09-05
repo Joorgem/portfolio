@@ -6,7 +6,7 @@
     "title": "What Moves Me",
     "items": {
       "learn": "Learning something new every day",
-      "exercise": "Standing on my head",
+      "exercise": "handstand",
       "nutrition": "Eating well",
       "people": "Being around people who inspire me"
     }
@@ -14,7 +14,13 @@
   "currently": {
     "title": "Currently",
     "location": "Brazil",
-    "role": "Sr. Data Engineer at Globant",
-    "scope": "Working globally, connecting data around the world"
+    "role": "sSr. Data Engineer at Globant",
+    "openToProjects": "Open to new projects."
+  },
+  "gallery": {
+    "title": "Photo Gallery"
+  },
+  "techStack": {
+    "title": "Tech Stack"
   }
 }

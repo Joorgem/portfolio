@@ -14,7 +14,13 @@
   "currently": {
     "title": "Atualmente",
     "location": "Brasil",
-    "role": "Engenheiro de Dados Sr. na Globant",
-    "scope": "Atuando globalmente, conectando dados ao redor do mundo"
+    "role": "Engenheiro de Dados sSr. na Globant",
+    "openToProjects": "Aberto a novos projetos."
+  },
+  "gallery": {
+    "title": "Galeria de Fotos"
+  },
+  "techStack": {
+    "title": "Tecnologias"
   }
 }

@@ -15,7 +15,16 @@ import {
   SiPostgresql,
   SiMongodb,
   SiExpress,
-  SiJavascript
+  SiJavascript,
+  SiOpenai,
+  SiHuggingface,
+  SiRedis,
+  SiMysql,
+  SiFirebase,
+  SiApachespark,
+  SiAmazonwebservices,
+  SiGooglecloud,
+  SiApache
 } from 'react-icons/si';
 
 const About: React.FC = () => {
@@ -32,6 +41,15 @@ const About: React.FC = () => {
     { node: <SiMongodb className="text-2xl text-gray-400" />, title: "MongoDB" },
     { node: <SiExpress className="text-2xl text-gray-400" />, title: "Express" },
     { node: <SiJavascript className="text-2xl text-gray-400" />, title: "JavaScript" },
+    { node: <SiOpenai className="text-2xl text-gray-400" />, title: "OpenAI" },
+    { node: <SiHuggingface className="text-2xl text-gray-400" />, title: "Hugging Face" },
+    { node: <SiRedis className="text-2xl text-gray-400" />, title: "Redis" },
+    { node: <SiMysql className="text-2xl text-gray-400" />, title: "MySQL" },
+    { node: <SiFirebase className="text-2xl text-gray-400" />, title: "Firebase" },
+    { node: <SiApachespark className="text-2xl text-gray-400" />, title: "Apache Spark" },
+    { node: <SiAmazonwebservices className="text-2xl text-gray-400" />, title: "AWS" },
+    { node: <SiGooglecloud className="text-2xl text-gray-400" />, title: "Google Cloud" },
+    { node: <SiApache className="text-2xl text-gray-400" />, title: "Apache" },
   ], []);
 
   // Usa suas fotos pessoais ou fotos de teste se não houver nenhuma
@@ -61,32 +79,26 @@ const About: React.FC = () => {
 
           {/* Right Column - Info Cards */}
           <div className="flex flex-col gap-6 h-full">
-            {/* What Moves Me Card */}
+            {/* Tech Stack Card */}
             <div className="group relative p-8 flex-1 min-h-[240px] rounded-2xl bg-black/20 backdrop-blur-md border border-gray-800/50 hover:border-gray-700/50 transition-all duration-300 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 to-black/30 rounded-2xl"></div>
               <div className="relative z-10 h-full flex flex-col">
                 <h3 className="text-2xl font-semibold text-gray-100 mb-6">
-                  {t('whatMovesMe.title')}
+                  {t('techStack.title', 'Tech Stack')}
                 </h3>
-                <div className="flex-grow flex items-center">
-                  <div className="w-full space-y-4">
-                    <div className="text-sm text-gray-300 leading-relaxed flex items-center gap-3">
-                      <span className="w-1 h-1 bg-cyan-400 rounded-full"></span>
-                      {t('whatMovesMe.items.learn')}
-                    </div>
-                    <div className="text-sm text-gray-300 leading-relaxed flex items-center gap-3">
-                      <span className="w-1 h-1 bg-green-400 rounded-full"></span>
-                      {t('whatMovesMe.items.exercise')}
-                    </div>
-                    <div className="text-sm text-gray-300 leading-relaxed flex items-center gap-3">
-                      <span className="w-1 h-1 bg-purple-400 rounded-full"></span>
-                      {t('whatMovesMe.items.nutrition')}
-                    </div>
-                    <div className="text-sm text-gray-300 leading-relaxed flex items-center gap-3">
-                      <span className="w-1 h-1 bg-cyan-400 rounded-full"></span>
-                      {t('whatMovesMe.items.people')}
-                    </div>
-                  </div>
+                <div className="flex-grow">
+                  <LogoLoop
+                    logos={techLogos}
+                    speed={30}
+                    direction="left"
+                    logoHeight={24}
+                    gap={32}
+                    pauseOnHover={true}
+                    fadeOut={true}
+                    fadeOutColor="#000000"
+                    scaleOnHover={true}
+                    className="py-2"
+                  />
                 </div>
               </div>
               {/* Subtle accent line */}
@@ -107,7 +119,7 @@ const About: React.FC = () => {
                       {t('currently.location')} • {t('currently.role')}
                     </p>
                     <p className="text-gray-400 text-sm pl-4 border-l border-gray-600/30">
-                      {t('currently.scope')}
+                      {t('currently.openToProjects')}
                     </p>
                   </div>
                 </div>
@@ -119,32 +131,6 @@ const About: React.FC = () => {
         </div>
       </div>
 
-      {/* Tech Stack Section */}
-      <div className="mt-16">
-        <div className="text-center mb-8">
-          <h3 className="text-2xl font-semibold text-gray-100 mb-4">
-            {t('techStack.title', 'Tech Stack')}
-          </h3>
-          <p className="text-gray-400 text-sm">
-            {t('techStack.subtitle', 'Technologies I work with')}
-          </p>
-        </div>
-        
-        <div className="relative p-6 rounded-2xl bg-black/20 backdrop-blur-md border border-gray-800/50">
-          <LogoLoop
-            logos={techLogos}
-            speed={80}
-            direction="left"
-            logoHeight={32}
-            gap={48}
-            pauseOnHover={true}
-            fadeOut={true}
-            fadeOutColor="#000000"
-            scaleOnHover={true}
-            className="py-4"
-          />
-        </div>
-      </div>
     </section>
   );
 };

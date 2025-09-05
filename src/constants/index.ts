@@ -244,7 +244,7 @@ export const experiences: Experience[] = [
     ],
   },
   {
-    title: "Desenvolvedor Full-Stack",
+    title: "Desenvolvedor",
     job: "Projetos Pessoais & Freelance", 
     date: "2023 - Present",
     contents: [

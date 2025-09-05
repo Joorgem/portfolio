@@ -11,7 +11,6 @@
 // Types for navigation points
 export interface NavigationPoint {
   id: string;
-  name: string;
   section: string;
   position: [number, number, number];
   radius: number;
@@ -43,7 +42,6 @@ export const NAVIGATION_POINTS: Record<string, NavigationPoint> = {
   // Astronaut's head - About Me Section
   HEAD: {
     id: 'about',
-    name: 'About Me',
     section: 'about',
     position: [0, 350, 0], // Centro aproximado da cabeça no espaço do modelo
     radius: 65, // Raio de detecção ajustado
@@ -55,7 +53,6 @@ export const NAVIGATION_POINTS: Record<string, NavigationPoint> = {
   // Planet 1 - Projects Section
   PLANET_1: {
     id: 'projects',
-    name: 'Projects',
     section: 'projects', 
     position: [-357.404, 392.646, 0], // Posição no espaço do modelo (Y e Z trocados por rotação)
     radius: 45,
@@ -67,7 +64,6 @@ export const NAVIGATION_POINTS: Record<string, NavigationPoint> = {
   // Planet 2 - Experience Section
   PLANET_2: {
     id: 'experience',
-    name: 'Experience',
     section: 'experience',
     position: [375.469, 427.948, 0], // Posição no espaço do modelo
     radius: 65,
@@ -79,7 +75,6 @@ export const NAVIGATION_POINTS: Record<string, NavigationPoint> = {
   // Planet 3 - Contact Section
   PLANET_3: {
     id: 'contact',
-    name: 'Contact',
     section: 'contact',
     position: [-341.988, 460.196, -117.028], // Posição no espaço do modelo
     radius: 65,
@@ -91,7 +86,6 @@ export const NAVIGATION_POINTS: Record<string, NavigationPoint> = {
   // Planet 4 - Courses Section
   PLANET_4: {
     id: 'courses',
-    name: 'Courses',
     section: 'courses',
     position: [199.634, 566.883, -221.001], // Posição no espaço do modelo
     radius: 45,
