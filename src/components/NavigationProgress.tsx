@@ -1,109 +1,202 @@
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence, useSpring, Variants } from 'framer-motion';
 import { useNavigationStore } from '../stores/navigation.store';
 import { getAllNavigationPoints } from '../constants/navigationPoints';
+
+// Variants para animações organizadas
+const dotVariants: Variants = {
+  initial: { 
+    scale: 0, 
+    opacity: 0 
+  },
+  enter: { 
+    scale: 1, 
+    opacity: 1,
+    transition: {
+      type: "spring",
+      stiffness: 300,
+      damping: 20
+    }
+  },
+  hover: { 
+    scale: 1.3,
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 15
+    }
+  },
+  tap: { 
+    scale: 0.95 
+  },
+  orbiting: {
+    scale: [1, 1.1, 1],
+    transition: {
+      duration: 2,
+      repeat: Infinity,
+      ease: "easeInOut"
+    }
+  }
+};
+
+
+const pulseRingVariants: Variants = {
+  initial: { 
+    scale: 1, 
+    opacity: 0 
+  },
+  pulse: {
+    scale: [1, 1.5, 1.8],
+    opacity: [0.4, 0.2, 0],
+    transition: {
+      duration: 2,
+      repeat: Infinity,
+      ease: "easeOut"
+    }
+  }
+};
 
 interface ProgressDotProps {
   section: {
     id: string;
     name: string;
   };
+  index: number;
   isVisited: boolean;
   isActive: boolean;
   isOrbiting: boolean;
   onClick: () => void;
+  progress: number;
 }
 
 const ProgressDot: React.FC<ProgressDotProps> = ({ 
   section, 
+  index,
   isVisited, 
   isActive, 
   isOrbiting,
-  onClick 
+  onClick,
+  progress
 }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  
+  // Determine dot color based on state
+  const getDotColor = () => {
+    if (isActive || isOrbiting) return '#33c2cc'; // aqua
+    if (isVisited) return 'rgba(255, 255, 255, 0.5)'; // white semi-transparent
+    return 'rgba(255, 255, 255, 0.2)';
+  };
+
   return (
     <motion.button
       onClick={onClick}
-      className="relative flex items-center gap-3 group cursor-pointer w-full text-left"
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ 
-        opacity: 1, 
-        x: isOrbiting ? -4 : 0 
-      }}
-      transition={{ duration: 0.4, delay: 0.1 }}
-      whileHover={{ x: -2 }}
-      whileTap={{ scale: 0.98 }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      className="relative flex items-center gap-4 group cursor-pointer w-full text-left z-10"
+      variants={dotVariants}
+      initial="initial"
+      animate="enter"
+      whileHover="hover"
+      whileTap="tap"
+      custom={index}
+      aria-label={`Navigate to ${section.name} section`}
+      role="button"
+      tabIndex={0}
     >
-      {/* Dot */}
-      <motion.div
-        className="relative w-3 h-3 flex-shrink-0 transition-transform duration-300"
-        whileHover={{ scale: 1.2 }}
-      >
-        {/* Outer ring for active/orbiting state */}
+      {/* Main dot container */}
+      <div className="relative w-4 h-4 flex-shrink-0">
+        {/* Pulse ring for orbiting state */}
+        <AnimatePresence>
+          {isOrbiting && (
+            <motion.div
+              className="absolute inset-0 rounded-full"
+              style={{
+                border: '1px solid #33c2cc',
+              }}
+              variants={pulseRingVariants}
+              initial="initial"
+              animate="pulse"
+              exit="initial"
+            />
+          )}
+        </AnimatePresence>
+
+        {/* Glow effect for active/orbiting */}
         <AnimatePresence>
           {(isActive || isOrbiting) && (
             <motion.div
-              className="absolute inset-0 rounded-full border border-white/40"
-              initial={{ scale: 0, opacity: 0 }}
+              className="absolute inset-0 rounded-full"
+              initial={{ opacity: 0, scale: 0.8 }}
               animate={{ 
-                scale: isOrbiting ? [1, 1.4, 1] : 1, 
-                opacity: 0.6 
+                opacity: 0.4, 
+                scale: 1.5,
+                filter: 'blur(8px)'
               }}
-              exit={{ scale: 0, opacity: 0 }}
-              transition={{ 
-                duration: isOrbiting ? 2 : 0.3,
-                repeat: isOrbiting ? Infinity : 0,
-                ease: "easeInOut"
+              exit={{ opacity: 0, scale: 0.8 }}
+              style={{
+                background: isOrbiting ? '#33c2cc' : 'rgba(255, 255, 255, 0.3)'
               }}
+              transition={{ duration: 0.3 }}
             />
           )}
         </AnimatePresence>
 
         {/* Main dot */}
         <motion.div
-          className={`
-            w-full h-full rounded-full transition-all duration-300
-            ${isVisited 
-              ? 'bg-white/60 border-white/20 border' 
-              : 'bg-transparent border border-white/20'
-            }
-            ${isActive ? 'bg-white/80' : ''}
-          `}
+          className="relative w-full h-full rounded-full border transition-all duration-300"
+          style={{
+            backgroundColor: isVisited || isActive || isOrbiting ? getDotColor() : 'transparent',
+            borderColor: getDotColor(),
+            borderWidth: isActive ? '2px' : '1px'
+          }}
+          animate={isOrbiting ? "orbiting" : "default"}
+          variants={dotVariants}
+        />
+
+        {/* Active pulse center dot */}
+        <AnimatePresence>
+          {isActive && (
+            <motion.div
+              className="absolute inset-0 m-auto w-1.5 h-1.5 bg-white rounded-full"
+              initial={{ scale: 0 }}
+              animate={{ scale: [0.8, 1.2, 0.8] }}
+              exit={{ scale: 0 }}
+              transition={{
+                scale: {
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }
+              }}
+            />
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Label with enhanced states */}
+      <div className="relative">
+        <motion.span 
+          className={`text-xs font-light tracking-wider transition-all duration-300 whitespace-nowrap select-none`}
+          style={{
+            color: isActive ? '#ffffff' : 
+                  isOrbiting ? '#33c2cc' :
+                  isVisited ? 'rgba(255, 255, 255, 0.8)' : 
+                  'rgba(255, 255, 255, 0.4)',
+            fontWeight: isActive || isOrbiting ? 500 : 300
+          }}
           animate={{
-            scale: isActive ? 1.1 : 1
+            x: isHovered ? 2 : 0
           }}
         >
-          {/* Checkmark for visited */}
-          <AnimatePresence>
-            {isVisited && !isActive && (
-              <motion.div
-                className="absolute inset-0 flex items-center justify-center"
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                <div className="w-1 h-1 bg-black rounded-full" />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
-      </motion.div>
-
-      {/* Label */}
-      <div className="text-left">
-        <span className={`text-xs font-light tracking-wider transition-colors duration-300 whitespace-nowrap ${
-          isActive ? 'text-white font-medium' : 
-          isOrbiting ? 'text-white/90 font-medium' :
-          isVisited ? 'text-white/70' : 
-          'text-white/40'
-        }`}>
           {section.name}
-        </span>
+        </motion.span>
+
       </div>
     </motion.button>
   );
 };
+
+
 
 const NavigationProgress: React.FC = () => {
   const navigationState = useNavigationStore(state => state.navigationState);
@@ -114,22 +207,60 @@ const NavigationProgress: React.FC = () => {
   const canInteract = useNavigationStore(state => state.canInteract);
   const startNavigation = useNavigationStore(state => state.startNavigation);
 
-  // Detecta se é desktop
+  // Get navigation points
+  const allNavigationPoints = getAllNavigationPoints();
+
+  // Reorganize navigation points: visited sections at top in order of visit, unvisited below
+  const navigationPoints = React.useMemo(() => {
+    const visited = [];
+    const unvisited = [];
+    
+    // First add visited sections in the order they were visited
+    for (const visitedId of visitedSections) {
+      const point = allNavigationPoints.find(p => p.id === visitedId);
+      if (point) {
+        visited.push(point);
+      }
+    }
+    
+    // Then add unvisited sections in their original order
+    for (const point of allNavigationPoints) {
+      if (!visitedSections.includes(point.id)) {
+        unvisited.push(point);
+      }
+    }
+    
+    return [...visited, ...unvisited];
+  }, [visitedSections]);
+
+  // Desktop detection
   const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 768;
 
-  // Não renderiza em mobile ou se tutorial não foi completado
+  // Don't render on mobile or if tutorial not completed
   if (!isDesktop || !tutorialCompleted) return null;
 
-  // Esconde durante transições intensas
+  // Only show on hero page (idle, orbiting states)
+  // Hide when in section or during transitions
   const shouldHide = navigationState === 'entering' || 
                      navigationState === 'exiting' ||
-                     navigationState === 'zooming_in' && 
-                     useNavigationStore.getState().zoomProgress > 0.7;
+                     navigationState === 'zooming_in' ||
+                     navigationState === 'zooming_out' ||
+                     navigationState === 'in_section';
 
-  // Obtém todos os pontos de navegação
-  const navigationPoints = getAllNavigationPoints();
+  // Calculate progress
+  const getProgressForSection = (index: number) => {
+    const visitedCount = visitedSections.filter((id) => {
+      const sectionIndex = navigationPoints.findIndex(p => p.id === id);
+      return sectionIndex <= index;
+    }).length;
+    return Math.min(visitedCount / (index + 1), 1);
+  };
 
-  // Determina estado de cada seção
+  const overallProgress = visitedSections.length > 0 
+    ? Math.max(...navigationPoints.map((_, i) => getProgressForSection(i))) 
+    : 0;
+
+  // Determine section state
   const getSectionState = (sectionId: string) => {
     const isVisited = visitedSections.includes(sectionId);
     const isActive = currentSection.toLowerCase() === sectionId && navigationState === 'in_section';
@@ -142,12 +273,12 @@ const NavigationProgress: React.FC = () => {
   const handleDotClick = (sectionId: string) => {
     if (!canInteract()) return;
     
-    // Se já está orbitando a mesma seção, não faz nada
+    // If already orbiting the same section, don't do anything
     if (targetSection?.toLowerCase() === sectionId && navigationState === 'orbiting') {
       return;
     }
 
-    // Inicia navegação
+    // Start navigation
     startNavigation(sectionId);
   };
 
@@ -155,68 +286,54 @@ const NavigationProgress: React.FC = () => {
     <AnimatePresence>
       {!shouldHide && (
         <motion.div
-          className="fixed right-8 top-1/2 -translate-y-1/2 z-[9998] flex flex-col gap-6"
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: 20 }}
-          transition={{ duration: 0.5 }}
+          className="fixed right-8 top-8 z-[9998] flex flex-col items-end gap-6"
+          initial={{ opacity: 0, x: 20, y: -10 }}
+          animate={{ opacity: 1, x: 0, y: 0 }}
+          exit={{ opacity: 0, x: 20, y: -10 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          {/* Progress counter */}
-          <motion.div
-            className="text-right mb-2"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: visitedSections.length > 0 ? 1 : 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <span className="text-white/40 text-xs font-light tracking-wider">
-              {visitedSections.length}/{navigationPoints.length} explored
-            </span>
-          </motion.div>
-
           {/* Progress dots */}
-          <div className="flex flex-col gap-4">
+          <div className="relative flex flex-col gap-4">
+            {/* Navigation dots */}
             {navigationPoints.map((point, index) => {
               const { isVisited, isActive, isOrbiting } = getSectionState(point.id);
               
               return (
                 <motion.div
                   key={point.id}
+                  layout
+                  layoutId={`nav-dot-${point.id}`}
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 + 0.2 }}
+                  transition={{ 
+                    delay: index * 0.1 + 0.2,
+                    type: "spring",
+                    stiffness: 200,
+                    damping: 20,
+                    layout: {
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 30
+                    }
+                  }}
                 >
                   <ProgressDot
                     section={{
                       id: point.id,
                       name: point.name
                     }}
+                    index={index}
                     isVisited={isVisited}
                     isActive={isActive}
                     isOrbiting={isOrbiting}
                     onClick={() => handleDotClick(point.id)}
+                    progress={getProgressForSection(index)}
                   />
                 </motion.div>
               );
             })}
           </div>
 
-          {/* Completion indicator */}
-          <AnimatePresence>
-            {visitedSections.length === navigationPoints.length && (
-              <motion.div
-                className="text-center mt-2"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ delay: 0.5 }}
-              >
-                <div className="w-full h-px bg-white/10 mb-2" />
-                <span className="text-white/60 text-xs font-light tracking-wider">
-                  Complete!
-                </span>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </motion.div>
       )}
     </AnimatePresence>

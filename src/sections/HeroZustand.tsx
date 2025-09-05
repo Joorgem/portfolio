@@ -318,9 +318,9 @@ const HeroZustand: React.FC = () => {
         </div>
       )}
       
-      {/* Language Toggle - Principal (fixo) - Só aparece quando não estamos em uma seção */}
+      {/* Language Toggle - Reposicionado ao lado do NavigationProgress */}
       {navigationState !== 'in_section' && (
-        <div className="fixed top-12 right-8 md:right-12 z-50 flex items-start">
+        <div className="fixed top-8 right-52 z-[9999] flex items-start">
           <LanguageToggle />
         </div>
       )}

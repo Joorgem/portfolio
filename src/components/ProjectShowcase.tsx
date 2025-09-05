@@ -232,11 +232,11 @@ const ProjectShowcase: React.FC<ProjectShowcaseProps> = ({
                     </div>
 
                     {/* Scrollable Content */}
-                    <div className="flex-1 overflow-y-auto">
+                    <div className="flex-1 overflow-y-auto relative">
                       <div className="p-6 space-y-4">
                         {subDescription.map((desc, i) => (
                           <motion.div
-                            key={i}
+                            key={`desc-${i}-${desc.slice(0, 20)}`}
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: i * 0.1 + 0.2 }}

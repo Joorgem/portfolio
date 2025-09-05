@@ -7,23 +7,13 @@
   },
   "courses": [
     {
-      "title": "Node.js - The Complete Guide",
-      "institution": "Udemy - Maximilian Schwarzmüller",
-      "period": "2025",
-      "description": "Desenvolvimento backend completo com Node.js, Express, MongoDB, autenticação JWT, APIs RESTful e deployment em produção.",
-      "type": "course",
-      "technologies": ["Node.js", "Express", "MongoDB", "JWT"],
-      "link": "https://udemy.com",
-      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg"
-    },
-    {
       "title": "Aplicações React com IA",
       "institution": "Udemy - JavaScript Mastery",
       "period": "2025",
       "description": "Desenvolvimento de aplicações React integradas com IA, utilizando OpenAI API, ChatGPT, machine learning e processamento de linguagem natural no frontend.",
       "type": "course",
-      "technologies": ["React", "OpenAI API", "IA/ML", "TypeScript"],
-      "link": "https://udemy.com",
+      "technologies": ["JavaScript", "OpenAI API", "Node.js", "React"],
+      "link": "https://www.udemy.com/course/creating-ai-chat-apps-with-the-open-ai-api-in-javascript",
       "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
     },
     {
@@ -37,32 +27,23 @@
       "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg"
     },
     {
-      "title": "Contribuidor Open Source",
-      "institution": "Comunidade GitHub",
-      "period": "2024-Presente",
-      "description": "Contribuições ativas para projetos open source, incluindo bibliotecas React, tools de desenvolvimento e documentação técnica.",
-      "type": "extracurricular",
-      "technologies": ["Open Source", "Git", "Comunidade"],
-      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
-    },
-    {
-      "title": "Padrões Avançados de TypeScript",
-      "institution": "Frontend Masters",
+      "title": "TypeScript Masterclass 2025 Edition - React + NodeJS Project",
+      "institution": "Udemy",
       "period": "2024",
-      "description": "Padrões avançados em TypeScript para desenvolvimento de bibliotecas, utility types, conditional types e meta-programming.",
+      "description": "TypeScript V5 Updated Course - Full Stack Development, TypeScript with ReactJS, ShadcnUI, Node.js, Express and MongoDB.",
       "type": "course",
-      "technologies": ["TypeScript", "Padrões Avançados"],
-      "link": "https://frontendmasters.com",
+      "technologies": ["TypeScript", "React", "Node.js", "MongoDB", "ShadcnUI", "TailwindCSS"],
+      "link": "https://udemy.com/course/typescript-course/",
       "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg"
     },
     {
-      "title": "Docker & Kubernetes: Guia Completo",
-      "institution": "Udemy - Stephen Grider",
+      "title": "Docker: Do Básico ao Avançado",
+      "institution": "Udemy",
       "period": "2024",
       "description": "Curso completo de containerização com Docker, orquestração com Kubernetes, CI/CD pipelines e deploy de aplicações em clusters de produção.",
       "type": "course",
-      "technologies": ["Docker", "Kubernetes", "DevOps"],
-      "link": "https://udemy.com",
+      "technologies": ["Docker", "Docker Compose", "Docker Swarm", "Containers"],
+      "link": "https://www.udemy.com/course/docker-basico-ao-avancado",
       "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg"
     },
     {
@@ -71,8 +52,8 @@
       "period": "2024",
       "description": "Curso completo de fundamentos AWS cobrindo EC2, S3, RDS, Lambda, IAM, CloudFormation e preparação para certificação Cloud Practitioner com hands-on labs.",
       "type": "course",
-      "technologies": ["AWS", "Cloud Computing", "EC2", "S3"],
-      "link": "https://udemy.com",
+      "technologies": ["AWS", "EC2", "S3", "RDS", "Lambda", "IAM", "CloudFormation"],
+      "link": "https://www.udemy.com/course/aws-certified-cloud-practitioner-new/",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg"
     },
     {
@@ -81,9 +62,9 @@
       "period": "2024",
       "description": "Introdução ao Three.js para desenvolvimento web 3D, criação de geometrias, materiais, iluminação e animações básicas para sites interativos.",
       "type": "course",
-      "technologies": ["Three.js", "JavaScript", "WebGL"],
+      "technologies": ["Three.js", "WebGL", "JavaScript", "3D Graphics"],
       "link": "https://udemy.com",
-      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg"
+      "logo": "https://codiland.com/wp-content/uploads/2024/04/logothreejs.png"
     },
     {
       "title": "Inteligência Artificial e Agentes Inteligentes",
@@ -91,7 +72,7 @@
       "period": "2024",
       "description": "Curso completo sobre IA, criação de agentes inteligentes, redes neurais, processamento de linguagem natural e implementação de chatbots com Python.",
       "type": "course",
-      "technologies": ["Python", "IA", "Agentes", "NLP"],
+      "technologies": ["Python", "IA", "Redes Neurais", "NLP", "Chatbots"],
       "link": "https://alura.com.br",
       "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
     },
@@ -101,7 +82,7 @@
       "period": "2022",
       "description": "Formação completa em Python focada em análise de dados, pandas, numpy, matplotlib e machine learning com scikit-learn para projetos reais.",
       "type": "course",
-      "technologies": ["Python", "Pandas", "NumPy", "Machine Learning"],
+      "technologies": ["Python", "Pandas", "NumPy", "Matplotlib", "Scikit-learn"],
       "link": "https://alura.com.br",
       "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
     },
@@ -111,7 +92,7 @@
       "period": "2021",
       "description": "Curso completo de Python cobrindo fundamentos, programação orientada a objetos, manipulação de dados, APIs e desenvolvimento web com Flask/Django.",
       "type": "course",
-      "technologies": ["Python", "Django", "Flask", "Análise de Dados"],
+      "technologies": ["Python", "Django", "Flask", "APIs", "OOP"],
       "link": "https://udemy.com",
       "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
     }

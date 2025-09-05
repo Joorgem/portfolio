@@ -56,6 +56,8 @@ interface NavigationStoreState {
   tutorialCompleted: boolean;
   // Progress tracking
   visitedSections: string[];
+  // Scroll lock for modals/overlays
+  scrollLocked: boolean;
 }
 
 // Store actions interface
@@ -83,6 +85,9 @@ interface NavigationStoreActions {
   markSectionAsVisited: (_sectionId: string) => void;
   loadVisitedSections: () => void;
   saveVisitedSections: () => void;
+  // Scroll lock actions
+  lockScroll: () => void;
+  unlockScroll: () => void;
 }
 
 // Complete store type
@@ -152,6 +157,9 @@ export const useNavigationStore = create<NavigationStore>()(
     // Progress tracking
     visitedSections: [],
     
+    // Scroll lock state
+    scrollLocked: false,
+    
     // ===================================
     // GETTERS (HELPERS)
     // ===================================
@@ -211,6 +219,12 @@ export const useNavigationStore = create<NavigationStore>()(
      */
     handleScroll: (deltaY: number, isInsideContent: boolean = false) => {
       const state = get();
+      
+      // CRITICAL: If scroll is locked (e.g., by DomeGallery), ignore all scroll events
+      if (state.scrollLocked) {
+        return;
+      }
+      
       const anim = state._animation;
       const now = Date.now();
       
@@ -604,15 +618,8 @@ export const useNavigationStore = create<NavigationStore>()(
     // TUTORIAL
     // ===================================
     initializeTutorial: () => {
-      const hasSeenTutorial = localStorage.getItem('portfolio-tutorial-completed');
-      if (!hasSeenTutorial) {
-        set({ showTutorial: true });
-      } else {
-        set({ tutorialCompleted: true });
-      }
-      
-      // Load visited sections from localStorage
-      get().loadVisitedSections();
+      // Always show tutorial on page load
+      set({ showTutorial: true });
     },
     
     closeTutorial: () => {
@@ -620,7 +627,7 @@ export const useNavigationStore = create<NavigationStore>()(
     },
     
     completeTutorial: () => {
-      localStorage.setItem('portfolio-tutorial-completed', 'true');
+      // Only mark as completed for current session, no localStorage
       set({ 
         showTutorial: false, 
         tutorialCompleted: true 
@@ -637,31 +644,28 @@ export const useNavigationStore = create<NavigationStore>()(
       if (!state.visitedSections.includes(normalizedId)) {
         const updatedSections = [...state.visitedSections, normalizedId];
         set({ visitedSections: updatedSections });
-        
-        // Save to localStorage
-        get().saveVisitedSections();
+        // No localStorage saving - only in-memory for current session
       }
     },
 
+    // Removed localStorage functions - no persistence between sessions
     loadVisitedSections: () => {
-      try {
-        const saved = localStorage.getItem('portfolio-visited-sections');
-        if (saved) {
-          const visitedSections = JSON.parse(saved);
-          set({ visitedSections });
-        }
-      } catch (error) {
-        console.warn('Failed to load visited sections from localStorage:', error);
-      }
+      // No-op: sections always start fresh
     },
 
     saveVisitedSections: () => {
-      try {
-        const state = get();
-        localStorage.setItem('portfolio-visited-sections', JSON.stringify(state.visitedSections));
-      } catch (error) {
-        console.warn('Failed to save visited sections to localStorage:', error);
-      }
+      // No-op: no saving to localStorage
+    },
+
+    // ===================================
+    // SCROLL LOCK (for modals/overlays)
+    // ===================================
+    lockScroll: () => {
+      set({ scrollLocked: true });
+    },
+
+    unlockScroll: () => {
+      set({ scrollLocked: false });
     }
   }))
 );
