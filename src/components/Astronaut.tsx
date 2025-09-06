@@ -37,14 +37,14 @@ export const Astronaut = forwardRef<THREE.Group, AstronautProps>((props, ref: Fo
   const dragStartX = useRef<number>(0);
   const lastX = useRef<number>(0);
   const velocity = useRef<number>(0);
-  const currentRotation = useRef<number>(0);
+  const currentRotation = useRef<number>(Math.PI/2); // Inicia de frente (+90° em radianos)
   
   // Animação de entrada - subindo de baixo
   const yPosition = useMotionValue(-15);
   const ySpring = useSpring(yPosition, { damping: 20, stiffness: 50 });
   
   // Spring para rotação suave e densa
-  const rotationY = useMotionValue(0);
+  const rotationY = useMotionValue(Math.PI/2); // Inicia de frente (+90° em radianos)
   const rotationYSpring = useSpring(rotationY, { damping: 35, stiffness: 50 });
   
   useEffect(() => {
