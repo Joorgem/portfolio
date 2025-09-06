@@ -21,7 +21,7 @@ const DomeGalleryCard: React.FC<DomeGalleryCardProps> = ({
   return (
     <motion.div
       ref={cardRef}
-      className={`group relative h-[400px] md:h-[480px] lg:h-[500px] rounded-2xl bg-black/20 backdrop-blur-md border border-gray-800/50 hover:border-gray-700/50 transition-all duration-300 overflow-hidden ${className}`}
+      className={`group relative rounded-2xl bg-black/20 backdrop-blur-md border border-gray-800/50 hover:border-gray-700/50 transition-all duration-300 overflow-hidden ${className}`}
       whileHover={{ scale: 1.01 }}
       transition={{ duration: 0.2 }}
     >
@@ -30,13 +30,12 @@ const DomeGalleryCard: React.FC<DomeGalleryCardProps> = ({
       
       {/* DomeGallery - agora com clicks habilitados */}
       <div className="relative h-full overflow-hidden">
-        <div className="absolute inset-0 scale-[0.8] flex items-center justify-center">
+        <div className="absolute inset-0 scale-[0.85] md:scale-[0.8] flex items-center justify-center">
           <DomeGallery
             photos={photos}
-            fit={0.5}
-            minRadius={350}
+            fit={0.6}
+            minRadius={250}
             maxVerticalRotation={25}
-            segments={28}
             dragDampening={0.95}
             grayscale={false}
             overlayBlurColor="transparent"

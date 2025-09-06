@@ -52,8 +52,11 @@ const About: React.FC = () => {
     { node: <SiApache className="text-2xl text-gray-400" />, title: "Apache" },
   ], []);
 
-  // Usa suas fotos pessoais ou fotos de teste se não houver nenhuma
-  const photos = useMemo(() => personalPhotos.length > 0 ? personalPhotos : placeholderPhotos, []);
+  // Usar fotos reais do Google Drive
+  const photos = useMemo(() => {
+    // Usar as fotos configuradas do Google Drive
+    return personalPhotos.length > 0 ? personalPhotos : placeholderPhotos;
+  }, []);
 
   return (
     <section className="relative c-space min-h-screen" id="about">
@@ -67,18 +70,18 @@ const About: React.FC = () => {
       
       {/* Main Content Grid */}
       <div className="mt-12 mb-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
           {/* Left Column - DomeGallery Card */}
-          <div className="relative">
+          <div className="relative order-1 lg:order-1">
             <DomeGalleryCard
               photos={photos}
               title={t('gallery.title', 'Photo Gallery')}
-              className="h-full"
+              className="h-[400px] md:h-[450px] lg:h-full"
             />
           </div>
 
           {/* Right Column - Info Cards */}
-          <div className="flex flex-col gap-6 h-full">
+          <div className="flex flex-col gap-6 h-full order-2 lg:order-2">
             {/* Tech Stack Card */}
             <div className="group relative p-8 flex-1 min-h-[240px] rounded-2xl bg-black/20 backdrop-blur-md border border-gray-800/50 hover:border-gray-700/50 transition-all duration-300 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 to-black/30 rounded-2xl"></div>

@@ -1,13 +1,10 @@
-import { useEffect, useMemo, useRef, useCallback, useState } from 'react';
+import { useEffect, useMemo, useRef, useCallback } from 'react';
 import { useGesture } from '@use-gesture/react';
-import './DomeGallery.css';
 
 type ImageItem = string | { src: string; alt?: string };
-type PhotoItem = { id: string; url: string; caption: string };
 
 type DomeGalleryProps = {
   images?: ImageItem[];
-  photos?: PhotoItem[];
   fit?: number;
   fitBasis?: 'auto' | 'min' | 'max' | 'width' | 'height';
   minRadius?: number;
@@ -15,7 +12,6 @@ type DomeGalleryProps = {
   padFactor?: number;
   overlayBlurColor?: string;
   maxVerticalRotationDeg?: number;
-  maxVerticalRotation?: number; // Backward compatibility
   dragSensitivity?: number;
   enlargeTransitionMs?: number;
   segments?: number;
@@ -74,119 +70,6 @@ const DEFAULTS = {
   segments: 35
 };
 
-// Hook para detectar dispositivo móvel
-const useIsMobile = () => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    checkIsMobile();
-    window.addEventListener('resize', checkIsMobile);
-    return () => window.removeEventListener('resize', checkIsMobile);
-  }, []);
-
-  return isMobile;
-};
-
-// Configurações adaptáveis por dispositivo - CORRIGIDO (React Bits)
-const getAdaptiveSegments = (isMobile: boolean) => {
-  const width = window.innerWidth;
-  // Mobile: 20 segmentos conforme solicitado (React Bits funciona bem com 35, mas 20 é suficiente)
-  if (isMobile || width < 768) return 20;
-  // Desktop: manter funcionamento original
-  if (width < 1024) return 25; // Tablet
-  return 28; // Desktop mantido
-};
-
-// Componente de imagem SIMPLIFICADO para mobile (React Bits original)
-const OptimizedImage: React.FC<{
-  src: string;
-  alt: string;
-  className?: string;
-  style?: React.CSSProperties;
-  isMobile: boolean;
-}> = ({ src, alt, className, style, isMobile }) => {
-  // Para mobile: usar sistema simples (React Bits original)
-  if (isMobile) {
-    return (
-      <img
-        src={src}
-        alt={alt}
-        draggable={false}
-        className="w-full h-full object-cover pointer-events-none"
-        style={{
-          backfaceVisibility: 'hidden',
-          filter: style?.filter
-        }}
-      />
-    );
-  }
-  
-  // Para desktop: manter sistema complexo
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [isInView, setIsInView] = useState(false);
-  const imgRef = useRef<HTMLImageElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.01, rootMargin: '50px' }
-    );
-
-    if (imgRef.current) {
-      observer.observe(imgRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <div ref={imgRef} className={className} style={style}>
-      {!isInView ? (
-        <div 
-          className="w-full h-full bg-gray-800 animate-pulse flex items-center justify-center"
-          style={{ backgroundColor: 'rgba(75, 85, 99, 0.3)' }}
-        >
-          <div className="w-8 h-8 border-2 border-gray-600 border-t-gray-400 rounded-full animate-spin"></div>
-        </div>
-      ) : (
-        <>
-          {!isLoaded && (
-            <div 
-              className="absolute inset-0 bg-gray-800 animate-pulse flex items-center justify-center"
-              style={{ backgroundColor: 'rgba(75, 85, 99, 0.3)' }}
-            >
-              <div className="w-8 h-8 border-2 border-gray-600 border-t-gray-400 rounded-full animate-spin"></div>
-            </div>
-          )}
-          <img
-            src={src}
-            alt={alt}
-            draggable={false}
-            loading="lazy"
-            className={`w-full h-full object-cover pointer-events-none transition-opacity duration-300 ${
-              isLoaded ? 'opacity-100' : 'opacity-0'
-            }`}
-            style={{
-              backfaceVisibility: 'hidden',
-              filter: style?.filter
-            }}
-            onLoad={() => setIsLoaded(true)}
-          />
-        </>
-      )}
-    </div>
-  );
-};
-
 const clamp = (v: number, min: number, max: number) => Math.min(Math.max(v, min), max);
 const normalizeAngle = (d: number) => ((d % 360) + 360) % 360;
 const wrapAngleSigned = (deg: number) => {
@@ -201,7 +84,6 @@ const getDataNumber = (el: HTMLElement, name: string, fallback: number) => {
 
 function buildItems(pool: ImageItem[], seg: number): ItemDef[] {
   const xCols = Array.from({ length: seg }, (_, i) => -37 + i * 2);
-  // Coordenadas Y originais React Bits - mais balanceadas
   const evenYs = [-4, -2, 0, 2, 4];
   const oddYs = [-3, -1, 1, 3, 5];
 
@@ -258,7 +140,6 @@ function computeItemBaseRotation(offsetX: number, offsetY: number, sizeX: number
 
 export default function DomeGallery({
   images = DEFAULT_IMAGES,
-  photos,
   fit = 0.5,
   fitBasis = 'auto',
   minRadius = 600,
@@ -266,10 +147,9 @@ export default function DomeGallery({
   padFactor = 0.25,
   overlayBlurColor = '#060010',
   maxVerticalRotationDeg = DEFAULTS.maxVerticalRotationDeg,
-  maxVerticalRotation, // Backward compatibility
   dragSensitivity = DEFAULTS.dragSensitivity,
   enlargeTransitionMs = DEFAULTS.enlargeTransitionMs,
-  segments = DEFAULTS.segments, // Usado em adaptiveSegments
+  segments = DEFAULTS.segments,
   dragDampening = 2,
   openedImageWidth = '400px',
   openedImageHeight = '400px',
@@ -277,8 +157,6 @@ export default function DomeGallery({
   openedImageBorderRadius = '30px',
   grayscale = true
 }: DomeGalleryProps) {
-  const isMobile = useIsMobile();
-  const adaptiveSegments = useMemo(() => getAdaptiveSegments(isMobile), [isMobile]);
   const rootRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLDivElement>(null);
   const sphereRef = useRef<HTMLDivElement>(null);
@@ -319,21 +197,7 @@ export default function DomeGallery({
     document.body.classList.remove('dg-scroll-lock');
   }, []);
 
-  // Normalize both photos and images into the same format
-  const normalizedImages = useMemo(() => {
-    if (photos && photos.length > 0) {
-      return photos.map(photo => ({
-        src: photo.url,
-        alt: photo.caption
-      }));
-    }
-    return images;
-  }, [photos, images]);
-
-  const items = useMemo(() => buildItems(normalizedImages, adaptiveSegments), [normalizedImages, adaptiveSegments]);
-
-  // Handle backward compatibility for maxVerticalRotation
-  const actualMaxVerticalRotation = maxVerticalRotation !== undefined ? maxVerticalRotation : maxVerticalRotationDeg;
+  const items = useMemo(() => buildItems(images, segments), [images, segments]);
 
   const applyTransform = (xDeg: number, yDeg: number) => {
     const el = sphereRef.current;
@@ -460,7 +324,7 @@ export default function DomeGallery({
           inertiaRAF.current = null;
           return;
         }
-        const nextX = clamp(rotationRef.current.x - vY / 200, -actualMaxVerticalRotation, actualMaxVerticalRotation);
+        const nextX = clamp(rotationRef.current.x - vY / 200, -maxVerticalRotationDeg, maxVerticalRotationDeg);
         const nextY = wrapAngleSigned(rotationRef.current.y + vX / 200);
         rotationRef.current = { x: nextX, y: nextY };
         applyTransform(nextX, nextY);
@@ -469,7 +333,7 @@ export default function DomeGallery({
       stopInertia();
       inertiaRAF.current = requestAnimationFrame(step);
     },
-    [dragDampening, actualMaxVerticalRotation, stopInertia]
+    [dragDampening, maxVerticalRotationDeg, stopInertia]
   );
 
   useGesture(
@@ -506,8 +370,8 @@ export default function DomeGallery({
 
         const nextX = clamp(
           startRotRef.current.x - dyTotal / dragSensitivity,
-          -actualMaxVerticalRotation,
-          actualMaxVerticalRotation
+          -maxVerticalRotationDeg,
+          maxVerticalRotationDeg
         );
         const nextY = startRotRef.current.y + dxTotal / dragSensitivity;
 
@@ -714,7 +578,7 @@ export default function DomeGallery({
     const offsetY = getDataNumber(parent, 'offsetY', 0);
     const sizeX = getDataNumber(parent, 'sizeX', 2);
     const sizeY = getDataNumber(parent, 'sizeY', 2);
-    const parentRot = computeItemBaseRotation(offsetX, offsetY, sizeX, sizeY, adaptiveSegments);
+    const parentRot = computeItemBaseRotation(offsetX, offsetY, sizeX, sizeY, segments);
     const parentY = normalizeAngle(parentRot.rotateY);
     const globalY = normalizeAngle(rotationRef.current.y);
     let rotY = -(parentY + globalY) % 360;
@@ -861,6 +725,16 @@ export default function DomeGallery({
       }
     }
     
+    // body.dg-scroll-lock {
+    //   position: fixed !important;
+    //   top: 0;
+    //   left: 0;
+    //   width: 100% !important;
+    //   height: 100% !important;
+    //   overflow: hidden !important;
+    //   touch-action: none !important;
+    //   overscroll-behavior: contain !important;
+    // }
     .item__image {
       position: absolute;
       inset: 10px;
@@ -889,8 +763,8 @@ export default function DomeGallery({
         className="sphere-root relative w-full h-full"
         style={
           {
-            ['--segments-x' as any]: adaptiveSegments,
-            ['--segments-y' as any]: adaptiveSegments,
+            ['--segments-x' as any]: segments,
+            ['--segments-y' as any]: segments,
             ['--overlay-blur-color' as any]: overlayBlurColor,
             ['--tile-radius' as any]: imageBorderRadius,
             ['--enlarge-radius' as any]: openedImageBorderRadius,
@@ -950,12 +824,13 @@ export default function DomeGallery({
                       backfaceVisibility: 'hidden'
                     }}
                   >
-                    <OptimizedImage
+                    <img
                       src={it.src}
+                      draggable={false}
                       alt={it.alt}
-                      isMobile={isMobile}
-                      className="w-full h-full"
+                      className="w-full h-full object-cover pointer-events-none"
                       style={{
+                        backfaceVisibility: 'hidden',
                         filter: `var(--image-filter, ${grayscale ? 'grayscale(1)' : 'none'})`
                       }}
                     />
