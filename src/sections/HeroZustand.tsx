@@ -318,8 +318,8 @@ const HeroZustand: React.FC = () => {
         </div>
       )}
       
-      {/* Language Toggle - Reposicionado ao lado do NavigationProgress */}
-      {navigationState !== 'in_section' && (
+      {/* Language Toggle - Apenas Desktop */}
+      {navigationState !== 'in_section' && !isMobile && (
         <div className="fixed top-8 right-52 z-[9999] flex items-start">
           <LanguageToggle />
         </div>

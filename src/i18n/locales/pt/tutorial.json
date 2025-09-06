@@ -1,9 +1,13 @@
 {
   "title": "Inicie sua Exploração",
+  "languageSelection": {
+    "title": "Escolha Seu Idioma",
+    "subtitle": "Selecione seu idioma preferido para começar"
+  },
   "steps": {
     "step1": {
       "desktop": "<span class=\"text-white font-medium\">Selecione</span> qualquer planeta para orbitá-lo",
-      "mobile": "<span class=\"text-white font-medium\">Toque</span> em um planeta ou use a barra de navegação para entrar em órbita"
+      "mobile": "<span class=\"text-white font-medium\">Selecione</span> algum planeta"
     },
     "step2": {
       "desktop": "<span class=\"text-white font-medium\">Role ↑</span> para entrar!",

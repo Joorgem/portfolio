@@ -30,7 +30,7 @@
       }
     },
     "mobile": {
-      "idle": "Tap planets to orbit", 
+      "idle": "Select any planet", 
       "orbiting": {
         "combined": "Swipe: ↑ enter or ↓ return"
       }

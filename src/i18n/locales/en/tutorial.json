@@ -1,9 +1,13 @@
 {
   "title": "Start Your Exploration",
+  "languageSelection": {
+    "title": "Choose Your Language",
+    "subtitle": "Select your preferred language to begin"
+  },
   "steps": {
     "step1": {
       "desktop": "<span class=\"text-white font-medium\">Select</span> any planet to orbit it",
-      "mobile": "<span class=\"text-white font-medium\">Tap</span> any planet or use the sidebar to orbit it"
+      "mobile": "<span class=\"text-white font-medium\">Select</span> any planet"
     },
     "step2": {
       "desktop": "<span class=\"text-white font-medium\">Scroll ↑</span> to get inside!",
