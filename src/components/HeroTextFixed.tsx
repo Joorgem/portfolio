@@ -82,7 +82,7 @@ const HeroTextFixed: React.FC = () => {
           {/* Mobile View - Tamanhos menores */}
           <div className="block md:hidden">
             <motion.p
-              className="text-2xl sm:text-3xl font-medium text-white mb-4"
+              className="text-lg sm:text-xl font-medium text-white mb-4"
               variants={variants}
               initial="hidden"
               animate="visible"
@@ -93,7 +93,7 @@ const HeroTextFixed: React.FC = () => {
             </motion.p>
             <div className="space-y-2">
               <motion.p
-                className="text-3xl sm:text-4xl font-black text-neutral-300"
+                className="text-2xl sm:text-3xl font-black text-neutral-300"
                 variants={variants}
                 initial="hidden"
                 animate="visible"
@@ -111,11 +111,11 @@ const HeroTextFixed: React.FC = () => {
               >
                 <FlipWords
                   words={words}
-                  className="font-bold text-white text-5xl sm:text-6xl"
+                  className="font-bold text-white text-3xl sm:text-4xl"
                 />
               </motion.div>
               <motion.p
-                className="text-2xl sm:text-3xl font-black text-neutral-300"
+                className="text-lg sm:text-xl font-black text-neutral-300"
                 variants={variants}
                 initial="hidden"
                 animate="visible"

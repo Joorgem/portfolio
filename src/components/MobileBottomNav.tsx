@@ -22,12 +22,13 @@ const MobileBottomNav: React.FC = () => {
   const currentSection = useNavigationStore(state => state.currentSection);
   const startNavigation = useNavigationStore(state => state.startNavigation);
   const canInteract = useNavigationStore(state => state.canInteract);
+  const tutorialCompleted = useNavigationStore(state => state.tutorialCompleted);
 
   // Detecta se é dispositivo móvel
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
-  // Não renderiza em desktop
-  if (!isMobile) return null;
+  // Não renderiza em desktop ou se tutorial não foi completado
+  if (!isMobile || !tutorialCompleted) return null;
 
   // Esconde o menu quando está dentro de uma seção ou em transição
   const shouldHide = navigationState === 'in_section' || 

@@ -86,7 +86,7 @@ const About: React.FC = () => {
                 <h3 className="text-2xl font-semibold text-gray-100 mb-6">
                   {t('techStack.title', 'Tech Stack')}
                 </h3>
-                <div className="flex-grow">
+                <div className="flex-grow flex items-center justify-center">
                   <LogoLoop
                     logos={techLogos}
                     speed={30}
@@ -97,7 +97,7 @@ const About: React.FC = () => {
                     fadeOut={true}
                     fadeOutColor="#000000"
                     scaleOnHover={true}
-                    className="py-2"
+                    className="py-4"
                   />
                 </div>
               </div>

@@ -3,7 +3,7 @@
   "steps": {
     "step1": {
       "desktop": "<span class=\"text-white font-medium\">Selecione</span> qualquer planeta para orbitá-lo",
-      "mobile": "<span class=\"text-white font-medium\">Toque</span> qualquer planeta ou use a barra lateral para orbitá-lo"
+      "mobile": "<span class=\"text-white font-medium\">Toque</span> em um planeta ou use a barra de navegação para entrar em órbita"
     },
     "step2": {
       "desktop": "<span class=\"text-white font-medium\">Role ↑</span> para entrar!",

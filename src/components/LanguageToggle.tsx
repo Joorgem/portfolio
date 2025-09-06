@@ -1,9 +1,15 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { useNavigationStore } from '../stores/navigation.store';
 
 export const LanguageToggle: React.FC = () => {
   const { i18n, t } = useTranslation('common');
+  const tutorialCompleted = useNavigationStore(state => state.tutorialCompleted);
+  
+  // No mobile, só mostra se tutorial não foi completado
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  if (isMobile && tutorialCompleted) return null;
 
   const toggleLanguage = () => {
     const currentLang = i18n.language;
