@@ -22,5 +22,10 @@
   },
   "techStack": {
     "title": "Tecnologias"
+  },
+  "resume": {
+    "title": "Currículo",
+    "downloadButton": "Baixar PDF",
+    "downloading": "Baixando..."
   }
 }

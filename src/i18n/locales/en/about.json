@@ -22,5 +22,10 @@
   },
   "techStack": {
     "title": "Tech Stack"
+  },
+  "resume": {
+    "title": "Resume",
+    "downloadButton": "Download PDF",
+    "downloading": "Downloading..."
   }
 }

@@ -109,7 +109,7 @@ export const myProjects: Project[] = [
   },
   {
     id: 2,
-    title: "Interactive 3D Portfolio",
+    title: "Immersive Portifolio",
     subDescription: [
       "3D interactive portfolio with spatial navigation using Three.js and React Three Fiber.",
       "Complex state management system with Zustand for seamless transitions between sections.",

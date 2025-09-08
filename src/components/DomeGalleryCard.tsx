@@ -30,7 +30,7 @@ const DomeGalleryCard: React.FC<DomeGalleryCardProps> = ({
       
       {/* DomeGallery - agora com clicks habilitados */}
       <div className="relative h-full overflow-hidden">
-        <div className="absolute inset-0 scale-[0.85] md:scale-[0.8] flex items-center justify-center">
+        <div className="absolute inset-0 scale-[1.1] md:scale-[1.05] flex items-center justify-center">
           <DomeGallery
             photos={photos}
             fit={0.6}
