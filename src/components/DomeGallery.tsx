@@ -822,8 +822,9 @@ export default function DomeGallery({
       position: absolute;
       inset: 0;
       margin: auto;
-      perspective: calc(var(--radius) * 2);
+      perspective: calc(var(--radius) * 2.5);
       perspective-origin: 50% 50%;
+      overflow: visible;
     }
     
     .sphere {
@@ -900,7 +901,7 @@ export default function DomeGallery({
       >
         <main
           ref={mainRef}
-          className="absolute inset-0 grid place-items-center overflow-hidden select-none bg-transparent"
+          className="absolute inset-0 grid place-items-center overflow-visible select-none bg-transparent"
           style={{
             touchAction: 'none',
             WebkitUserSelect: 'none'

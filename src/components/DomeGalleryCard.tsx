@@ -21,16 +21,14 @@ const DomeGalleryCard: React.FC<DomeGalleryCardProps> = ({
   return (
     <motion.div
       ref={cardRef}
-      className={`group relative rounded-2xl bg-black/20 backdrop-blur-md border border-gray-800/50 hover:border-gray-700/50 transition-all duration-300 overflow-hidden ${className}`}
+      className={`group relative bg-transparent transition-all duration-300 overflow-visible ${className}`}
       whileHover={{ scale: 1.01 }}
       transition={{ duration: 0.2 }}
     >
-      {/* Background gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 to-black/30 rounded-2xl"></div>
       
-      {/* DomeGallery - agora com clicks habilitados */}
-      <div className="relative h-full overflow-hidden">
-        <div className="absolute inset-0 scale-[1.1] md:scale-[1.05] flex items-center justify-center">
+      {/* DomeGallery - sem limitações de overflow - tamanho otimizado */}
+      <div className="relative h-full overflow-visible">
+        <div className="absolute inset-0 scale-90 md:scale-95 flex items-center justify-center overflow-visible">
           <DomeGallery
             photos={photos}
             fit={0.6}
@@ -44,8 +42,6 @@ const DomeGalleryCard: React.FC<DomeGalleryCardProps> = ({
         
       </div>
 
-      {/* Subtle accent line */}
-      <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent"></div>
     </motion.div>
   );
 

@@ -55,7 +55,7 @@ const About: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative c-space min-h-screen" id="about">
+    <section className="relative c-space min-h-screen overflow-visible" id="about">
       <Particles
         className="absolute inset-0 -z-50"
         quantity={100}
@@ -65,28 +65,28 @@ const About: React.FC = () => {
       />
       
       {/* Main Content Grid */}
-      <div className="mt-12 mb-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 mb-12">
-          {/* Left Column - DomeGallery Card */}
-          <div className="relative order-1 lg:order-1">
-            <DomeGalleryCard
-              photos={photos}
-              title={t('gallery.title', 'Photo Gallery')}
-              className="h-[400px] md:h-[450px] lg:h-full"
-            />
-          </div>
-
-          {/* Right Column - Info Cards */}
-          <div className="flex flex-col gap-6 h-full order-2 lg:order-2">
-            {/* Currently Card with Integrated Resume */}
-            <div className="group relative p-6 rounded-2xl bg-black/20 backdrop-blur-md border border-gray-800/50 hover:border-gray-700/50 transition-all duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 to-black/30 rounded-2xl"></div>
-              <div className="relative z-10 h-full">
-                {/* Header with title and resume button */}
-                <div className="flex items-start justify-between mb-4">
-                  <h3 className="text-2xl font-semibold text-gray-100">
-                    {t('currently.title')}
-                  </h3>
+      <div className="mt-12 mb-8 overflow-visible">
+        {/* Currently Card - Top Section */}
+        <div className="mb-6">
+          <div className="group relative p-6 rounded-2xl bg-transparent transition-all duration-300">
+            <div className="relative">
+              {/* Header with title */}
+              <div className="mb-4">
+                <h3 className="text-2xl font-semibold text-gray-100">
+                  {t('currently.title')}
+                </h3>
+              </div>
+              
+              {/* Content area with status information */}
+              <div className="space-y-4">
+                <p className="text-gray-400 text-sm flex items-center gap-2">
+                  <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                  {t('currently.location')} • {t('currently.role')}
+                </p>
+                <div className="flex items-center gap-4">
+                  <p className="text-gray-400 text-sm pl-4 border-l border-gray-600/30">
+                    {t('currently.openToProjects')}
+                  </p>
                   <InteractiveHoverButton
                     onClick={() => {
                       const link = document.createElement('a');
@@ -105,36 +105,18 @@ const About: React.FC = () => {
                     <span className="sm:hidden">PDF</span>
                   </InteractiveHoverButton>
                 </div>
-                
-                {/* Content area with status information */}
-                <div className="space-y-4">
-                  <p className="text-gray-400 text-sm flex items-center gap-2">
-                    <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                    {t('currently.location')} • {t('currently.role')}
-                  </p>
-                  <p className="text-gray-400 text-sm pl-4 border-l border-gray-600/30">
-                    {t('currently.openToProjects')}
-                  </p>
-                </div>
               </div>
-              {/* Subtle accent line */}
-              <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent"></div>
-            </div>
-
-            {/* Tech Stack Card */}
-            <div className="group relative p-8 flex-1 min-h-[280px] rounded-2xl bg-black/20 backdrop-blur-md border border-gray-800/50 hover:border-gray-700/50 transition-all duration-300 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 to-black/30 rounded-2xl"></div>
-              <div className="relative z-10 h-full">
-                <div className="flex items-center justify-center h-full">
-                  <div className="relative overflow-hidden">
-                    <IconCloud images={techLogosImages} />
-                  </div>
-                </div>
-              </div>
-              {/* Subtle accent line */}
-              <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent"></div>
             </div>
           </div>
+        </div>
+
+        {/* DomeGallery - Bottom Section Full Width - tamanho otimizado */}
+        <div className="w-full overflow-visible">
+          <DomeGalleryCard
+            photos={photos}
+            title={t('gallery.title', 'Photo Gallery')}
+            className="h-[600px] md:h-[700px] lg:h-[750px] overflow-visible"
+          />
         </div>
 
       </div>
