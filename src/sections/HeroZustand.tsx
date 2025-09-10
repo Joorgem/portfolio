@@ -9,7 +9,6 @@ import NavigationSystemStable from "../components/NavigationSystemStable";
 import CameraControllerZustand from "../components/CameraController.Zustand";
 import { useNavigationStore } from "../stores/navigation.store";
 import type { NavigationPoint } from "../constants/navigationPoints";
-import { Particles } from "../components/Particles";
 import { LanguageToggle } from "../components/LanguageToggle";
 import { useTranslation } from "react-i18next";
 
@@ -215,14 +214,7 @@ const HeroZustand: React.FC = () => {
   };
   
   return (
-    <section className="relative w-screen h-screen overflow-hidden bg-black">
-      <Particles
-        className="absolute inset-0 -z-50"
-        quantity={isMobile ? 50 : 100}  // Mobile: menos partículas para performance
-        ease={80}
-        color={"#ffffff"}
-        refresh
-      />
+    <section className="relative w-screen h-screen overflow-hidden bg-transparent">{/* Partículas agora no App.jsx */}
       {/* Texto Hero - Oculta durante navegação */}
       {(navigationState === 'idle' || navigationState === 'orbiting') && (
         <HeroTextFixed />

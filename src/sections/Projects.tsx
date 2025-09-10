@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ProjectShowcase from "../components/ProjectShowcase";
 import { myProjects } from "../constants";
 import { motion } from "framer-motion";
-import { Particles } from "../components/Particles";
+import Particles from "../components/Particles";
 import { useTranslation } from "react-i18next";
 
 const Projects: React.FC = () => {
@@ -31,10 +31,10 @@ const Projects: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative bg-black">
+    <section className="relative bg-black w-full min-h-screen">
       {/* Background with particles - behind content */}
       {showParticles && (
-        <div className="fixed inset-0 z-0">
+        <div className="absolute inset-0 -z-10">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -42,10 +42,17 @@ const Projects: React.FC = () => {
           >
             <Particles
               className="absolute inset-0 w-full h-full"
-              quantity={100}
-              ease={80}
-              color={"#ffffff"}
-              refresh
+              particleColors={['#ffffff', '#f8fafc', '#e2e8f0']}
+              particleCount={100}
+              particleSpread={10}
+              speed={0.04}
+              particleBaseSize={50}
+              sizeRandomness={1.0}
+              cameraDistance={18}
+              moveParticlesOnHover={true}
+              particleHoverFactor={0.4}
+              alphaParticles={true}
+              disableRotation={false}
             />
           </motion.div>
         </div>

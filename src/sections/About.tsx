@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Particles } from "../components/Particles";
+import Particles from "../components/Particles";
 import { IconCloud } from "../components/magicui/icon-cloud";
 import { InteractiveHoverButton } from "../components/magicui/interactive-hover-button";
 import DomeGalleryCard from "../components/DomeGalleryCard";
@@ -58,10 +58,17 @@ const About: React.FC = () => {
     <section className="relative c-space min-h-screen overflow-visible" id="about">
       <Particles
         className="absolute inset-0 -z-50"
-        quantity={100}
-        ease={80}
-        color={"#ffffff"}
-        refresh
+        particleColors={['#ffffff', '#f1f5f9', '#e2e8f0']}
+        particleCount={80}
+        particleSpread={8}
+        speed={0.02}
+        particleBaseSize={40}
+        sizeRandomness={0.6}
+        cameraDistance={15}
+        moveParticlesOnHover={true}
+        particleHoverFactor={0.8}
+        alphaParticles={true}
+        disableRotation={false}
       />
       
       {/* Main Content Grid */}

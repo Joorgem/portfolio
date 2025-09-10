@@ -10,6 +10,8 @@ import Contact from '../sections/Contact';
 import Courses from '../sections/Courses';
 import { useTranslation } from 'react-i18next';
 import { LanguageToggle } from '../components/LanguageToggle';
+import Particles from '../components/Particles';
+import { useMediaQuery } from 'react-responsive';
 
 // Container de página com animações suaves
 const PageContainer = ({ sectionId, backgroundColor = "#0a0a0a", children }) => {
@@ -18,6 +20,7 @@ const PageContainer = ({ sectionId, backgroundColor = "#0a0a0a", children }) => 
   const pageVisible = useNavigationStore(state => state.pageVisible);
   const fadeProgress = useNavigationStore(state => state.fadeProgress);
   const initiateExit = useNavigationStore(state => state.initiateExit);
+  const isMobile = useMediaQuery({ maxWidth: 853 });
   
   const [shouldRender, setShouldRender] = useState(false);
   
@@ -36,12 +39,30 @@ const PageContainer = ({ sectionId, backgroundColor = "#0a0a0a", children }) => 
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed inset-0 z-40 overflow-y-auto"
-          style={{ backgroundColor }}
+          className="fixed inset-0 z-30 overflow-y-auto"
+          style={backgroundColor === "transparent" ? {} : { backgroundColor }}
         >
+          {/* Partículas da seção - ativas apenas quando seção está aberta */}
+          <div className="fixed inset-0 z-40 pointer-events-none">
+            <Particles
+              className="absolute inset-0 w-full h-full"
+              particleColors={['#ffffff', '#f8fafc', '#e2e8f0']}
+              particleCount={isMobile ? 400 : 800}
+              particleSpread={20}
+              speed={0.1}
+              particleBaseSize={100}
+              sizeRandomness={1.2}
+              cameraDistance={20}
+              moveParticlesOnHover={true}
+              particleHoverFactor={0.5}
+              alphaParticles={false}
+              disableRotation={false}
+            />
+          </div>
+
           {/* Overlay de fade baseado no progresso */}
           <motion.div
-            className="fixed inset-0 bg-black pointer-events-none z-30"
+            className="fixed inset-0 bg-black pointer-events-none z-20"
             initial={{ opacity: 1 }}
             animate={{ opacity: 1 - fadeProgress }}
             transition={{ duration: 0.1 }}
@@ -115,10 +136,10 @@ const PageContainer = ({ sectionId, backgroundColor = "#0a0a0a", children }) => 
           {/* Gradientes decorativos sutis */}
           <div className="fixed top-0 left-0 right-0 h-24 
                           bg-gradient-to-b from-black/30 to-transparent 
-                          pointer-events-none z-30" />
+                          pointer-events-none z-20" />
           <div className="fixed bottom-0 left-0 right-0 h-24 
                           bg-gradient-to-t from-black/30 to-transparent 
-                          pointer-events-none z-30" />
+                          pointer-events-none z-20" />
         </motion.div>
       )}
     </AnimatePresence>
@@ -134,7 +155,7 @@ const SectionPagesZustand = () => {
       {/* About Page */}
       <PageContainer 
         sectionId="about" 
-        backgroundColor="#0a0a0a"
+        backgroundColor="transparent"
       >
         <div className="min-h-screen pt-24 pb-10">
           <About />
@@ -154,7 +175,7 @@ const SectionPagesZustand = () => {
       {/* Experience Page */}
       <PageContainer 
         sectionId="experience" 
-        backgroundColor="#0a0a0a"
+        backgroundColor="transparent"
       >
         <div className="min-h-screen pt-24 pb-10 flex items-center justify-center">
           <div className="w-full max-w-6xl px-4">
@@ -166,7 +187,7 @@ const SectionPagesZustand = () => {
       {/* Contact Page */}
       <PageContainer 
         sectionId="contact" 
-        backgroundColor="#0a0a0a"
+        backgroundColor="transparent"
       >
         <div className="min-h-screen pt-24 pb-10">
           <Contact />
@@ -176,7 +197,7 @@ const SectionPagesZustand = () => {
       {/* Courses Page */}
       <PageContainer 
         sectionId="courses" 
-        backgroundColor="#0a0a0a"
+        backgroundColor="transparent"
       >
         <div className="min-h-screen pt-24 pb-10">
           <Courses />

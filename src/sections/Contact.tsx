@@ -1,8 +1,9 @@
 import { useState, FormEvent, ChangeEvent } from "react";
 import emailjs from "@emailjs/browser";
 import Alert from "../components/Alert";
-import { Particles } from "../components/Particles";
 import { useTranslation } from "react-i18next";
+import { motion } from "framer-motion";
+import { Github, Linkedin, Mail } from "lucide-react";
 
 interface FormData {
   name: string;
@@ -66,23 +67,79 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center c-space">
-      <Particles
-        className="absolute inset-0 -z-50"
-        quantity={100}
-        ease={80}
-        color={"#ffffff"}
-        refresh
-      />
-      {showAlert && <Alert type={alertType} text={alertMessage} />}
-      <div className="flex flex-col items-center justify-center max-w-md p-8 mx-auto border border-white/10 rounded-2xl bg-black/30 backdrop-blur-sm">
-        <div className="flex flex-col items-start w-full gap-5 mb-10">
-          <h2 className="text-heading">{t('title')}</h2>
-          <p className="font-normal text-neutral-400">
+    <section className="relative bg-transparent w-full min-h-screen">{/* Particles inherit from Hero background */}
+      
+      {/* Layout Unificado - Header + Formulário */}
+      <div className="relative z-10 flex flex-col justify-center items-center min-h-screen py-20 px-4">
+        
+        {/* Header Compacto */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-5xl lg:text-7xl font-bold text-white mb-6">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60">
+              {t('title')}
+            </span>
+          </h2>
+          
+          <p className="text-lg text-gray-200 max-w-2xl mx-auto leading-relaxed mb-8">
             {t('description')}
           </p>
-        </div>
-        <form className="w-full" onSubmit={handleSubmit}>
+          
+          {/* Ícones Sociais Minimalistas */}
+          <div className="flex items-center justify-center gap-6 mb-8">
+            <motion.a
+              href="https://www.linkedin.com/in/jorge-molina-539394197/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={t('social.linkedin')}
+              title={t('social.linkedin')}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              className="p-3 border border-white/10 rounded-full hover:border-white/30 transition-all duration-300 hover:bg-white/5"
+            >
+              <Linkedin size={20} className="text-gray-300 hover:text-white transition-colors duration-300" />
+            </motion.a>
+            
+            <motion.a
+              href="https://github.com/Joorgem"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={t('social.github')}
+              title={t('social.github')}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              className="p-3 border border-white/10 rounded-full hover:border-white/30 transition-all duration-300 hover:bg-white/5"
+            >
+              <Github size={20} className="text-gray-300 hover:text-white transition-colors duration-300" />
+            </motion.a>
+            
+            <motion.a
+              href="mailto:contato@jorgemolina.dev"
+              aria-label={t('social.email')}
+              title={t('social.email')}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              className="p-3 border border-white/10 rounded-full hover:border-white/30 transition-all duration-300 hover:bg-white/5"
+            >
+              <Mail size={20} className="text-gray-300 hover:text-white transition-colors duration-300" />
+            </motion.a>
+          </div>
+        </motion.div>
+
+        {/* Formulário Content */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="relative w-full max-w-md"
+        >
+          {showAlert && <Alert type={alertType} text={alertMessage} />}
+          <div className="flex flex-col items-center justify-center p-8 mx-auto border border-white/10 rounded-2xl bg-black/30 backdrop-blur-sm">
+            <form className="w-full" onSubmit={handleSubmit}>
           <div className="mb-5">
             <label htmlFor="name" className="feild-label">
               {t('form.fields.name')}
@@ -131,13 +188,16 @@ const Contact: React.FC = () => {
               required
             />
           </div>
-          <button
-            type="submit"
-            className="w-full px-1 py-3 text-lg text-center rounded-md cursor-pointer bg-gradient-to-r from-neutral-800 to-neutral-700 border border-white/10 hover:from-neutral-700 hover:to-neutral-600 hover:border-white/20 transition-all duration-300 hover-animation"
-          >
-            {!isLoading ? t('form.submit') : t('form.sending')}
-          </button>
-        </form>
+            <button
+              type="submit"
+              className="w-full px-1 py-3 text-lg text-center rounded-md cursor-pointer bg-gradient-to-r from-neutral-800 to-neutral-700 border border-white/10 hover:from-neutral-700 hover:to-neutral-600 hover:border-white/20 transition-all duration-300 hover-animation"
+            >
+              {!isLoading ? t('form.submit') : t('form.sending')}
+            </button>
+            </form>
+          </div>
+        </motion.div>
+        
       </div>
     </section>
   );

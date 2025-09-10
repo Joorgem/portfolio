@@ -1,6 +1,11 @@
 {
   "title": "Let's Talk",
   "description": "From full-stack web development and mobile applications to custom software solutions, API integrations, database design, and cloud deployments - let's turn your ideas into innovative digital experiences.",
+  "social": {
+    "linkedin": "LinkedIn Profile",
+    "github": "GitHub Profile", 
+    "email": "Send Email"
+  },
   "form": {
     "fields": {
       "name": "Full Name",

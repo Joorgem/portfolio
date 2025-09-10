@@ -8,12 +8,14 @@ interface TimelineProps {
   data?: Experience[]; // Made optional to allow for translated data
   useTranslatedData?: boolean; // Flag to use translations instead of props data
   sectionTitle?: string; // Optional custom title
+  showTitle?: boolean; // Flag to show/hide section title
 }
 
 export const Timeline: React.FC<TimelineProps> = ({ 
   data, 
   useTranslatedData = false,
-  sectionTitle 
+  sectionTitle,
+  showTitle = true
 }) => {
   const { t } = useTranslation('experiences');
   
@@ -46,7 +48,7 @@ export const Timeline: React.FC<TimelineProps> = ({
 
   return (
     <div className="c-space section-spacing" ref={containerRef}>
-      <h2 className="text-heading">{timelineTitle}</h2>
+      {showTitle && <h2 className="text-heading">{timelineTitle}</h2>}
       <div ref={ref} className="relative pb-40">
         {timelineData.map((item, index) => (
           <div
