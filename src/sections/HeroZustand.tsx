@@ -47,11 +47,8 @@ const HeroZustand: React.FC = () => {
   // Handler de navegação - MOBILE E DESKTOP IGUAIS
   const handleNavigate = useCallback((point: NavigationPoint) => {
     if (!canInteract()) {
-      console.log('⚠️ Navegação bloqueada - Estado:', navigationState);
       return;
     }
-    
-    console.log('🎯 Navegando para:', point.name);
     
     // Comportamento unificado: sempre entra em órbita primeiro
     // O usuário controla o zoom via scroll/touch
@@ -78,7 +75,6 @@ const HeroZustand: React.FC = () => {
         // Se está dentro de uma seção
         if (isInsideContent) {
           // Permite scroll normal do conteúdo
-          console.log('📜 Scroll dentro do conteúdo');
           handleScroll(e.deltaY, true);
           return; // Não previne o default
         } else {
@@ -100,7 +96,6 @@ const HeroZustand: React.FC = () => {
         lastTouchY = touchStartY;
         touchStartTime = Date.now();
         
-        console.log('📱 Touch Start:', touchStartY);
       }
     };
     
@@ -133,7 +128,6 @@ const HeroZustand: React.FC = () => {
           // Inverte o deltaY para mobile (swipe down = zoom in)
           handleScroll(-deltaY * 3, false);
           
-          console.log('📱 Touch Move - Delta:', deltaY);
         }
         
         lastTouchY = currentY;
@@ -144,43 +138,35 @@ const HeroZustand: React.FC = () => {
       const deltaTime = Date.now() - touchStartTime;
       const totalDeltaY = touchStartY - lastTouchY;
       
-      console.log('📱 Touch End - Total Delta:', totalDeltaY, 'Time:', deltaTime);
       
       // Detecta swipe rápido e forte
       if (deltaTime < 300 && Math.abs(totalDeltaY) > 50) {
         // Swipe forte detectado - amplifica ainda mais
         handleScroll(-totalDeltaY * 5, false);
-        console.log('📱 Swipe detectado!');
       }
     };
     
     // Handler de ESC
     const handleKeyDown = (e: KeyboardEvent) => {
-      console.log('⌨️ Tecla pressionada:', e.key);
       
       if (e.key === 'Escape') {
         const state = useNavigationStore.getState();
-        console.log('🔄 ESC detectado! Estado atual:', state.navigationState);
         e.preventDefault();
         
         // Se está em seção, sai da seção E vai para inicial
         if (state.navigationState === 'in_section') {
-          console.log('🔄 ESC - Saindo da seção e voltando ao início');
           state.goToInitialState();
         } 
         // Se está orbitando um planeta, volta para inicial
         else if (state.navigationState === 'orbiting') {
-          console.log('🔄 ESC - Voltando ao estado inicial do orbiting');
           state.goToInitialState();
         }
         // Se está fazendo zoom, cancela
         else if (state.navigationState === 'zooming_in') {
-          console.log('🔄 ESC - Cancelando zoom');
           state.goToInitialState();
         }
         // Qualquer outro estado
         else {
-          console.log('🔄 ESC - Estado atual não requer ação:', state.navigationState);
         }
       }
     };

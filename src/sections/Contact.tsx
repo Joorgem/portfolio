@@ -43,7 +43,6 @@ const Contact: React.FC = () => {
     setIsLoading(true);
 
     try {
-      console.log("From submitted:", formData);
       await emailjs.send(
         "service_ea205oa",
         "template_o2y5538",
@@ -61,7 +60,6 @@ const Contact: React.FC = () => {
       showAlertMessage("success", t('form.successMessage'));
     } catch (error) {
       setIsLoading(false);
-      console.log(error);
       showAlertMessage("danger", t('form.errorMessage'));
     }
   };

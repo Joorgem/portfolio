@@ -24,6 +24,5 @@ export function convertShareLinkToDirectUrl(shareLink: string): string | null {
   }
 
   // Se não conseguir extrair o ID, retorna null
-  console.warn('Não foi possível extrair ID do link:', shareLink);
   return null;
 }
