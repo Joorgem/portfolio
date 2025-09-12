@@ -1,35 +1,13 @@
 // src/stores/navigation.store.ts
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
+import { 
+  NAVIGATION_CONFIG, 
+  ANIMATION_CONSTANTS, 
+  NavigationStates,
+  type NavigationState
+} from '../constants/navigationConfig';
 
-// Navigation States enum for better type safety
-export const NavigationStates = {
-  IDLE: 'idle',
-  ORBITING: 'orbiting',
-  ZOOMING_IN: 'zooming_in',
-  ENTERING: 'entering',
-  IN_SECTION: 'in_section',
-  EXITING: 'exiting',
-  ZOOMING_OUT: 'zooming_out',
-} as const;
-
-export type NavigationState = typeof NavigationStates[keyof typeof NavigationStates];
-
-// Configuration interface
-interface NavigationConfig {
-  zoomInSensitivity: number;
-  zoomOutSensitivity: number;
-  zoomSpeed: number;
-  fadeSpeed: number;
-  zoomStartFade: number;
-  zoomComplete: number;
-  fadePauseCanvas: number;
-  zoomAutoComplete: number;
-  zoomOutCompleteThreshold: number;
-  exitScrollThreshold: number;
-  scrollThrottle: number;
-  maxScrollDelta: number;
-}
 
 // Animation internal state interface
 interface AnimationState {
@@ -58,6 +36,11 @@ interface NavigationStoreState {
   visitedSections: string[];
   // Scroll lock for modals/overlays
   scrollLocked: boolean;
+  // CONTINUITY FIX: Preserva estado final para transição suave de saída
+  finalZoomProgress: number;        // Zoom progress quando entrou na seção (98%)
+  finalOrbitAngle: number;          // Ângulo orbital quando entrou na seção
+  finalCameraRadius: number;        // Raio da câmera quando entrou na seção
+  finalCameraHeight: number;        // Altura da câmera quando entrou na seção
 }
 
 // Store actions interface
@@ -88,40 +71,15 @@ interface NavigationStoreActions {
   // Scroll lock actions
   lockScroll: () => void;
   unlockScroll: () => void;
+  // CONTINUITY FIX: Preserva estado final
+  saveFinalCameraState: (_zoomProgress: number, _orbitAngle: number, _radius: number, _height: number) => void;
 }
 
 // Complete store type
 export type NavigationStore = NavigationStoreState & NavigationStoreActions;
 
-// MOBILE FIX: Detecta se é dispositivo móvel
-const isMobileDevice = () => {
-  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 768;
-};
-
-// Configurações do sistema com suporte mobile
-const CONFIG: NavigationConfig = {
-  // Sensibilidades adaptativas para mobile/desktop
-  zoomInSensitivity: isMobileDevice() ? 0.0015 : 0.0008,      // Mobile MAIS sensível ainda
-  zoomOutSensitivity: isMobileDevice() ? 0.0018 : 0.0010,     // Mobile MAIS sensível ainda
-  
-  // Velocidades de animação automática mais lentas
-  zoomSpeed: 0.012,               // Reduzido de 0.015 para 0.012
-  fadeSpeed: 0.015,               // Reduzido de 0.018 para 0.015
-  
-  // Pontos de transição ajustados para mais controle manual
-  zoomStartFade: 0.88,            // Aumentado de 0.85 para 0.88 (fade mais tarde)
-  zoomComplete: 0.98,             // Mantido em 0.98
-  fadePauseCanvas: 0.95,          // Mantido em 0.95
-  zoomAutoComplete: 0.65,         // Mesmo valor para mobile e desktop agora
-  
-  // Thresholds para estados especiais
-  zoomOutCompleteThreshold: 0.65, // AUMENTADO de 0.85 para 0.65 (ativa animação mais cedo - menos "vai e volta")
-  exitScrollThreshold: -150,      // Mantido
-  
-  // Novos parâmetros para suavidade extra
-  scrollThrottle: isMobileDevice() ? 5 : 12,        // Mobile AINDA mais responsivo
-  maxScrollDelta: 120,            // Limita picos de deltaY para evitar saltos
-};
+// Using centralized navigation configuration
+const CONFIG = NAVIGATION_CONFIG;
 
 export const useNavigationStore = create<NavigationStore>()(
   subscribeWithSelector((set, get) => ({
@@ -139,13 +97,13 @@ export const useNavigationStore = create<NavigationStore>()(
     // Valores de animação (não causam re-render)
     _animation: {
       frame: null,
-      zoomDirection: 0,        // -1 = out, 0 = parado, 1 = in
+      zoomDirection: ANIMATION_CONSTANTS.ZOOM_DIRECTION.STOPPED,
       fadeFrame: null,
       lastScrollTime: 0,
     },
     
     // Zoom out visual (0 a 1, onde 1 = zoom out máximo)
-    zoomOutProgress: 0,
+    zoomOutProgress: ANIMATION_CONSTANTS.INITIAL_VALUES.ZOOM_OUT_PROGRESS,
     
     // Hover do planeta
     hoveredPlanet: null,
@@ -159,6 +117,12 @@ export const useNavigationStore = create<NavigationStore>()(
     
     // Scroll lock state
     scrollLocked: false,
+    
+    // CONTINUITY FIX: Estado preservado para transições suaves
+    finalZoomProgress: 0,
+    finalOrbitAngle: 0,
+    finalCameraRadius: 4.2,
+    finalCameraHeight: 1.8,
     
     // ===================================
     // GETTERS (HELPERS)
@@ -310,14 +274,13 @@ export const useNavigationStore = create<NavigationStore>()(
       }
       
       // ========================================
-      // ESTADO IN_SECTION - Saída por scroll
+      // ESTADO IN_SECTION - DESABILITADO: Saída APENAS por ESC ou botão
       // ========================================
-      else if (currentState === NavigationStates.IN_SECTION && !isInsideContent) {
-        // Scroll para baixo forte para sair
-        if (deltaY > 50) {
-          get().initiateExit();
-        }
-      }
+      // CORREÇÃO CRÍTICA: Removido o scroll automático de saída que causava fechamento indesejado
+      // A saída da seção agora é controlada EXCLUSIVAMENTE por:
+      // 1. Botão "Voltar" no canto superior esquerdo (onClick={initiateExit})
+      // 2. Tecla ESC (handleKeyDown no HeroZustand.tsx)
+      // 3. Scroll dentro das seções é NORMAL e não interfere na navegação 3D
     },
     
     
@@ -345,11 +308,15 @@ export const useNavigationStore = create<NavigationStore>()(
       const state = get();
       if (state.navigationState !== NavigationStates.IN_SECTION) return;
       
-      // Atualização atômica para evitar estados intermediários
+      // CONTINUITY FIX: Restaura valores finais para começar saída de onde entrada terminou
       set({ 
         navigationState: NavigationStates.EXITING,
         pageVisible: false,
-        targetSection: null  // CRÍTICO: garante que vai direto para MAIN
+        targetSection: null,  // CRÍTICO: garante que vai direto para MAIN
+        // Restaura zoom progress para onde estava quando entrou (98%)
+        zoomProgress: state.finalZoomProgress,
+        // Reset zoom out progress para começar do zero
+        zoomOutProgress: 0
       });
       
       // Inicia animação de fade out
@@ -417,19 +384,20 @@ export const useNavigationStore = create<NavigationStore>()(
             get().startFadeInAnimation();
           }
           
-          // Completa zoom
+          // Completa zoom - mas NÃO entra na seção ainda
+          // A entrada na seção é controlada pelo fade, não pelo zoom
           if (nextZoom >= CONFIG.zoomComplete) {
-            get().enterSection();
             shouldContinue = false;
           }
         }
-        // Zoom out
+        // Zoom out - CONTINUITY FIX: Velocidade mais simétrica para transição suave
         else if (anim.zoomDirection < 0 && state.navigationState === NavigationStates.ZOOMING_OUT) {
-          const nextZoom = Math.max(0, state.zoomProgress - CONFIG.zoomSpeed * 1.5);
+          // Usa velocidade ligeiramente mais rápida para compensar a distância (98% até 0%)
+          const nextZoom = Math.max(0, state.zoomProgress - CONFIG.zoomSpeed * 1.2);
           set({ zoomProgress: nextZoom });
-          shouldContinue = nextZoom > 0;
+          shouldContinue = nextZoom > CONFIG.zoomOutCompleteThreshold;
           
-          if (nextZoom === 0) {
+          if (nextZoom <= CONFIG.zoomOutCompleteThreshold) {
             get().completeExit();
             shouldContinue = false;
           }
@@ -477,9 +445,9 @@ export const useNavigationStore = create<NavigationStore>()(
         const nextFade = Math.min(1, state.fadeProgress + CONFIG.fadeSpeed);
         set({ fadeProgress: nextFade });
         
-        // Pausa canvas quando fade alto
-        if (nextFade >= CONFIG.fadePauseCanvas && state.canvas3DActive) {
-          set({ canvas3DActive: false });
+        // O canvas não é mais pausado aqui. A visibilidade será controlada por CSS.
+        if (nextFade >= 0.98) {
+          // A lógica de pausar o canvas foi removida.
         }
         
         if (nextFade < 1) {
@@ -490,12 +458,15 @@ export const useNavigationStore = create<NavigationStore>()(
             }
           });
         } else {
+          // Fade completado - AGORA pode entrar na seção
           set({ 
             _animation: { 
               ...get()._animation, 
               fadeFrame: null 
             }
           });
+          // Entra na seção APENAS quando fade estiver 100% completo
+          get().enterSection();
         }
       };
       
@@ -521,18 +492,18 @@ export const useNavigationStore = create<NavigationStore>()(
         const nextFade = Math.max(0, state.fadeProgress - CONFIG.fadeSpeed * 2);
         set({ fadeProgress: nextFade });
         
-        // Resume canvas quando fade baixo
-        if (nextFade <= 0.5 && !state.canvas3DActive) {
-          set({ canvas3DActive: true });
-        }
+        // O canvas agora está sempre ativo; a visibilidade é controlada por CSS.
         
         if (nextFade > 0) {
           requestAnimationFrame(animate);
         } else {
-          // Inicia zoom out
+          // CONTINUITY FIX: Inicia zoom out preservando continuidade
+          const currentState = get();
           set({ 
             navigationState: NavigationStates.ZOOMING_OUT,
-            _animation: { ...get()._animation, zoomDirection: -1 }
+            // Garante que zoom progress está no valor final salvo
+            zoomProgress: currentState.finalZoomProgress,
+            _animation: { ...currentState._animation, zoomDirection: -1 }
           });
           get().startAnimationLoop();
         }
@@ -549,18 +520,26 @@ export const useNavigationStore = create<NavigationStore>()(
       const section = state.targetSection;
       if (!section) return;
       
-      set({ navigationState: NavigationStates.ENTERING });
+      // CONTINUITY FIX: Salva estado final quando entra na seção
+      // Isso garante que a saída comece de onde a entrada terminou
+      set({ 
+        navigationState: NavigationStates.ENTERING,
+        // Preserva o estado atual como "final" para usar na saída
+        finalZoomProgress: state.zoomProgress, // Deve estar em ~0.98 (CONFIG.zoomComplete)
+        // Os valores de câmera serão salvos pelo CameraController via saveFinalCameraState
+      });
       
       setTimeout(() => {
         set({ 
           currentSection: section,
           pageVisible: true,
-          navigationState: NavigationStates.IN_SECTION
+          navigationState: NavigationStates.IN_SECTION,
+          // fadeProgress: 0 // REMOVIDO: O overlay agora é removido pelo SectionPagesZustand
         });
         
         // Mark section as visited
         get().markSectionAsVisited(section.toLowerCase());
-      }, 100);
+      }, 100); // Volta ao original - agora controlado pelo fade
       
       // Atualiza URL
       if (typeof window !== 'undefined') {
@@ -666,6 +645,16 @@ export const useNavigationStore = create<NavigationStore>()(
 
     unlockScroll: () => {
       set({ scrollLocked: false });
+    },
+
+    // CONTINUITY FIX: Salva estado final da câmera para uso na saída
+    saveFinalCameraState: (zoomProgress: number, orbitAngle: number, radius: number, height: number) => {
+      set({
+        finalZoomProgress: zoomProgress,
+        finalOrbitAngle: orbitAngle,
+        finalCameraRadius: radius,
+        finalCameraHeight: height
+      });
     }
   }))
 );

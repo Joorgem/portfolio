@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence, useSpring, Variants } from 'framer-motion';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { useNavigationStore } from '../stores/navigation.store';
 import { getAllNavigationPoints } from '../constants/navigationPoints';
 import { useTranslation } from 'react-i18next';
@@ -67,17 +67,17 @@ interface ProgressDotProps {
   isOrbiting: boolean;
   onClick: () => void;
   progress: number;
-  getSectionName: (id: string) => string;
+  getSectionName: (_id: string) => string;
 }
 
 const ProgressDot: React.FC<ProgressDotProps> = ({ 
   section, 
-  index,
+  index: _index,
   isVisited, 
   isActive, 
   isOrbiting,
   onClick,
-  progress,
+  progress: _progress,
   getSectionName
 }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -100,7 +100,7 @@ const ProgressDot: React.FC<ProgressDotProps> = ({
       animate="enter"
       whileHover="hover"
       whileTap="tap"
-      custom={index}
+      custom={_index}
       aria-label={`Navigate to ${section.id} section`}
       role="button"
       tabIndex={0}
@@ -239,7 +239,7 @@ const NavigationProgress: React.FC = () => {
     }
     
     return [...visited, ...unvisited];
-  }, [visitedSections]);
+  }, [visitedSections, allNavigationPoints]);
 
   // Desktop detection
   const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 768;
@@ -264,9 +264,9 @@ const NavigationProgress: React.FC = () => {
     return Math.min(visitedCount / (index + 1), 1);
   };
 
-  const overallProgress = visitedSections.length > 0 
-    ? Math.max(...navigationPoints.map((_, i) => getProgressForSection(i))) 
-    : 0;
+  // const _overallProgress = visitedSections.length > 0 
+  //   ? Math.max(...navigationPoints.map((_, i) => getProgressForSection(i))) 
+  //   : 0;
 
   // Determine section state
   const getSectionState = (sectionId: string) => {

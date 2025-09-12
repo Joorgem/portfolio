@@ -15,7 +15,7 @@
     "jsx": "react-jsx",
 
     /* Linting */
-    "strict": false,
+    "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
@@ -26,13 +26,9 @@
       "@/*": ["./src/*"]
     },
 
-    /* Type checking - gradual activation */
+    /* Type checking - now using strict mode (which includes all these) */
     "allowJs": true,
-    "checkJs": false,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true
+    "checkJs": false
   },
   "include": [
     "src"

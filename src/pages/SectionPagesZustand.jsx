@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, startTransition } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigationStore } from '../stores/navigation.store';
 
@@ -13,13 +13,21 @@ import { LanguageToggle } from '../components/LanguageToggle';
 import Particles from '../components/Particles';
 import { useMediaQuery } from 'react-responsive';
 
+// Timing unificado para evitar conflitos de animação
+const ANIMATION_TIMING = {
+  fade: 0.1,      // Mesmo timing do Hero fade
+  content: 0.3,   // Conteúdo aparece suavemente
+  button: 0.4,    // Botão aparece por último
+  delay: 0.05     // Delay estratégico
+};
+
 // Container de página com animações suaves
 const PageContainer = ({ sectionId, backgroundColor = "#0a0a0a", children }) => {
   const { t } = useTranslation('common');
   const currentSection = useNavigationStore(state => state.currentSection);
   const pageVisible = useNavigationStore(state => state.pageVisible);
-  const fadeProgress = useNavigationStore(state => state.fadeProgress);
   const initiateExit = useNavigationStore(state => state.initiateExit);
+  const startFadeOutAnimation = useNavigationStore(state => state.startFadeOutAnimation);
   const isMobile = useMediaQuery({ maxWidth: 853 });
   
   const [shouldRender, setShouldRender] = useState(false);
@@ -27,20 +35,30 @@ const PageContainer = ({ sectionId, backgroundColor = "#0a0a0a", children }) => 
   // Controla quando renderizar baseado no store
   useEffect(() => {
     const isActive = currentSection === sectionId && pageVisible;
-    setShouldRender(isActive);
+    startTransition(() => {
+      setShouldRender(isActive);
+    });
   }, [currentSection, sectionId, pageVisible]);
+
+  // CORREÇÃO CRÍTICA: Removido useEffect que causava fechamento automático
+  // O fadeOut deve ser controlado EXCLUSIVAMENTE pelo botão de saída ou ESC
+  // O rendering da seção agora é puro, sem efeitos colaterais que interferem na navegação
   
   return (
     <AnimatePresence mode="wait">
       {shouldRender && (
         <motion.div
           key={`page-${sectionId}`}
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 1 }} // MODIFICADO: Começa opaco para ser revelado pelo fade
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          className="fixed inset-0 z-30 overflow-y-auto"
-          style={backgroundColor === "transparent" ? {} : { backgroundColor }}
+          transition={{ 
+            duration: ANIMATION_TIMING.fade,
+            delay: ANIMATION_TIMING.delay,
+            ease: "easeOut" 
+          }}
+          className="fixed inset-0 z-30 overflow-y-auto bg-black"
+          style={backgroundColor === "transparent" ? { backgroundColor: "#000000" } : { backgroundColor }}
         >
           {/* Partículas da seção - ativas apenas quando seção está aberta */}
           <div className="fixed inset-0 z-40 pointer-events-none">
@@ -60,13 +78,7 @@ const PageContainer = ({ sectionId, backgroundColor = "#0a0a0a", children }) => 
             />
           </div>
 
-          {/* Overlay de fade baseado no progresso */}
-          <motion.div
-            className="fixed inset-0 bg-black pointer-events-none z-20"
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 - fadeProgress }}
-            transition={{ duration: 0.1 }}
-          />
+          {/* Overlay removido - usando apenas o overlay do Hero para evitar piscamento */}
           
           {/* Botão de voltar com animação */}
           <motion.button
@@ -74,8 +86,8 @@ const PageContainer = ({ sectionId, backgroundColor = "#0a0a0a", children }) => 
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ 
-              duration: 0.4,
-              delay: 0.3,
+              duration: ANIMATION_TIMING.button,
+              delay: ANIMATION_TIMING.content,
               ease: [0.4, 0, 0.2, 1]
             }}
             onClick={initiateExit}
@@ -116,8 +128,8 @@ const PageContainer = ({ sectionId, backgroundColor = "#0a0a0a", children }) => 
               opacity: 1, 
               y: 0,
               transition: {
-                duration: 0.6,
-                delay: 0.1,
+                duration: ANIMATION_TIMING.content,
+                delay: ANIMATION_TIMING.delay,
                 ease: [0.25, 0.1, 0.25, 1]
               }
             }}
@@ -125,7 +137,7 @@ const PageContainer = ({ sectionId, backgroundColor = "#0a0a0a", children }) => 
               opacity: 0,
               y: 50,
               transition: {
-                duration: 0.3
+                duration: ANIMATION_TIMING.fade
               }
             }}
             className="relative min-h-screen w-full"

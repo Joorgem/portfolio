@@ -1,7 +1,7 @@
 import React, { useRef, useMemo, useEffect, useState, Suspense } from 'react';
-import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
-import { OrbitControls, Html, Float, useTexture } from '@react-three/drei';
+import { OrbitControls, Html, Float } from '@react-three/drei';
 import { useMediaQuery } from 'react-responsive';
 
 interface PhotoItem {

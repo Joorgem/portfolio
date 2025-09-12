@@ -53,9 +53,6 @@ export const useNavigationInteraction = (options: UseNavigationInteractionOption
           setHoveredPoint(point);
           isHoveringRef.current = true;
           
-          if (debugMode) {
-            console.log('🎯 Hover confirmed:', point.name);
-          }
         }
       }, hoverDelay);
     } else {
@@ -71,17 +68,11 @@ export const useNavigationInteraction = (options: UseNavigationInteractionOption
     
     // Previne cliques muito rápidos
     if (now - lastClickTime.current < clickDelay) {
-      if (debugMode) {
-        console.log('⚠️ Click ignored (too fast)');
-      }
       return;
     }
     
     // Previne cliques durante transição
     if (isTransitioning) {
-      if (debugMode) {
-        console.log('⚠️ Click ignored (transitioning)');
-      }
       return;
     }
     
@@ -96,9 +87,6 @@ export const useNavigationInteraction = (options: UseNavigationInteractionOption
     setSelectedPoint(point);
     setIsTransitioning(true);
     
-    if (debugMode) {
-      console.log('✅ Click registered:', point.name);
-    }
     
     // Chama callback de navegação
     if (onNavigate) {
@@ -176,8 +164,6 @@ export const useNavigationPerformance = (debugMode = false): UseNavigationPerfor
       const now = performance.now();
       const delta = now - lastTime.current;
       const fps = Math.round((frameCount.current * 1000) / delta);
-      
-      console.log(`📊 Navigation FPS: ${fps}`);
       
       frameCount.current = 0;
       lastTime.current = now;

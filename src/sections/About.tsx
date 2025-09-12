@@ -1,52 +1,14 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import Particles from "../components/Particles";
-import { IconCloud } from "../components/magicui/icon-cloud";
 import { InteractiveHoverButton } from "../components/magicui/interactive-hover-button";
 import DomeGalleryCard from "../components/DomeGalleryCard";
 import { personalPhotos, placeholderPhotos } from "../data/personalPhotos";
-import { FileText, Download } from "lucide-react";
 
 const About: React.FC = () => {
-  const { t } = useTranslation('about');
+  const { t, i18n } = useTranslation('about');
+  const currentLanguage = i18n.language;
   
-  // Array de imagens dos logos de tecnologias para o IconCloud
-  const techLogosImages = useMemo(() => [
-    // Frontend & Core Technologies
-    "/assets/logos/nextjs.check.svg",
-    "/assets/logos/react.svg", 
-    "/assets/logos/typescript.svg",
-    "/assets/logos/javascript.svg",
-    "/assets/logos/tailwindcss.svg",
-    "/assets/logos/html5.svg",
-    "/assets/logos/css3.svg",
-    
-    // Backend & Languages
-    "/assets/logos/python.svg",
-    "/assets/logos/nodejs.svg",
-    
-    // Databases
-    "/assets/logos/postgresql.svg",
-    "/assets/logos/mongodb.svg",
-    
-    // 3D & Animations
-    "/assets/logos/three.js.svg",
-    
-    // Tools & Development
-    "/assets/logos/git.svg",
-    "/assets/logos/github-white.svg",
-    "/assets/logos/visualstudiocode.svg",
-    "/assets/logos/vitejs.svg",
-    "/assets/logos/docker.svg",
-    "/assets/logos/figma.svg",
-    "/assets/logos/blender-devicon.svg",
-    
-    // Cloud & Services
-    "/assets/logos/azure.svg",
-    "/assets/logos/amazonwebservices.svg",
-    "/assets/logos/googlecloud.svg",
-    "/assets/logos/stripe.svg"
-  ], []);
 
   // Usar fotos reais do Google Drive
   const photos = useMemo(() => {
@@ -96,9 +58,17 @@ const About: React.FC = () => {
                   </p>
                   <InteractiveHoverButton
                     onClick={() => {
+                      const resumeFile = currentLanguage === 'pt'
+                        ? '/assets/resume/Jorge_Matheus_Molina_David_Currículo.pdf'
+                        : '/assets/resume/Jorge_Matheus_Molina_David_Resume.pdf';
+
+                      const downloadName = currentLanguage === 'pt'
+                        ? 'Jorge_Matheus_Molina_David_Currículo.pdf'
+                        : 'Jorge_Matheus_Molina_David_Resume.pdf';
+
                       const link = document.createElement('a');
-                      link.href = '/assets/resume/JorgeMatheusMolinaDavid_Currículo.pdf';
-                      link.download = 'Jorge_Molina_Resume.pdf';
+                      link.href = resumeFile;
+                      link.download = downloadName;
                       link.target = '_blank';
                       link.rel = 'noopener noreferrer';
                       document.body.appendChild(link);

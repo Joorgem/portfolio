@@ -35,5 +35,28 @@
         "combined": "Swipe: ↑ enter or ↓ return"
       }
     }
+  },
+  "a11y": {
+    "astronaut": {
+      "description": "Interactive 3D astronaut model. Navigate through space to explore different sections of the portfolio."
+    },
+    "navigation": {
+      "planetDescription": "Navigate to {{section}} section. Click to orbit around this planet and scroll to enter.",
+      "about": {
+        "ariaLabel": "Navigate to About section - Learn about Jorge's background and skills"
+      },
+      "projects": {
+        "ariaLabel": "Navigate to Projects section - Explore Jorge's portfolio of work"
+      },
+      "experience": {
+        "ariaLabel": "Navigate to Experience section - View Jorge's professional journey"
+      },
+      "contact": {
+        "ariaLabel": "Navigate to Contact section - Get in touch with Jorge"
+      },
+      "courses": {
+        "ariaLabel": "Navigate to Courses section - See Jorge's educational achievements"
+      }
+    }
   }
 }

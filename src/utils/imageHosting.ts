@@ -4,7 +4,7 @@
 interface ImageService {
   name: string;
   detectPattern: RegExp;
-  getDirectUrl: (url: string) => string;
+  getDirectUrl: (_url: string) => string;
 }
 
 // Serviços de hospedagem de imagem que funcionam sem CORS
@@ -67,28 +67,28 @@ const imageServices: ImageService[] = [
   {
     name: 'Direct URL',
     detectPattern: /\.(jpg|jpeg|png|gif|webp|svg)$/i,
-    getDirectUrl: (url: string) => url
+    getDirectUrl: (_url: string) => _url
   }
 ];
 
 /**
  * Processa qualquer URL de imagem e retorna a melhor versão para uso sem CORS
  */
-export function processImageUrl(url: string): string {
+export function processImageUrl(_url: string): string {
   // Se já é uma URL direta de imagem, retorna como está
-  if (url.startsWith('http://localhost') || url.startsWith('/')) {
-    return url;
+  if (_url.startsWith('http://localhost') || _url.startsWith('/')) {
+    return _url;
   }
 
   // Tenta cada serviço
   for (const service of imageServices) {
-    if (service.detectPattern.test(url)) {
-      return service.getDirectUrl(url);
+    if (service.detectPattern.test(_url)) {
+      return service.getDirectUrl(_url);
     }
   }
 
   // Se não reconhecer o serviço, retorna a URL original
-  return url;
+  return _url;
 }
 
 /**

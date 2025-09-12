@@ -35,5 +35,28 @@
         "combined": "Deslize: ↑ entrar ou ↓ voltar"
       }
     }
+  },
+  "a11y": {
+    "astronaut": {
+      "description": "Modelo 3D interativo de astronauta. Navegue pelo espaço para explorar diferentes seções do portfólio."
+    },
+    "navigation": {
+      "planetDescription": "Navegar para a seção {{section}}. Clique para orbitar este planeta e role para entrar.",
+      "about": {
+        "ariaLabel": "Navegar para seção Sobre - Conheça o background e habilidades do Jorge"
+      },
+      "projects": {
+        "ariaLabel": "Navegar para seção Projetos - Explore o portfólio de trabalhos do Jorge"
+      },
+      "experience": {
+        "ariaLabel": "Navegar para seção Experiência - Veja a jornada profissional do Jorge"
+      },
+      "contact": {
+        "ariaLabel": "Navegar para seção Contato - Entre em contato com o Jorge"
+      },
+      "courses": {
+        "ariaLabel": "Navegar para seção Cursos - Veja as conquistas educacionais do Jorge"
+      }
+    }
   }
 }

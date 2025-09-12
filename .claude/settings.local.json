@@ -73,7 +73,9 @@
       "Bash(git push:*)",
       "Bash(rg:*)",
       "Bash(npx:*)",
-      "Bash(do echo \"Creating test image $i\")"
+      "Bash(do echo \"Creating test image $i\")",
+      "Bash(start http://localhost:5173)",
+      "Bash(ffmpeg:*)"
     ],
     "deny": [],
     "ask": [],

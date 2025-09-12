@@ -223,7 +223,7 @@ const CustomCursor: React.FC = () => {
     
     // Additional listeners for fullscreen compatibility
     if (document.fullscreenElement) {
-      document.fullscreenElement.addEventListener('mousemove', handleMouseMove, { passive: true });
+      document.fullscreenElement.addEventListener('mousemove', handleMouseMove as EventListener, { passive: true });
       document.fullscreenElement.addEventListener('mouseleave', handleMouseLeave);
       document.fullscreenElement.addEventListener('mouseenter', handleMouseEnter);
     }
@@ -247,7 +247,7 @@ const CustomCursor: React.FC = () => {
       
       // Clean up fullscreen listeners if they exist
       if (document.fullscreenElement) {
-        document.fullscreenElement.removeEventListener('mousemove', handleMouseMove);
+        document.fullscreenElement.removeEventListener('mousemove', handleMouseMove as EventListener);
         document.fullscreenElement.removeEventListener('mouseleave', handleMouseLeave);
         document.fullscreenElement.removeEventListener('mouseenter', handleMouseEnter);
       }

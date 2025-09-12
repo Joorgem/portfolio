@@ -12,7 +12,7 @@ interface DomeGalleryCardProps {
 
 const DomeGalleryCard: React.FC<DomeGalleryCardProps> = ({
   photos,
-  title = "Photo Gallery",
+  title: _title = "Photo Gallery",
   className = ""
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);

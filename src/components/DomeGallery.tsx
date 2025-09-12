@@ -109,28 +109,14 @@ const OptimizedImage: React.FC<{
   style?: React.CSSProperties;
   isMobile: boolean;
 }> = ({ src, alt, className, style, isMobile }) => {
-  // Para mobile: usar sistema simples (React Bits original)
-  if (isMobile) {
-    return (
-      <img
-        src={src}
-        alt={alt}
-        draggable={false}
-        className="w-full h-full object-cover pointer-events-none"
-        style={{
-          backfaceVisibility: 'hidden',
-          filter: style?.filter
-        }}
-      />
-    );
-  }
-  
-  // Para desktop: manter sistema complexo
+  // Sempre declarar hooks primeiro
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
+    // Skip intersection observer for mobile
+    if (isMobile) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -146,8 +132,25 @@ const OptimizedImage: React.FC<{
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [isMobile]);
 
+  // Para mobile: usar sistema simples
+  if (isMobile) {
+    return (
+      <img
+        src={src}
+        alt={alt}
+        draggable={false}
+        className="w-full h-full object-cover pointer-events-none"
+        style={{
+          backfaceVisibility: 'hidden',
+          filter: style?.filter
+        }}
+      />
+    );
+  }
+
+  // Para desktop: sistema complexo com lazy loading
   return (
     <div ref={imgRef} className={className} style={style}>
       {!isInView ? (
@@ -269,7 +272,7 @@ export default function DomeGallery({
   maxVerticalRotation, // Backward compatibility
   dragSensitivity = DEFAULTS.dragSensitivity,
   enlargeTransitionMs = DEFAULTS.enlargeTransitionMs,
-  segments = DEFAULTS.segments, // Usado em adaptiveSegments
+  segments: _segments = DEFAULTS.segments, // Usado em adaptiveSegments
   dragDampening = 2,
   openedImageWidth = '400px',
   openedImageHeight = '400px',

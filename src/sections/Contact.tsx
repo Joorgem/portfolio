@@ -4,6 +4,7 @@ import Alert from "../components/Alert";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { Github, Linkedin, Mail } from "lucide-react";
+import { EMAIL_CONFIG, createEmailTemplateParams } from "../constants/emailConfig";
 
 interface FormData {
   name: string;
@@ -44,21 +45,15 @@ const Contact: React.FC = () => {
 
     try {
       await emailjs.send(
-        "service_ea205oa",
-        "template_o2y5538",
-        {
-          from_name: formData.name,
-          to_name: "Jorge",
-          from_email: formData.email,
-          to_email: "contato@jorgemolina.dev",
-          message: formData.message,
-        },
-        "i2duMx6NvyyeZvrwf"
+        EMAIL_CONFIG.serviceId,
+        EMAIL_CONFIG.templateId,
+        createEmailTemplateParams(formData),
+        EMAIL_CONFIG.publicKey
       );
       setIsLoading(false);
       setFormData({ name: "", email: "", message: "" });
       showAlertMessage("success", t('form.successMessage'));
-    } catch (error) {
+    } catch {
       setIsLoading(false);
       showAlertMessage("danger", t('form.errorMessage'));
     }

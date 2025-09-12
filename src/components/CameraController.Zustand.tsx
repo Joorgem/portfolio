@@ -123,16 +123,19 @@ interface CameraState {
   isTransitioning: boolean;
   transitionProgress: number;
   
-  // Sistema SIMPLIFICADO de transição direta
-  isExiting: boolean;                           // Flag simples para saída
-  cameraTargetPosition: THREE.Vector3;         // Posição alvo da câmera (sempre válida)
-  cameraTargetLookAt: THREE.Vector3;           // LookAt alvo da câmera (sempre válida)
-  transitionSpeed: number;                     // Velocidade da transição
+  // CONTINUITY FIX: Campos para transições suaves (sem sistema conflitante)
+  lastSavedAngle: number;                      // Último ângulo salvo para continuidade
 }
+
+// Pré-alocar objetos Vector3 reutilizáveis para performance (seguindo padrões React Three Fiber)
+const tempPosition = new THREE.Vector3();
+const tempTarget = new THREE.Vector3();
+const tempLookAt = new THREE.Vector3();
 
 /**
  * CameraController usando Zustand
  * Acessa o estado diretamente do store, evitando re-renders desnecessários
+ * Otimizado com práticas React Three Fiber: reutilização de objetos Vector3
  */
 export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = ({ astronautRef, astronautScale = 0.4 }) => {
   const { camera } = useThree();
@@ -141,6 +144,7 @@ export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = (
   const currentSection = useNavigationStore(state => state.currentSection);
   const targetSection = useNavigationStore(state => state.targetSection);
   const zoomOutProgress = useNavigationStore(state => state.zoomOutProgress);
+  const saveFinalCameraState = useNavigationStore(state => state.saveFinalCameraState);
   
   // Estado local da câmera (não causa re-render)
   const state = useRef<CameraState>({
@@ -169,11 +173,8 @@ export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = (
     isTransitioning: false,
     transitionProgress: 0,
     
-    // Sistema SIMPLIFICADO de transição direta
-    isExiting: false,                           // Flag simples para saída
-    cameraTargetPosition: new THREE.Vector3(), // Posição alvo da câmera (sempre válida)
-    cameraTargetLookAt: new THREE.Vector3(),   // LookAt alvo da câmera (sempre válida)
-    transitionSpeed: 0.1                       // Velocidade da transição
+    // CONTINUITY FIX: Estado para transições suaves
+    lastSavedAngle: 0                          // Último ângulo salvo para continuidade
   });
   
   // FIX: Usa escala dinâmica passada como prop
@@ -248,8 +249,7 @@ export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = (
         state.current.targetCenter.set(0, 0, 0);
       }
       
-      // Reset flags
-      state.current.isExiting = false;
+      // CONTINUITY FIX: Limpa estado anterior para nova transição
     }
   }, [targetSection, currentSection]);
   
@@ -257,48 +257,40 @@ export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = (
    * Loop principal - executado a cada frame
    */
   useFrame((frameState: RootState, delta: number) => {
-    // Pega estado atual do store
+    // Acesso direto ao store para performance (evita React re-renders)
     const store = useNavigationStore.getState();
     const { zoomProgress, navigationState } = store;
-    
-    // SISTEMA SIMPLIFICADO: Transição direta quando targetSection = 'MAIN'
-    if (targetSection === 'MAIN' && currentSection !== 'MAIN' && !state.current.isExiting) {
-      state.current.isExiting = true;
-      
-      const mainConfig = ORBIT_CONFIG.MAIN;
-      state.current.cameraTargetPosition.set(
-        Math.cos(0) * mainConfig.radius,
-        mainConfig.height,
-        Math.sin(0) * mainConfig.radius
-      );
-      state.current.cameraTargetLookAt.set(0, 0, 0);
-      state.current.targetFov = mainConfig.fov;
-      state.current.transitionSpeed = 0.08;
-    }
-    
-    // Executa transição direta
-    if (state.current.isExiting) {
-      camera.position.lerp(state.current.cameraTargetPosition, state.current.transitionSpeed);
-      if (camera instanceof THREE.PerspectiveCamera) {
-        camera.fov = THREE.MathUtils.lerp(camera.fov, state.current.targetFov, state.current.transitionSpeed);
-      }
-      camera.updateProjectionMatrix();
-      camera.lookAt(state.current.cameraTargetLookAt);
-      
-      const distance = camera.position.distanceTo(state.current.cameraTargetPosition);
-      if (distance < 0.2) {
-        state.current.isExiting = false;
-        camera.position.copy(state.current.cameraTargetPosition);
-        if (camera instanceof THREE.PerspectiveCamera) {
-          camera.fov = state.current.targetFov;
-        }
-        camera.updateProjectionMatrix();
-      }
+
+    // Se estiver dentro de uma seção, pausa completamente a câmera para manter a posição de "pouso"
+    if (navigationState === 'in_section') {
+      // A câmera permanecerá na última posição calculada antes de entrar na seção
       return;
     }
     
+    // CONTINUITY FIX: Sistema unificado de transições sem conflitos
+    // Removido sistema "simplificado" que causava teleporte da câmera
+    
+    // CONTINUITY FIX: Salva estado final quando zoom completa e restaura na saída
+    if (navigationState === 'entering') {
+      // Salva estado atual da câmera quando está entrando na seção
+      saveFinalCameraState(
+        zoomProgress,
+        state.current.orbitAngle,
+        state.current.smoothRadius,
+        state.current.smoothHeight
+      );
+    } else if (navigationState === 'zooming_out') {
+      // CONTINUITY FIX: Restaura estado final salvo quando inicia zoom out
+      const store = useNavigationStore.getState();
+      if (store.finalOrbitAngle !== undefined && Math.abs(state.current.orbitAngle - store.finalOrbitAngle) > 0.1) {
+        state.current.orbitAngle = store.finalOrbitAngle;
+        state.current.smoothRadius = store.finalCameraRadius;
+        state.current.smoothHeight = store.finalCameraHeight;
+      }
+    }
+    
     // ========================================
-    // LÓGICA ORBITAL: Só executa se NÃO for transição direta
+    // LÓGICA ORBITAL: Sistema unificado para entrada e saída
     // ========================================
     const section = state.current.activeSection;
     // MOBILE FIX: Recalcula config a cada frame para garantir valores corretos
@@ -482,37 +474,6 @@ export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = (
       camera.aspect = window.innerWidth / window.innerHeight;
     }
     camera.updateProjectionMatrix();
-    
-    // ========================================
-    // 7. DEBUG (a cada 2 segundos)
-    // ========================================
-    if (frameState.clock.elapsedTime % 2 < delta) {
-      if (section === 'MAIN') {
-        console.log(`📍 Estado MAIN:`, {
-          centro: state.current.orbitCenter.toArray().map(n => n.toFixed(2)),
-          raio: effectiveRadius.toFixed(2),
-          altura: effectiveHeight.toFixed(2),
-          fov: effectiveFov.toFixed(0),
-          posicaoCamera: [x.toFixed(2), y.toFixed(2), z.toFixed(2)],
-          transicionando: state.current.isTransitioning
-        });
-      } else {
-        // DEBUG MELHORADO: Inclui informações de projeção
-        const projectedCenter = state.current.orbitCenter.clone();
-        projectedCenter.project(camera);
-        
-        console.log(`📍 Órbita ${section}:`, {
-          centro: state.current.orbitCenter.toArray().map(n => n.toFixed(2)),
-          projeção: [projectedCenter.x.toFixed(3), projectedCenter.y.toFixed(3)],
-          raio: effectiveRadius.toFixed(2),
-          zoom: `${(zoomProgress * 100).toFixed(0)}%`,
-          estado: navigationState,
-          rotação: astronautRef?.current?.rotation.y.toFixed(2) || '0',
-          aspectRatio: (window.innerWidth / window.innerHeight).toFixed(2),
-          isMobile: window.innerWidth < 768
-        });
-      }
-    }
   });
   
   return null;

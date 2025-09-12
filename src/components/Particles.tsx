@@ -240,6 +240,7 @@ const Particles: React.FC<ParticlesProps> = ({
     moveParticlesOnHover,
     particleHoverFactor,
     alphaParticles,
+    particleColors,
     particleBaseSize,
     sizeRandomness,
     cameraDistance,

@@ -31,7 +31,10 @@ const StableHitbox = React.memo<StableHitboxProps>(({
 }) => {
   const meshRef = useRef<THREE.Mesh>(null!);
   const [localHover, setLocalHover] = useState(false);
-  console.log('isSelected:', isSelected); // Avoid unused variable warning
+  const { t } = useTranslation('common');
+  
+  // Use isSelected to avoid unused variable warning
+  void isSelected;
   
   // Handlers
   const handlePointerOver = React.useCallback((e: React.PointerEvent) => {
@@ -61,23 +64,22 @@ const StableHitbox = React.memo<StableHitboxProps>(({
   
   return (
     <group position={point.position}>
-      {/* Hitbox usando Sphere do drei - mais estável */}
-      <Sphere 
-        ref={meshRef}
-        args={[point.radius, 16, 16]}
-        onPointerOver={handlePointerOver}
-        onPointerOut={handlePointerOut}
-        onClick={handleClick}
-        onPointerDown={(e) => e.stopPropagation()}
-      >
-        <meshBasicMaterial 
-          transparent
-          opacity={debugMode ? 0.1 : 0}
-          color={debugMode ? getDebugColor(point.id) : '#000000'}
-          side={THREE.DoubleSide}
-        />
-      </Sphere>
-      
+        {/* Hitbox usando Sphere do drei - mais estável */}
+        <Sphere 
+          ref={meshRef}
+          args={[point.radius, 16, 16]}
+          onPointerOver={handlePointerOver}
+          onPointerOut={handlePointerOut}
+          onClick={handleClick}
+          onPointerDown={(e) => e.stopPropagation()}
+        >
+          <meshBasicMaterial 
+            transparent
+            opacity={debugMode ? 0.1 : 0}
+            color={debugMode ? getDebugColor(point.id) : '#000000'}
+            side={THREE.DoubleSide}
+          />
+        </Sphere>
     </group>
   );
 });
