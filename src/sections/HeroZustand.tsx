@@ -271,9 +271,6 @@ const HeroZustand: React.FC = () => {
               <span className="text-white/50 text-[14px] font-light tracking-widest uppercase drop-shadow-sm">
                 {t('footer.desktop.idle')}
               </span>
-              <span className="text-white/30 text-[11px] font-light tracking-wider uppercase drop-shadow-sm">
-                Tab • Enter • ESC to navigate
-              </span>
             </div>
           )}
           {navigationState === 'orbiting' && (

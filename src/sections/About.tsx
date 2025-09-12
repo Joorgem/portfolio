@@ -34,7 +34,7 @@ const About: React.FC = () => {
       />
       
       {/* Main Content Grid */}
-      <div className="mt-12 mb-8 overflow-visible">
+      <div className="-mt-12 mb-8 overflow-visible">
         {/* Currently Card - Top Section */}
         <div className="mb-6">
           <div className="group relative p-6 rounded-2xl bg-transparent transition-all duration-300">
