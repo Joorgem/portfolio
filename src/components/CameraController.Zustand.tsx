@@ -95,7 +95,7 @@ const getOrbitConfig = (): Record<string, OrbitConfig> => {
   };
 };
 
-const ORBIT_CONFIG = getOrbitConfig();
+// const ORBIT_CONFIG = getOrbitConfig(); // Unused
 
 interface CameraState {
   // Órbita
@@ -128,9 +128,9 @@ interface CameraState {
 }
 
 // Pré-alocar objetos Vector3 reutilizáveis para performance (seguindo padrões React Three Fiber)
-const tempPosition = new THREE.Vector3();
-const tempTarget = new THREE.Vector3();
-const tempLookAt = new THREE.Vector3();
+// const tempPosition = new THREE.Vector3(); // Unused
+// const tempTarget = new THREE.Vector3(); // Unused  
+// const tempLookAt = new THREE.Vector3(); // Unused
 
 /**
  * CameraController usando Zustand
@@ -256,7 +256,7 @@ export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = (
   /**
    * Loop principal - executado a cada frame
    */
-  useFrame((frameState: RootState, delta: number) => {
+  useFrame((_frameState: RootState, delta: number) => {
     // Acesso direto ao store para performance (evita React re-renders)
     const store = useNavigationStore.getState();
     const { zoomProgress, navigationState } = store;

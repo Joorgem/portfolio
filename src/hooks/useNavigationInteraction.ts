@@ -162,8 +162,7 @@ export const useNavigationPerformance = (debugMode = false): UseNavigationPerfor
     
     const interval = setInterval(() => {
       const now = performance.now();
-      const delta = now - lastTime.current;
-      const fps = Math.round((frameCount.current * 1000) / delta);
+      // Debug timing calculation removed
       
       frameCount.current = 0;
       lastTime.current = now;

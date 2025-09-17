@@ -34,26 +34,26 @@ const About: React.FC = () => {
       />
       
       {/* Main Content Grid */}
-      <div className="-mt-12 mb-8 overflow-visible">
-        {/* Currently Card - Top Section */}
-        <div className="mb-6">
-          <div className="group relative p-6 rounded-2xl bg-transparent transition-all duration-300">
+      <div className="mt-12 mb-8 overflow-visible">
+        {/* Currently Card - Top Section - MOVED UP */}
+        <div className="mb-6 -mt-16">
+          <div className="group relative inline-block p-8 rounded-2xl bg-white/[0.02] border border-white/[0.05] backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.03] hover:border-white/[0.08] max-w-md w-full sm:w-auto">
             <div className="relative">
               {/* Header with title */}
-              <div className="mb-4">
+              <div className="mb-6">
                 <h3 className="text-2xl font-semibold text-gray-100">
                   {t('currently.title')}
                 </h3>
               </div>
               
               {/* Content area with status information */}
-              <div className="space-y-4">
+              <div className="space-y-5">
                 <p className="text-gray-400 text-sm flex items-center gap-2">
                   <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
                   {t('currently.location')} • {t('currently.role')}
                 </p>
-                <div className="flex items-center gap-4">
-                  <p className="text-gray-400 text-sm pl-4 border-l border-gray-600/30">
+                <div className="flex items-center gap-5 pt-2">
+                  <p className="text-gray-400 text-sm pl-4 border-l border-gray-500/40">
                     {t('currently.openToProjects')}
                   </p>
                   <InteractiveHoverButton

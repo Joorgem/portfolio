@@ -31,7 +31,7 @@ const StableHitbox = React.memo<StableHitboxProps>(({
 }) => {
   const meshRef = useRef<THREE.Mesh>(null!);
   const [localHover, setLocalHover] = useState(false);
-  const { t } = useTranslation('common');
+  // const { t } = useTranslation('common'); // Unused
   
   // Use isSelected to avoid unused variable warning
   void isSelected;
