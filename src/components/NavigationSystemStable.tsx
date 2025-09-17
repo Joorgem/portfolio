@@ -5,6 +5,7 @@ import { NAVIGATION_POINTS, NavigationPoint } from '../constants/navigationPoint
 import { useNavigationInteraction, useNavigationCursor } from '../hooks/useNavigationInteraction';
 import { useNavigationStore } from '../stores/navigation.store';
 import { useTranslation } from 'react-i18next';
+import { ObjectPool } from '../utils/objectPool';
 import * as THREE from 'three';
 
 interface StableHitboxProps {
@@ -54,11 +55,11 @@ const StableHitbox = React.memo<StableHitboxProps>(({
     onClick(point);
   }, [point, onClick]);
   
-  // Animação suave
+  // Animação suave - using object pool for performance
   useFrame(() => {
     if (meshRef.current) {
       const targetScale = (isHovered || localHover) ? 1.05 : 1;
-      meshRef.current.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
+      meshRef.current.scale.lerp(ObjectPool.tempVector1.set(targetScale, targetScale, targetScale), 0.1);
     }
   });
   

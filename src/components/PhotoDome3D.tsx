@@ -3,6 +3,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { OrbitControls, Html, Float } from '@react-three/drei';
 import { useMediaQuery } from 'react-responsive';
+import { ObjectPool } from '../utils/objectPool';
 
 interface PhotoItem {
   id: string;
@@ -64,10 +65,10 @@ const PhotoFrame: React.FC<{
       // Subtle floating animation
       groupRef.current.position.y = position[1] + Math.sin(time * 0.5 + index) * 0.02;
       
-      // Scale on hover
+      // Scale on hover - using dedicated object pool for performance
       const targetScale = hovered ? 1.15 : 1;
       meshRef.current.scale.lerp(
-        new THREE.Vector3(targetScale, targetScale, targetScale),
+        ObjectPool.tempVector4.set(targetScale, targetScale, targetScale),
         0.1
       );
       

@@ -1,6 +1,7 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useMemo } from 'react';
 import { useFrame, useThree, RootState } from '@react-three/fiber';
 import { useNavigationStore } from '../stores/navigation.store';
+import { ObjectPool } from '../utils/objectPool';
 import * as THREE from 'three';
 
 interface CameraControllerZustandProps {
@@ -140,11 +141,15 @@ interface CameraState {
 export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = ({ astronautRef, astronautScale = 0.4 }) => {
   const { camera } = useThree();
   
-  // Monitora mudanças no currentSection, targetSection e zoomOutProgress
-  const currentSection = useNavigationStore(state => state.currentSection);
-  const targetSection = useNavigationStore(state => state.targetSection);
-  const zoomOutProgress = useNavigationStore(state => state.zoomOutProgress);
+  // PERFORMANCE OPTIMIZATION: Direct store access instead of reactive hooks
+  // Only subscribe to saveFinalCameraState as it's used in useEffect
   const saveFinalCameraState = useNavigationStore(state => state.saveFinalCameraState);
+
+  // PERFORMANCE: Local vectors to avoid conflicts with other components
+  const localVectors = useMemo(() => ({
+    projectedCenter: new THREE.Vector3(),
+    correctedCenter: new THREE.Vector3(),
+  }), []);
   
   // Estado local da câmera (não causa re-render)
   const state = useRef<CameraState>({
@@ -186,6 +191,7 @@ export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = (
    */
   const calculateWorldPosition = (modelCoords: [number, number, number], section: string): THREE.Vector3 => {
     if (!modelCoords || section === 'MAIN') {
+      // CRITICAL FIX: Return new instance to avoid shared mutable state
       return new THREE.Vector3(0, 0, 0);
     }
     
@@ -205,17 +211,18 @@ export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = (
       }
     }
     
-    // Aplica escala dinâmica do modelo
-    const scaled = new THREE.Vector3(
+    // CRITICAL FIX: Use temporary vector for calculations but return new instance
+    const tempVector = ObjectPool.tempVector2.set(
       modelCoords[0] * totalScale,
       modelCoords[1] * totalScale + verticalOffset,
       modelCoords[2] * totalScale
     );
+    const scaled = tempVector.clone(); // Return new instance to avoid shared state
     
-    // Aplica rotação atual do astronauta
+    // Aplica rotação atual do astronauta - using object pool for performance
     if (astronautRef?.current) {
       const rotation = astronautRef.current.rotation.y;
-      const rotMatrix = new THREE.Matrix4().makeRotationY(rotation);
+      const rotMatrix = ObjectPool.tempMatrix1.makeRotationY(rotation);
       scaled.applyMatrix4(rotMatrix);
       
       // Adiciona posição do astronauta
@@ -226,32 +233,8 @@ export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = (
     return scaled;
   };
   
-  /**
-   * SIMPLIFICADO: Atualiza seção da câmera baseado nos estados do store
-   */
-  useEffect(() => {
-    const activeSection = targetSection || currentSection || 'MAIN';
-    
-    if (activeSection !== state.current.activeSection) {
-      state.current.activeSection = activeSection;
-      state.current.isTransitioning = true;
-      state.current.transitionProgress = 0;
-      
-      // MOBILE FIX: Usa configuração atualizada
-      const currentConfig = getOrbitConfig();
-      const config = currentConfig[activeSection] || currentConfig.MAIN;
-      state.current.targetRadius = config.radius;
-      state.current.targetHeight = config.height;
-      state.current.targetFov = config.fov;
-      
-      // Centro da órbita
-      if (activeSection === 'MAIN') {
-        state.current.targetCenter.set(0, 0, 0);
-      }
-      
-      // CONTINUITY FIX: Limpa estado anterior para nova transição
-    }
-  }, [targetSection, currentSection]);
+  // PERFORMANCE OPTIMIZATION: Section updates moved to useFrame for better performance
+  // This avoids React re-renders and uses direct store polling
   
   /**
    * Loop principal - executado a cada frame
@@ -259,7 +242,27 @@ export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = (
   useFrame((_frameState: RootState, delta: number) => {
     // Acesso direto ao store para performance (evita React re-renders)
     const store = useNavigationStore.getState();
-    const { zoomProgress, navigationState } = store;
+    const { zoomProgress, navigationState, targetSection, currentSection, zoomOutProgress } = store;
+
+    // PERFORMANCE OPTIMIZATION: Poll section changes in useFrame instead of useEffect
+    const activeSection = targetSection || currentSection || 'MAIN';
+    if (activeSection !== state.current.activeSection) {
+      state.current.activeSection = activeSection;
+      state.current.isTransitioning = true;
+      state.current.transitionProgress = 0;
+
+      // MOBILE FIX: Usa configuração atualizada
+      const currentConfig = getOrbitConfig();
+      const config = currentConfig[activeSection] || currentConfig.MAIN;
+      state.current.targetRadius = config.radius;
+      state.current.targetHeight = config.height;
+      state.current.targetFov = config.fov;
+
+      // Centro da órbita
+      if (activeSection === 'MAIN') {
+        state.current.targetCenter.set(0, 0, 0);
+      }
+    }
 
     // Se estiver dentro de uma seção, pausa completamente a câmera para manter a posição de "pouso"
     if (navigationState === 'in_section') {
@@ -447,20 +450,20 @@ export const CameraControllerZustand: React.FC<CameraControllerZustandProps> = (
     // ========================================
     camera.position.set(x, y, z);
     
-    // MOBILE FIX: Ajusta lookAt considerando aspect ratio
+    // MOBILE FIX: Ajusta lookAt considerando aspect ratio - using object pool
     const isMobileDevice = window.innerWidth < 768;
     if (isMobileDevice && section !== 'MAIN') {
-      // Verifica projeção do centro para garantir centralização
-      const projectedCenter = state.current.orbitCenter.clone();
-      projectedCenter.project(camera);
-      
+      // Verifica projeção do centro para garantir centralização - using local vectors
+      localVectors.projectedCenter.copy(state.current.orbitCenter);
+      localVectors.projectedCenter.project(camera);
+
       // Se não está centralizado (deve ser próximo de 0,0)
-      if (Math.abs(projectedCenter.x) > 0.1 || Math.abs(projectedCenter.y) > 0.1) {
-        // Aplica correção baseada no offset detectado
-        const correctedCenter = state.current.orbitCenter.clone();
-        correctedCenter.x -= projectedCenter.x * 0.1;
-        correctedCenter.y -= projectedCenter.y * 0.1;
-        camera.lookAt(correctedCenter);
+      if (Math.abs(localVectors.projectedCenter.x) > 0.1 || Math.abs(localVectors.projectedCenter.y) > 0.1) {
+        // Aplica correção baseada no offset detectado - using local vectors
+        localVectors.correctedCenter.copy(state.current.orbitCenter);
+        localVectors.correctedCenter.x -= localVectors.projectedCenter.x * 0.1;
+        localVectors.correctedCenter.y -= localVectors.projectedCenter.y * 0.1;
+        camera.lookAt(localVectors.correctedCenter);
       } else {
         camera.lookAt(state.current.orbitCenter);
       }
