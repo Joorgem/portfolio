@@ -68,3 +68,8 @@ temp/
 
 # Vite
 .vite/
+
+# AI Assistant Files
+.claude/
+claude.md
+gemini.md

@@ -300,7 +300,13 @@ Working on advanced **astronaut character rigging**:
 - **WebXR support** for VR/AR experiences
 - **Advanced particle physics** with realistic space debris
 
-## 🚀 **Getting Started**
+## ⚖️ Licença e Uso
+
+O código-fonte deste projeto é proprietário e está disponível apenas para fins de visualização e avaliação. Ele é protegido por uma licença de direitos autorais que proíbe a cópia, modificação ou distribuição. Veja o arquivo `LICENSE.md` para mais detalhes.
+
+Os modelos 3D e outros assets de terceiros utilizados estão sujeitos às suas próprias licenças. As atribuições completas e os links para os criadores originais estão listados no arquivo `CREDITS.md`.
+
+## 🚀 Getting Started
 
 ### **Prerequisites**
 - Node.js 18+ (recommended: 20+)
