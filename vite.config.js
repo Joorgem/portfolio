@@ -85,12 +85,15 @@ export default defineConfig({
       // External dependencies for CDN loading (optional)
       external: [],
 
-      // Tree shaking otimizado
+      // Tree shaking seguro - preserva i18n e dependências críticas
       treeshake: {
-        preset: 'smallest',
-        moduleSideEffects: false,
-        propertyReadSideEffects: false,
-        tryCatchDeoptimization: false
+        preset: 'recommended', // Mudado de 'smallest' para 'recommended'
+        moduleSideEffects: (id) => {
+          // Preserva side effects para i18n e stores
+          return id.includes('i18n') || id.includes('store') || id.includes('zustand');
+        },
+        propertyReadSideEffects: true, // Mudado para true para preservar getters
+        tryCatchDeoptimization: true   // Mudado para true para preservar error handling
       }
     },
     
@@ -107,7 +110,7 @@ export default defineConfig({
     cssMinify: true,
   },
   
-  // Enhanced performance optimizations
+  // Enhanced performance optimizations - configuração segura
   optimizeDeps: {
     include: [
       'three',
@@ -117,14 +120,16 @@ export default defineConfig({
       'framer-motion',
       'react',
       'react-dom',
-      'react-i18next'
+      'react-i18next',
+      'i18next',
+      'i18next-browser-languagedetector'
     ],
     exclude: [
       // Exclude heavy development dependencies
       '@vitejs/plugin-react'
     ],
-    // Force específico para Tree Shaking em deps CJS
-    force: true
+    // Removido force: true que estava causando problemas de cache
+    // force: true
   },
   
   // Resolve optimizations

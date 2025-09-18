@@ -1,14 +1,12 @@
-import React, { useEffect, lazy, Suspense } from "react";
+import React, { useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
+import HeroZustand from "./sections/HeroZustand";
+import SectionPagesZustand from "./pages/SectionPagesZustand";
+import CustomCursor from "./components/CustomCursor";
+import MobileBottomNav from "./components/MobileBottomNav";
+import NavigationProgress from "./components/NavigationProgress";
+import NavigationTutorial from "./components/NavigationTutorial";
 import { useNavigationStore } from "./stores/navigation.store";
-
-// Lazy loading para otimização de bundle
-const HeroZustand = lazy(() => import("./sections/HeroZustand"));
-const SectionPagesZustand = lazy(() => import("./pages/SectionPagesZustand"));
-const CustomCursor = lazy(() => import("./components/CustomCursor"));
-const MobileBottomNav = lazy(() => import("./components/MobileBottomNav"));
-const NavigationProgress = lazy(() => import("./components/NavigationProgress"));
-const NavigationTutorial = lazy(() => import("./components/NavigationTutorial"));
 
 const App = () => {
   const initializeTutorial = useNavigationStore(state => state.initializeTutorial);
@@ -21,27 +19,24 @@ const App = () => {
 
   return (
     <div className="bg-black h-screen w-screen fixed inset-0 overflow-hidden relative">
-      <Suspense fallback={<div className="fixed inset-0 bg-black flex items-center justify-center">
-        <div className="text-white">Loading...</div>
-      </div>}>
-        {/* Cursor customizado */}
-        <CustomCursor />
 
-        {/* Menu de navegação inferior para mobile */}
-        <MobileBottomNav />
+      {/* Cursor customizado */}
+      <CustomCursor />
 
-        {/* Progress tracker para desktop */}
-        <NavigationProgress />
+      {/* Menu de navegação inferior para mobile */}
+      <MobileBottomNav />
 
-        {/* Tutorial de navegação */}
-        <NavigationTutorial />
+      {/* Progress tracker para desktop */}
+      <NavigationProgress />
 
-        {/* Cena 3D principal com navegação usando Zustand */}
-        <HeroZustand />
+      {/* Tutorial de navegação */}
+      <NavigationTutorial />
 
-        {/* Páginas das seções com Zustand */}
-        <SectionPagesZustand />
-      </Suspense>
+      {/* Cena 3D principal com navegação usando Zustand */}
+      <HeroZustand />
+
+      {/* Páginas das seções com Zustand */}
+      <SectionPagesZustand />
     </div>
   );
 };
