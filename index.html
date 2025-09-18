@@ -27,6 +27,57 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
 
+    <!-- Critical Font Preloading -->
+    <link rel="preload" href="/fonts/funnel-display-400.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="/fonts/funnel-display-300.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="/fonts/funnel-display-500.ttf" as="font" type="font/ttf" crossorigin>
+
+    <!-- Font Face Declarations -->
+    <style>
+      @font-face {
+        font-family: 'Funnel Display';
+        font-style: normal;
+        font-weight: 300;
+        font-display: swap;
+        src: url('/fonts/funnel-display-300.ttf') format('truetype');
+      }
+      @font-face {
+        font-family: 'Funnel Display';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url('/fonts/funnel-display-400.ttf') format('truetype');
+      }
+      @font-face {
+        font-family: 'Funnel Display';
+        font-style: normal;
+        font-weight: 500;
+        font-display: swap;
+        src: url('/fonts/funnel-display-500.ttf') format('truetype');
+      }
+      @font-face {
+        font-family: 'Funnel Display';
+        font-style: normal;
+        font-weight: 600;
+        font-display: swap;
+        src: url('/fonts/funnel-display-600.ttf') format('truetype');
+      }
+      @font-face {
+        font-family: 'Funnel Display';
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap;
+        src: url('/fonts/funnel-display-700.ttf') format('truetype');
+      }
+      @font-face {
+        font-family: 'Funnel Display';
+        font-style: normal;
+        font-weight: 800;
+        font-display: swap;
+        src: url('/fonts/funnel-display-800.ttf') format('truetype');
+      }
+    </style>
+
     <!-- Enhanced Title -->
     <title>Jorge Molina - Senior 3D Frontend Engineer | WebGL Portfolio</title>
   </head>

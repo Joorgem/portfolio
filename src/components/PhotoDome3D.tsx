@@ -41,7 +41,7 @@ const PhotoFrame: React.FC<{
     const textureLoader = new THREE.TextureLoader();
     setLoading(true);
     setError(false);
-    
+
     textureLoader.load(
       photo.url,
       (loadedTexture) => {
