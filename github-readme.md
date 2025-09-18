@@ -158,7 +158,7 @@ const useNavigationStore = create<NavigationStore>((set, get) => ({
 - **2KB vs 30KB+** - Critical for performance-sensitive 3D apps
 - **Zero unnecessary re-renders** during complex animations
 - **Direct state access** in useFrame loops for optimal performance
-- **TypeScript-first** for bulletproof state transitions
+- **TypeScript-first** for safer state transitions
 
 #### **Advanced WebGL Optimizations**
 ```typescript
@@ -215,9 +215,9 @@ const targetPosition = ObjectPool.tempVector1.set(x, y, z);
 
 **3D Optimization**
 - Object Pooling
-- Frustum Culling
-- LOD (Level of Detail)
-- Texture Streaming
+- Demand-based Rendering
+- Adaptive Pixel Ratio (DPR)
+- Instanced Rendering (Particles)
 
 </td>
 <td align="center" width="25%">
@@ -339,6 +339,6 @@ npm run validate      # Full project validation
 
 **🌌 Transforming ideas into immersive digital experiences**
 
-*Specialized in cutting-edge web technologies that push the boundaries of user interaction*
+</div>div>eraction*
 
-</div>
+</div>/div>
