@@ -28,22 +28,39 @@ export default defineConfig({
     rollupOptions: {
       output: {
         // More granular chunking strategy - only for actually used dependencies
-        manualChunks: {
-          // Three.js and related 3D libraries - largest chunk
-          'three-core': ['three'],
-          'three-react': ['@react-three/fiber', '@react-three/drei'],
-          
+        manualChunks: (id) => {
+          // Three.js core otimizado
+          if (id.includes('three') && !id.includes('@react-three')) {
+            return 'three-core';
+          }
+          // React Three Fiber separado
+          if (id.includes('@react-three/fiber')) {
+            return 'three-react-fiber';
+          }
+          // React Three Drei separado
+          if (id.includes('@react-three/drei')) {
+            return 'three-react-drei';
+          }
           // State management
-          'state': ['zustand'],
-          
-          // Animation libraries - only if actually used
-          'framer': ['framer-motion'],
-          
-          // UI and utility libraries - only existing ones
-          'ui-vendor': ['clsx'],
-          
-          // i18n separately for better caching
-          'i18n': ['react-i18next', 'i18next'],
+          if (id.includes('zustand')) {
+            return 'state';
+          }
+          // Framer Motion
+          if (id.includes('framer-motion')) {
+            return 'framer';
+          }
+          // i18n
+          if (id.includes('react-i18next') || id.includes('i18next')) {
+            return 'i18n';
+          }
+          // UI libraries
+          if (id.includes('clsx') || id.includes('react-responsive')) {
+            return 'ui-vendor';
+          }
+          // Node modules vendor chunk para libs pequenas
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
         },
         
         // Optimize chunk names for better caching
@@ -67,6 +84,14 @@ export default defineConfig({
       
       // External dependencies for CDN loading (optional)
       external: [],
+
+      // Tree shaking otimizado
+      treeshake: {
+        preset: 'smallest',
+        moduleSideEffects: false,
+        propertyReadSideEffects: false,
+        tryCatchDeoptimization: false
+      }
     },
     
     // Increase chunk size warning limit for 3D applications
@@ -87,7 +112,7 @@ export default defineConfig({
     include: [
       'three',
       '@react-three/fiber',
-      '@react-three/drei', 
+      '@react-three/drei',
       'zustand',
       'framer-motion',
       'react',
@@ -97,7 +122,9 @@ export default defineConfig({
     exclude: [
       // Exclude heavy development dependencies
       '@vitejs/plugin-react'
-    ]
+    ],
+    // Force específico para Tree Shaking em deps CJS
+    force: true
   },
   
   // Resolve optimizations

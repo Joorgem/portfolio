@@ -1,7 +1,7 @@
 import React, { Suspense, useRef, useEffect, useCallback } from "react";
 import { Canvas } from "@react-three/fiber";
 import { useMediaQuery } from "react-responsive";
-import * as THREE from 'three';
+import { Group, Vector3, Object3D } from 'three';
 import HeroTextFixed from "../components/HeroTextFixed";
 import { Astronaut } from "../components/Astronaut";
 import Loader from "../components/Loader";
@@ -19,7 +19,7 @@ import { useTranslation } from "react-i18next";
 const HeroZustand: React.FC = () => {
   const { t } = useTranslation('common');
   const isMobile = useMediaQuery({ maxWidth: 853 });
-  const astronautRef = useRef<THREE.Group>(null!);
+  const astronautRef = useRef<Group>(null!);
   
   // Estados do store - TODOS OS HOOKS PRIMEIRO
   const navigationState = useNavigationStore(state => state.navigationState);
