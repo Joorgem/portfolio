@@ -1,18 +1,14 @@
-# 🌌 **3D Space Portfolio** - Advanced WebGL Experience
+# 🌌 **3D Space Portfolio**
 
-**Senior Frontend Engineer specializing in immersive 3D web applications**
-
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-jorgemolina.dev-00d8ff?style=for-the-badge&logo=vercel)](https://jorgemolina.dev)
+[![Live Portfolio](https://img.shields.io/badge/Live%20Portfolio-jorgemolina.dev-00d8ff?style=for-the-badge&logo=vercel)](https://jorgemolina.dev)
 [![Repository](https://img.shields.io/badge/Repository-GitHub-181717?style=for-the-badge&logo=github)](https://github.com/Joorgem/portfolio)
-[![Lighthouse](https://img.shields.io/badge/Performance-61-FFA500?style=for-the-badge&logo=lighthouse)](https://jorgemolina.dev)
-[![Bundle](https://img.shields.io/badge/Bundle-1.6MB-FF6B6B?style=for-the-badge&logo=webpack)](https://github.com/Joorgem/portfolio)
+[![Lighthouse](https://img.shields.io/badge/Performance-78-4CAF50?style=for-the-badge&logo=lighthouse)](https://jorgemolina.dev)
+[![Bundle](https://img.shields.io/badge/Bundle-1.6MB-4CAF50?style=for-the-badge&logo=webpack)](https://github.com/Joorgem/portfolio)
 
 [![React](https://img.shields.io/badge/React-19-61dafb?style=for-the-badge&logo=react)](https://reactjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178c6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178c6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![Three.js](https://img.shields.io/badge/Three.js-0.173-000000?style=for-the-badge&logo=three.js)](https://threejs.org/)
 [![Zustand](https://img.shields.io/badge/Zustand-5.0-2D2D2D?style=for-the-badge)](https://zustand-demo.pmnd.rs/)
-
-> **"Transforming traditional portfolio concepts into an immersive 3D experimentation lab that showcases advanced frontend engineering capabilities."**
 
 ## 🚀 **Technical Highlights**
 
@@ -20,12 +16,12 @@
 - **⚡ Optimized 3D Performance** with intelligent rendering pipeline
 - **📱 Mobile-First 3D** responsive experience across all devices
 - **🎬 Cinematic Transitions** between 3D space and 2D content
-- **🔧 Advanced WebGL** optimizations reducing CPU usage by 80%
+- **🔧 Advanced WebGL** optimizations with demand-based rendering
 
 ## 🏗️ **Advanced Architecture**
 
 ### **🎯 State Management System**
-Built on a sophisticated **7-state navigation architecture** using Zustand for optimal performance:
+Built with a 7-state navigation architecture powered by **Zustand** for optimal performance:
 
 ```typescript
 idle → orbiting → zooming_in → entering → in_section → exiting → zooming_out → idle
@@ -45,13 +41,12 @@ https://github.com/user-attachments/assets/cc6417d2-d395-4677-aa47-3422ccf6df76
 
 #### **Intelligent Rendering Pipeline**
 ```typescript
-// CPU usage optimization - 80% reduction
-<Canvas frameloop={isInteracting ? 'always' : 'demand'} />
+// Intelligent rendering pipeline - render on demand
+<Canvas frameloop={canvas3DActive ? 'always' : 'demand'} />
 
-// Memory management for 3D assets
-useEffect(() => {
-  return () => geometries.forEach(geo => geo.dispose());
-}, []);
+// ObjectPool for optimal memory usage in 60fps loops
+import { ObjectPool } from '../utils/objectPool';
+meshRef.current.position.lerp(ObjectPool.tempVector1.set(x, y, z), 0.1);
 ```
 
 #### **Mobile-First 3D Optimization**
@@ -98,10 +93,10 @@ Running live at [**jorgemolina.dev**](https://jorgemolina.dev) with verified Lig
 
 | **Lighthouse Audit** | **Score** | **Status** |
 |----------------------|-----------|------------|
-| 🚀 **Performance** | **61** | 3D-Optimized |
+| 🚀 **Performance** | **78** | Excellent |
 | ♿ **Accessibility** | **100** | Perfect |
 | ✅ **Best Practices** | **100** | Excellent |
-| 🔍 **SEO** | **90** | Outstanding |
+| 🔍 **SEO** | **100** | Outstanding |
 
 </div>
 
@@ -111,13 +106,38 @@ Running live at [**jorgemolina.dev**](https://jorgemolina.dev) with verified Lig
 
 | **Metric** | **Value** | **Score** | **3D Context** |
 |------------|-----------|-----------|-----------------|
-| **FCP** (First Contentful Paint) | 4.7s | 13% | 3D Model Loading |
-| **LCP** (Largest Contentful Paint) | 4.7s | 33% | WebGL Canvas Ready |
-| **TBT** (Total Blocking Time) | 380ms | 69% | Good Interactivity |
+| **FCP** (First Contentful Paint) | 1.2s | 73% | **Optimized 3D Loading** |
+| **LCP** (Largest Contentful Paint) | 3.1s | 30% | WebGL Canvas Ready |
+| **TBT** (Total Blocking Time) | 10ms | 100% | **Excellent Interactivity** |
 | **CLS** (Cumulative Layout Shift) | 0.00 | 100% | **Perfect Stability** |
-| **SI** (Speed Index) | 5.1s | 62% | 3D Scene Assembly |
+| **SI** (Speed Index) | 1.6s | 80% | **Fast 3D Assembly** |
 
 </div>
+
+### **⚡ Performance Optimization Results**
+
+After implementing advanced bundle optimization and tree shaking techniques:
+
+#### **📈 Performance Improvements**
+- **Performance Score**: **+17 points** (61 → 78)
+- **FCP**: **-3.5s improvement** (4.7s → 1.2s)
+- **TBT**: **-370ms improvement** (380ms → 10ms)
+- **SI**: **-3.5s improvement** (5.1s → 1.6s)
+- **SEO**: **+10 points** (90 → 100)
+
+#### **🛠️ Optimization Techniques Applied**
+- **Advanced Tree Shaking**: Specific Three.js imports reducing bundle by 60-80 KiB
+- **Intelligent Code Splitting**: Granular chunking strategy for optimal caching
+- **Bundle Optimization**: Optimized 1.6MB bundle with intelligent chunking
+- **i18n Chunk Isolation**: Separate internationalization loading (17.27 KiB gzip)
+
+```typescript
+// Before: Import entire Three.js library
+import * as THREE from 'three';
+
+// After: Specific imports for tree shaking
+import { Group, Vector3, Object3D } from 'three';
+```
 
 ### **🎯 Technical Achievements**
 
@@ -144,13 +164,14 @@ const useNavigationStore = create<NavigationStore>((set, get) => ({
 ```typescript
 // Intelligent rendering pipeline
 <Canvas
-  frameloop={isInteracting ? 'always' : 'demand'}
+  frameloop={canvas3DActive ? 'always' : 'demand'}
   dpr={[1, 2]}
-  performance={{ min: 0.5 }}
 />
 
-// Object pooling for particles
-const particlePool = useMemo(() => new ObjectPool(Particle, 1000), []);
+// Object pooling for performance optimization
+import { ObjectPool } from '../utils/objectPool';
+// Pre-allocated objects: tempVector1, tempMatrix1, tempQuaternion1, etc.
+const targetPosition = ObjectPool.tempVector1.set(x, y, z);
 ```
 
 #### **Mobile 3D Engineering**
@@ -168,7 +189,7 @@ const particlePool = useMemo(() => new ObjectPool(Particle, 1000), []);
 | Technology | Version | Purpose | Performance Impact |
 |------------|---------|---------|-------------------|
 | ![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=white) | **19.0** | Frontend Framework | Fast Concurrent Features |
-| ![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178C6?style=flat-square&logo=typescript&logoColor=white) | **5.5** | Type Safety | Zero Runtime Errors |
+| ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white) | **5.9** | Type Safety | Zero Runtime Errors |
 | ![Three.js](https://img.shields.io/badge/Three.js-0.173-000000?style=flat-square&logo=three.js&logoColor=white) | **0.173** | 3D Engine Core | WebGL Optimization |
 | ![React Three Fiber](https://img.shields.io/badge/R3F-9.0-FF6B6B?style=flat-square&logo=react&logoColor=white) | **9.0** | React 3D Bridge | Declarative 3D |
 | ![Zustand](https://img.shields.io/badge/Zustand-5.0-2D2D2D?style=flat-square&logo=zustand&logoColor=white) | **5.0** | State Management | 2KB Bundle Size |
@@ -184,7 +205,7 @@ const particlePool = useMemo(() => new ObjectPool(Particle, 1000), []);
 <tr>
 <td align="center" width="25%">
 
-**🏗️ Build System**
+**🏗️Build System**
 - ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 - ![ESBuild](https://img.shields.io/badge/ESBuild-FFCF00?style=for-the-badge&logo=esbuild&logoColor=black)
 - ![Rollup](https://img.shields.io/badge/Rollup-EC4A3F?style=for-the-badge&logo=rollup.js&logoColor=white)
@@ -192,7 +213,7 @@ const particlePool = useMemo(() => new ObjectPool(Particle, 1000), []);
 </td>
 <td align="center" width="25%">
 
-**📱 3D Optimization**
+**3D Optimization**
 - Object Pooling
 - Frustum Culling
 - LOD (Level of Detail)
@@ -201,7 +222,7 @@ const particlePool = useMemo(() => new ObjectPool(Particle, 1000), []);
 </td>
 <td align="center" width="25%">
 
-**🎯 State Architecture**
+**State Architecture**
 - Finite State Machine
 - Direct Store Access
 - Zero Re-renders
@@ -220,12 +241,12 @@ const particlePool = useMemo(() => new ObjectPool(Particle, 1000), []);
 </tr>
 </table>
 
-### **🚀 Development Workflow**
+### **Development Workflow**
 
 <div align="center">
 
 ```bash
-# 🔥 Development Commands
+# Development Commands
 npm run dev          # Lightning-fast HMR development server
 npm run build        # Optimized production build
 npm run typecheck    # TypeScript validation & error checking
@@ -260,16 +281,17 @@ graph TD
 
 </div>
 
-## 🔮 **Continuous Innovation**
+## **Continuous Innovation**
 
 ### **Current Development - Version 2.0**
 Working on advanced **astronaut character rigging**:
 
-- **🎭 Contextual Animations**: Different poses per section interaction
-- **👀 Smart Look-At**: Character tracks user cursor and planet selections
-- **🎪 Interactive Gestures**: Pointing, waving, and section-specific actions
+- ** Contextual Animations**: Different poses per section interaction
+- ** Smart Look-At**: Character tracks user cursor and planet selections
+- ** Interactive Gestures**: Pointing, waving, and section-specific actions
 
 **Rigged character model - Version 2.0 development**
+
 ![Rig development](https://i.imgur.com/XqFTTPf.png)
 
 ### **Planned Technical Enhancements**
@@ -310,36 +332,6 @@ npm run typecheck     # TypeScript type checking
 npm run lint          # ESLint code quality check
 npm run validate      # Full project validation
 ```
-
-## 🎯 **Professional Profile**
-
-### **Technical Expertise**
-- **3D Web Development** - Advanced Three.js/WebGL implementations
-- **Performance Engineering** - Complex state management and optimization
-- **Mobile-First Development** - Responsive 3D experiences across devices
-- **Frontend Architecture** - Scalable TypeScript applications
-
-### **Specialized Skills**
-- **Immersive UI/UX** design for 3D environments
-- **WebGL Performance** optimization and profiling
-- **State Machine Architecture** for complex user flows
-- **Cross-platform** touch and gesture interactions
-
-## 🤝 **Professional Contact**
-
-> **Open to Senior Frontend Engineering opportunities specializing in 3D web applications, WebGL performance optimization, and immersive user experiences.**
-
-### **Let's Connect**
-- **🌐 Live Portfolio**: [jorgemolina.dev](https://jorgemolina.dev)
-- **💼 LinkedIn**: [Jorge Molina](https://linkedin.com/in/jorge-molina-539394197)
-- **📧 Professional Email**: [contato@jorgemolina.dev](mailto:contato@jorgemolina.dev)
-- **🔗 Repository**: [github.com/Joorgem/portfolio](https://github.com/Joorgem/portfolio)
-
-### **Technical Discussions Welcome**
-- 3D web development challenges
-- WebGL performance optimization strategies
-- Advanced state management patterns
-- Mobile 3D implementation techniques
 
 ---
 

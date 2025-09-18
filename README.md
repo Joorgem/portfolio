@@ -14,13 +14,13 @@
 
 > **"Transforming traditional portfolio concepts into an immersive 3D experimentation lab that showcases advanced frontend engineering capabilities."**
 
-## 🚀 **Technical Highlights**
+## **Technical Highlights**
 
-- **🎯 7-State Navigation System** with Zustand for complex 3D interactions
-- **⚡ Optimized 3D Performance** with intelligent rendering pipeline
-- **📱 Mobile-First 3D** responsive experience across all devices
-- **🎬 Cinematic Transitions** between 3D space and 2D content
-- **🔧 Advanced WebGL** optimizations reducing CPU usage by 80%
+- **7-State Navigation System** with Zustand for complex 3D interactions
+- **Optimized 3D Performance** with intelligent rendering pipeline
+- **Mobile-First 3D** responsive experience across all devices
+- **Cinematic Transitions** between 3D space and 2D content
+- **Advanced WebGL** optimizations reducing CPU usage by 80%
 
 ## 🏗️ **Advanced Architecture**
 
@@ -37,7 +37,7 @@ This state machine ensures **predictable transitions** and **zero navigation con
 
 > *🎬 Interactive demo showing smooth planetary orbit mechanics and camera transitions*
 >
-> **[📹 View Project](https://jorgemolina.dev)** - Experience the live 3D navigation
+> **[View Project](https://jorgemolina.dev)** - Experience the live 3D navigation
 
 https://github.com/user-attachments/assets/cc6417d2-d395-4677-aa47-3422ccf6df76
 
@@ -220,12 +220,12 @@ const particlePool = useMemo(() => new ObjectPool(Particle, 1000), []);
 </tr>
 </table>
 
-### **🚀 Development Workflow**
+### **Development Workflow**
 
 <div align="center">
 
 ```bash
-# 🔥 Development Commands
+# Development Commands
 npm run dev          # Lightning-fast HMR development server
 npm run build        # Optimized production build
 npm run typecheck    # TypeScript validation & error checking
@@ -260,14 +260,14 @@ graph TD
 
 </div>
 
-## 🔮 **Continuous Innovation**
+## **Continuous Innovation**
 
 ### **Current Development - Version 2.0**
 Working on advanced **astronaut character rigging**:
 
-- **🎭 Contextual Animations**: Different poses per section interaction
-- **👀 Smart Look-At**: Character tracks user cursor and planet selections
-- **🎪 Interactive Gestures**: Pointing, waving, and section-specific actions
+- **Contextual Animations**: Different poses per section interaction
+- **Smart Look-At**: Character tracks user cursor and planet selections
+- **Interactive Gestures**: Pointing, waving, and section-specific actions
 
 **Rigged character model - Version 2.0 development**
 ![Rig development](https://i.imgur.com/XqFTTPf.png)
@@ -278,7 +278,7 @@ Working on advanced **astronaut character rigging**:
 - **WebXR support** for VR/AR experiences
 - **Advanced particle physics** with realistic space debris
 
-## 🚀 **Getting Started**
+## **Getting Started**
 
 ### **Prerequisites**
 - Node.js 18+ (recommended: 20+)
@@ -311,24 +311,6 @@ npm run lint          # ESLint code quality check
 npm run validate      # Full project validation
 ```
 
-## 🎯 **Professional Profile**
-
-### **Technical Expertise**
-- **3D Web Development** - Advanced Three.js/WebGL implementations
-- **Performance Engineering** - Complex state management and optimization
-- **Mobile-First Development** - Responsive 3D experiences across devices
-- **Frontend Architecture** - Scalable TypeScript applications
-
-### **Specialized Skills**
-- **Immersive UI/UX** design for 3D environments
-- **WebGL Performance** optimization and profiling
-- **State Machine Architecture** for complex user flows
-- **Cross-platform** touch and gesture interactions
-
-## 🤝 **Professional Contact**
-
-> **Open to Senior Frontend Engineering opportunities specializing in 3D web applications, WebGL performance optimization, and immersive user experiences.**
-
 ### **Let's Connect**
 - **🌐 Live Portfolio**: [jorgemolina.dev](https://jorgemolina.dev)
 - **💼 LinkedIn**: [Jorge Molina](https://linkedin.com/in/jorge-molina-539394197)
@@ -340,13 +322,11 @@ npm run validate      # Full project validation
 - WebGL performance optimization strategies
 - Advanced state management patterns
 - Mobile 3D implementation techniques
-
+- Other contributions and discussions are also welcome!
 ---
 
 <div align="center">
 
 **🌌 Transforming ideas into immersive digital experiences**
-
-*Specialized in cutting-edge web technologies that push the boundaries of user interaction*
 
 </div>

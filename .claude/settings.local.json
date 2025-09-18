@@ -78,7 +78,10 @@
       "Bash(ffmpeg:*)",
       "Bash(tree:*)",
       "WebFetch(domain:jorgemolina.dev)",
-      "WebFetch(domain:fonts.googleapis.com)"
+      "WebFetch(domain:fonts.googleapis.com)",
+      "Bash(awk:*)",
+      "Bash(sort:*)",
+      "Bash(xargs ls:*)"
     ],
     "deny": [],
     "ask": [],
