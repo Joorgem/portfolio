@@ -23,9 +23,8 @@ const HeroTextFixed: React.FC = () => {
   return (
     <AnimatePresence>
       {shouldShow && (
-        <motion.div 
+        <motion.div
           className="absolute top-12 left-0 z-10 pt-0 pl-8 pr-8 pb-8 md:pt-0 md:pl-12 md:pr-12 md:pb-12 pointer-events-none"
-          style={{ position: 'absolute' }}
           initial={{ opacity: 0 }}
           animate={{ opacity }}
           exit={{ opacity: 0 }}

@@ -7,7 +7,8 @@
     "close": "Fechar",
     "submit": "Enviar",
     "send": "Enviar",
-    "loading": "Carregando..."
+    "loading": "Carregando...",
+    "loaded": "Carregado"
   },
   "navigation": {
     "backToMain": "Voltar para navegação principal"

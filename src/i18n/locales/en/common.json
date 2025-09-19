@@ -7,7 +7,8 @@
     "close": "Close",
     "submit": "Submit",
     "send": "Send",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "loaded": "Loaded"
   },
   "navigation": {
     "backToMain": "Back to main navigation"

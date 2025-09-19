@@ -134,7 +134,7 @@ const Contact: React.FC = () => {
           <div className="flex flex-col items-center justify-center p-8 mx-auto border border-white/10 rounded-2xl bg-black/30 backdrop-blur-sm">
             <form className="w-full" onSubmit={handleSubmit}>
           <div className="mb-5">
-            <label htmlFor="name" className="feild-label">
+            <label htmlFor="name" className="field-label">
               {t('form.fields.name')}
             </label>
             <input
@@ -150,7 +150,7 @@ const Contact: React.FC = () => {
             />
           </div>
           <div className="mb-5">
-            <label htmlFor="email" className="feild-label">
+            <label htmlFor="email" className="field-label">
               {t('form.fields.email')}
             </label>
             <input
@@ -166,7 +166,7 @@ const Contact: React.FC = () => {
             />
           </div>
           <div className="mb-5">
-            <label htmlFor="message" className="feild-label">
+            <label htmlFor="message" className="field-label">
               {t('form.fields.message')}
             </label>
             <textarea

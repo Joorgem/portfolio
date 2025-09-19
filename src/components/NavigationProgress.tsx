@@ -264,9 +264,6 @@ const NavigationProgress: React.FC = () => {
     return Math.min(visitedCount / (index + 1), 1);
   };
 
-  // const _overallProgress = visitedSections.length > 0 
-  //   ? Math.max(...navigationPoints.map((_, i) => getProgressForSection(i))) 
-  //   : 0;
 
   // Determine section state
   const getSectionState = (sectionId: string) => {

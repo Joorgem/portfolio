@@ -307,14 +307,14 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
 
       {/* Navigation Indicators */}
       {showIndicators && media.length > 1 && (
-        <div className="absolute bottom-4 right-4 flex space-x-2">
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
           {media.map((_, index) => (
             <button
               key={index}
               onClick={() => goToMedia(index)}
               className={`w-2 h-2 rounded-full transition-colors ${
-                index === currentIndex 
-                  ? 'bg-white' 
+                index === currentIndex
+                  ? 'bg-white'
                   : 'bg-white/50 hover:bg-white/70'
               }`}
             />

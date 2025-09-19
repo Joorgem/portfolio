@@ -7,9 +7,9 @@ import tseslint from '@typescript-eslint/eslint-plugin'
 import tsparser from '@typescript-eslint/parser'
 
 export default [
-  { ignores: ['dist', 'bewear/**', 'src/**/*.jsx'] },
+  { ignores: ['dist', 'bewear/**'] },
   {
-    files: ['src/**/*.{ts,tsx}', 'src/main.tsx'],
+    files: ['src/**/*.{ts,tsx,js,jsx}'],
     languageOptions: {
       parser: tsparser,
       ecmaVersion: 2020,

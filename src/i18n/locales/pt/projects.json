@@ -9,7 +9,9 @@
     "viewProject": "Ver Projeto",
     "code": "Código",
     "viewDetails": "Ver Detalhes",
-    "projectDetails": "Detalhes do Projeto"
+    "projectDetails": "Detalhes do Projeto",
+    "showMore": "Mais",
+    "showLess": "Menos"
   },
   "projects": [
     {
