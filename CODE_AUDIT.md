@@ -55,7 +55,7 @@ Este documento mapeia todos os arquivos e diretórios do projeto para uma audito
     - [x] `CameraController.Zustand.tsx` -> [Ver Análise](#cameracontrollerzustandtsx)
     - [x] `Card.tsx` -> [Ver Análise](#cardtsx)
     - [x] `CategoryTabs.tsx` -> [Ver Análise](#categorytabstsx)
-    - [ ] `CopyEmailButton.tsx`
+    - [x] `CopyEmailButton.tsx` -> [Ver Análise](#copyemailbuttontsx)
     - [x] `CustomCursor.tsx` -> [Ver Análise](#customcursortsx)
     - [ ] `Dome3D.tsx`
     - [ ] `DomeGallery.css`
