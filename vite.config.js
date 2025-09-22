@@ -2,6 +2,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
+import path from "path";
 
 export default defineConfig({
   plugins: [
@@ -135,6 +136,7 @@ export default defineConfig({
   // Resolve optimizations
   resolve: {
     alias: {
+      '@': path.resolve(__dirname, './src'),
       // Optimize Three.js imports
       'three/examples/jsm': 'three/examples/jsm',
     }
