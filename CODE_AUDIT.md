@@ -57,37 +57,37 @@ Este documento mapeia todos os arquivos e diretórios do projeto para uma audito
     - [x] `CategoryTabs.tsx` -> [Ver Análise](#categorytabstsx)
     - [x] `CopyEmailButton.tsx` -> [Ver Análise](#copyemailbuttontsx)
     - [x] `CustomCursor.tsx` -> [Ver Análise](#customcursortsx)
-    - [ ] `Dome3D.tsx`
-    - [ ] `DomeGallery.css`
-    - [ ] `DomeGallery.tsx`
-    - [ ] `DomeGalleryCard.tsx`
-    - [ ] `DownloadResumeCard.tsx`
+    - [x] `Dome3D.tsx` -> [Ver Análise](#dome3dtsx)
+    - [x] `DomeGallery.css` -> [Ver Análise](#domegallerycss)
+    - [x] `DomeGallery.tsx` -> [Ver Análise](#domegallerytsx)
+    - [x] `DomeGalleryCard.tsx` -> [Ver Análise](#domegallerycardtsx)
+    - [x] `DownloadResumeCard.tsx` -> [Ver Análise](#downloadresumecardtsx)
     - [x] `FlipWords.tsx` -> [Ver Análise](#flipwordstsx)
-    - [ ] `FullscreenCursor.tsx`
+    - [x] `FullscreenCursor.tsx` -> [Ver Análise](#fullscreencursortsx)
     - [x] `HeroTextFixed.tsx` -> [Ver Análise](#herotextfixedtsx)
     - [x] `LanguageToggle.tsx` -> [Ver Análise](#languagetoggletsx)
     - [x] `Loader.tsx` -> [Ver Análise](#loadertsx)
-    - [ ] `LogoLoop.tsx`
-    - [ ] `Marquee.tsx`
-    - [ ] `MediaConstellation.tsx`
+    - [x] `LogoLoop.tsx` -> [Ver Análise](#logolooptsx)
+    - [x] `Marquee.tsx` -> [Ver Análise](#marqueetsx)
+    - [x] `MediaConstellation.tsx` -> [Ver Análise](#mediaconstellationtsx)
     - [x] `MediaPlayer.tsx` -> [Ver Análise](#mediaplayertsx)
     - [x] `MobileBottomNav.tsx` -> [Ver Análise](#mobilebottomnavtsx)
     - [x] `NavigationProgress.tsx` -> [Ver Análise](#navigationprogresstsx)
     - [x] `NavigationSystemStable.tsx` -> [Ver Análise](#navigationsystemstabletsx)
     - [x] `NavigationTutorial.tsx` -> [Ver Análise](#navigationtutorialtsx)
     - [ ] `OptimizedMediaPlayer.tsx`
-    - [ ] `OrbitalMedia.tsx`
+    - [x] `OrbitalMedia.tsx` -> [Ver Análise](#orbitalmediatsx)
     - [x] `Particles.tsx` -> [Ver Análise](#particlestsx)
     - [ ] `PhotoDome3D.tsx`
     - [x] `ProjectCard.tsx` -> [Ver Análise](#projectcardtsx)
-    - [ ] `ProjectOrbit.tsx`
+    - [x] `ProjectOrbit.tsx` -> [Ver Análise](#projectorbittsx)
     - [x] `ProjectShowcase.tsx` -> [Ver Análise](#projectshowcasetsx)
     - [ ] `ResponsiveOrbitControls.tsx`
     - [x] `SimpleMediaViewer.tsx` -> [Ver Análise](#simplemediaviewertsx)
     - [x] `Timeline.tsx` -> [Ver Análise](#timelinetsx)
-    - [ ] `magicui/`
-      - [ ] `icon-cloud.tsx`
-      - [ ] `interactive-hover-button.tsx`
+    - [x] `magicui/`
+      - [x] `icon-cloud.tsx` -> [Ver Análise](#magicuiiconcloudtsx)
+      - [x] `interactive-hover-button.tsx` -> [Ver Análise](#magicuiinteractivehoverbuttontsx)
   - [x] `constants/`
     - [x] `emailConfig.ts` -> [Ver Análise](#emailconfigts)
     - [x] `index.ts` -> [Ver Análise](#constantsindexts)

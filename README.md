@@ -1,5 +1,8 @@
 # 🌌 **3D Space Portfolio**
 
+> **This is my personal portfolio showcasing advanced Three.js techniques.**
+> **Not intended as a template** - built specifically for my brand.
+
 [![Live Portfolio](https://img.shields.io/badge/Live%20Demo-jorgemolina.dev-00d8ff?style=for-the-badge&logo=vercel)](https://jorgemolina.dev)
 [![Repository](https://img.shields.io/badge/Repository-GitHub-181717?style=for-the-badge&logo=github)](https://github.com/Joorgem/portfolio)
 [![Lighthouse](https://img.shields.io/badge/Performance-78-4CAF50?style=for-the-badge&logo=lighthouse)](https://jorgemolina.dev)
