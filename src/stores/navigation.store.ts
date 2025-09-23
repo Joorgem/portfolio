@@ -117,9 +117,9 @@ let lastPortfolioMode: string = 'choosing';
 
 export const useNavigationStore = create<NavigationStore>()(
   subscribeWithSelector((set, get) => {
-    // ULTRA-DEBUG: Monitor ALL state changes
+    // ULTRA-DEBUG: Monitor ALL state changes - wrap the original set function
     const originalSet = set;
-    const monitoredSet = (partial: any, replace?: boolean) => {
+    set = (partial: any, replace?: boolean) => {
       const currentState = get();
 
       // Detect portfolioMode changes
@@ -703,7 +703,7 @@ export const useNavigationStore = create<NavigationStore>()(
       }
 
       // Marca como inicializado para prevenir execuções duplas
-      monitoredSet({ _isInitialized: true });
+      set({ _isInitialized: true });
 
       // Tutorial será ativado automaticamente quando o usuário selecionar o modo 3D
       // Não precisa mais fazer nada aqui
@@ -866,7 +866,7 @@ export const useNavigationStore = create<NavigationStore>()(
         activationInProgress: currentState.activationInProgress
       });
 
-      monitoredSet({
+      set({
         portfolioMode: mode,
         // Ativa canvas 3D apenas se modo 3D for selecionado
         canvas3DActive: mode === PortfolioModes.THREE_D,
@@ -938,7 +938,7 @@ export const useNavigationStore = create<NavigationStore>()(
         stackTrace: new Error().stack
       });
 
-      monitoredSet({ showModeSelector: true, portfolioMode: PortfolioModes.CHOOSING });
+      set({ showModeSelector: true, portfolioMode: PortfolioModes.CHOOSING });
 
       console.log(`💀💀💀 [${timestamp}] showPortfolioModeSelector COMPLETED - FORCED RESET TO CHOOSING`);
     },
