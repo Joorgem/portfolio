@@ -626,9 +626,6 @@ export const useNavigationStore = create<NavigationStore>()(
     // TUTORIAL
     // ===================================
     initializeTutorial: () => {
-      // Initialize portfolio mode first
-      get().initializePortfolioMode();
-
       // Tutorial será ativado automaticamente quando o usuário selecionar o modo 3D
       // Não precisa mais fazer nada aqui
     },
