@@ -6,7 +6,7 @@ import { PortfolioModes } from '../constants/navigationConfig';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'react-responsive';
 import Particles from './Particles';
-import { preloadHeroZustand } from '../utils/preloadHeroZustand';
+// import { preloadHeroZustand } from '../utils/preloadHeroZustand'; // DEBUGGING: Removed to isolate issue
 
 const PortfolioModeSelector: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -14,40 +14,30 @@ const PortfolioModeSelector: React.FC = () => {
   const setPortfolioMode = useNavigationStore(state => state.setPortfolioMode);
   const hidePortfolioModeSelector = useNavigationStore(state => state.hidePortfolioModeSelector);
   const loading3DScene = useNavigationStore(state => state.loading3DScene);
-  const isMobile = useMediaQuery({ maxWidth: 853 });
+  // const isMobile = useMediaQuery({ maxWidth: 853 }); // DEBUGGING: Removed to test
+  const isMobile = false; // DEBUGGING: Hardcoded to test
 
-  // PRODUCTION FIX: Preload with user intent detection
-  const preloadedRef = React.useRef(false);
-  const hoverTimeoutRef = React.useRef(null);
+  // DEBUGGING: Log all re-renders to identify the cause
+  React.useEffect(() => {
+    console.log('🔄 PortfolioModeSelector RE-RENDER:', {
+      showModeSelector,
+      loading3DScene,
+      isMobile
+    });
+  });
 
+  // DEBUGGING: Create a simplified handler to test pure interaction
+  const handleSimpleMouseEnter = () => {
+    console.log('🔍 SIMPLE HOVER ENTER - absolutely nothing else happens');
+  };
+
+  // DEBUGGING: Temporarily removed all preloading to isolate the issue
   const handleMouseEnter = React.useCallback(() => {
-    // Preload only after user hovers for 500ms (shows real intent)
-    hoverTimeoutRef.current = setTimeout(() => {
-      if (!preloadedRef.current) {
-        preloadedRef.current = true;
-
-        // Use requestIdleCallback to avoid interfering with rendering
-        const idleCallback = () => {
-          preloadHeroZustand().catch(error => {
-            console.warn('Preload failed:', error);
-          });
-        };
-
-        if (window.requestIdleCallback) {
-          window.requestIdleCallback(idleCallback);
-        } else {
-          setTimeout(idleCallback, 0);
-        }
-      }
-    }, 500);
+    console.log('🔍 HOVER ENTER - no preloading');
   }, []);
 
   const handleMouseLeave = React.useCallback(() => {
-    // Cancel preload if user leaves quickly
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current);
-      hoverTimeoutRef.current = null;
-    }
+    console.log('🔍 HOVER LEAVE - no preloading');
   }, []);
 
   const handleModeSelect = (mode: typeof PortfolioModes[keyof typeof PortfolioModes]) => {
@@ -64,14 +54,7 @@ const PortfolioModeSelector: React.FC = () => {
     i18n.changeLanguage(newLang);
   };
 
-  // Cleanup timeout on unmount
-  React.useEffect(() => {
-    return () => {
-      if (hoverTimeoutRef.current) {
-        clearTimeout(hoverTimeoutRef.current);
-      }
-    };
-  }, []);
+  // DEBUGGING: Removed cleanup as we removed the timeout
 
   return (
     <AnimatePresence>
@@ -139,14 +122,14 @@ const PortfolioModeSelector: React.FC = () => {
             <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
               {/* 3D Mode */}
               <motion.div
-              className="relative w-[280px] h-[140px] md:w-[320px] md:h-[160px] overflow-hidden group cursor-pointer flex items-center justify-center bg-black/30 hover:bg-black/20 rounded-xl transition-all duration-300"
+              className="relative w-[280px] h-[140px] md:w-[320px] md:h-[160px] overflow-hidden group cursor-pointer flex items-center justify-center bg-black/30 rounded-xl transition-all duration-300"
+              // DEBUGGING: Removed hover:bg-black/20 to test CSS hover interference
               onClick={() => handleModeSelect(PortfolioModes.THREE_D)}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
+              onMouseEnter={handleSimpleMouseEnter} // DEBUGGING: Using ultra-simple handler
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, type: 'spring', stiffness: 300 }}
-              whileHover={{ scale: 1.05 }}
+              // whileHover={{ scale: 1.05 }} // DEBUGGING: Removed to test if this causes re-render
             >
               {/* Loading overlay when transitioning */}
               {isTransitioning && (
