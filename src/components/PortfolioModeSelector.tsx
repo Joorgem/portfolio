@@ -16,20 +16,39 @@ const PortfolioModeSelector: React.FC = () => {
   const loading3DScene = useNavigationStore(state => state.loading3DScene);
   const isMobile = useMediaQuery({ maxWidth: 853 });
 
-  // Local state for preloading management
-  const [isPreloading, setIsPreloading] = useState(false);
+  // PRODUCTION FIX: Preload with user intent detection
+  const preloadedRef = React.useRef(false);
+  const hoverTimeoutRef = React.useRef(null);
 
-  // PRODUCTION FIX: Preload on hover to reduce loading time
-  const handlePreload3D = async () => {
-    if (!isPreloading) {
-      setIsPreloading(true);
-      try {
-        await preloadHeroZustand();
-      } catch (error) {
-        console.warn('Preload failed:', error);
+  const handleMouseEnter = React.useCallback(() => {
+    // Preload only after user hovers for 500ms (shows real intent)
+    hoverTimeoutRef.current = setTimeout(() => {
+      if (!preloadedRef.current) {
+        preloadedRef.current = true;
+
+        // Use requestIdleCallback to avoid interfering with rendering
+        const idleCallback = () => {
+          preloadHeroZustand().catch(error => {
+            console.warn('Preload failed:', error);
+          });
+        };
+
+        if (window.requestIdleCallback) {
+          window.requestIdleCallback(idleCallback);
+        } else {
+          setTimeout(idleCallback, 0);
+        }
       }
+    }, 500);
+  }, []);
+
+  const handleMouseLeave = React.useCallback(() => {
+    // Cancel preload if user leaves quickly
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
     }
-  };
+  }, []);
 
   const handleModeSelect = (mode: typeof PortfolioModes[keyof typeof PortfolioModes]) => {
     setPortfolioMode(mode);
@@ -44,6 +63,15 @@ const PortfolioModeSelector: React.FC = () => {
     const newLang = currentLang === 'pt' ? 'en' : 'pt';
     i18n.changeLanguage(newLang);
   };
+
+  // Cleanup timeout on unmount
+  React.useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <AnimatePresence>
@@ -113,7 +141,8 @@ const PortfolioModeSelector: React.FC = () => {
               <motion.div
               className="relative w-[280px] h-[140px] md:w-[320px] md:h-[160px] overflow-hidden group cursor-pointer flex items-center justify-center bg-black/30 hover:bg-black/20 rounded-xl transition-all duration-300"
               onClick={() => handleModeSelect(PortfolioModes.THREE_D)}
-              onMouseEnter={handlePreload3D} // PRODUCTION FIX: Preload on hover
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, type: 'spring', stiffness: 300 }}
@@ -141,7 +170,7 @@ const PortfolioModeSelector: React.FC = () => {
                 {t('modeSelector:3d.title')}
               </h2>
               <p className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/70 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                {isPreloading ? 'Ready to launch...' : t('modeSelector:3d.description')}
+                {t('modeSelector:3d.description')}
               </p>
             </motion.div>
 

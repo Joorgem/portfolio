@@ -2,10 +2,14 @@
 // Separate file to maintain Fast Refresh compatibility
 
 let HeroZustandPromise = null;
+let isPreloading = false;
 
 export const preloadHeroZustand = () => {
-  if (!HeroZustandPromise) {
-    HeroZustandPromise = import("../sections/HeroZustand");
+  if (!HeroZustandPromise && !isPreloading) {
+    isPreloading = true;
+    HeroZustandPromise = import("../sections/HeroZustand").finally(() => {
+      isPreloading = false;
+    });
   }
   return HeroZustandPromise;
 };
