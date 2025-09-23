@@ -1,14 +1,23 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Github, Linkedin, Mail, ArrowDown, ExternalLink } from "lucide-react";
 import { FlipWords } from "../components/FlipWords";
 import { InteractiveHoverButton } from "../components/magicui/interactive-hover-button";
 import TechStackCarousel from "../components/TechStackCarousel";
+import DomeGalleryCard from "../components/DomeGalleryCard";
+import { personalPhotos, placeholderPhotos } from "../data/personalPhotos";
+import { useNavigationStore } from "../stores/navigation.store";
+import { PortfolioModes } from "../constants/navigationConfig";
 
 const About: React.FC = () => {
   const { t, i18n } = useTranslation('about');
   const currentLanguage = i18n.language;
+  const portfolioMode = useNavigationStore(state => state.portfolioMode);
+
+  const photos = useMemo(() => {
+    return personalPhotos.length > 0 ? personalPhotos : placeholderPhotos;
+  }, []);
 
   const techStackLogos = [
     { name: 'React', src: '/assets/logos/react.svg' },
@@ -282,6 +291,47 @@ const About: React.FC = () => {
           </motion.div>
         </div>
       </motion.div>
+
+      {portfolioMode === PortfolioModes.THREE_D && (
+        <motion.div
+          className="relative z-10 py-24 px-4 sm:px-6 lg:px-8"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8 }}
+        >
+          <div className="max-w-7xl mx-auto">
+            <motion.div
+              className="text-center mb-16"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+                Photo Gallery
+              </h2>
+              <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+                A glimpse into my world beyond code
+              </p>
+            </motion.div>
+
+            <motion.div
+              className="w-full overflow-hidden"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <DomeGalleryCard
+                photos={photos}
+                title=""
+                className="h-[600px] md:h-[700px] lg:h-[750px] overflow-hidden"
+              />
+            </motion.div>
+          </div>
+        </motion.div>
+      )}
     </section>
   );
 };
