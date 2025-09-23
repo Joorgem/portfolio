@@ -48,6 +48,8 @@ interface NavigationStoreState {
   is3DSceneReady: boolean;
   // Loading 3D Scene state (to prevent race conditions)
   loading3DScene: boolean;
+  // Activation in progress flag (prevents simultaneous activations)
+  activationInProgress: boolean;
   // CONTINUITY FIX: Preserva estado final para transição suave de saída
   finalZoomProgress: number;        // Zoom progress quando entrou na seção (98%)
   finalOrbitAngle: number;          // Ângulo orbital quando entrou na seção
@@ -89,6 +91,7 @@ interface NavigationStoreActions {
   set3DSceneReady: (_isReady: boolean) => void;
   // Loading 3D Scene actions (race condition prevention)
   setLoading3DScene: (_isLoading: boolean) => void;
+  setActivationInProgress: (_inProgress: boolean) => void;
   activate3DSceneAndTutorial: () => void;
   // Portfolio mode actions
   setPortfolioMode: (_mode: PortfolioMode) => void;
@@ -155,6 +158,8 @@ export const useNavigationStore = create<NavigationStore>()(
     is3DSceneReady: false,
     // Loading 3D Scene state (prevents race conditions)
     loading3DScene: false,
+    // Activation in progress flag (prevents simultaneous activations)
+    activationInProgress: false,
     
     // CONTINUITY FIX: Estado preservado para transições suaves
     finalZoomProgress: 0,
@@ -714,16 +719,31 @@ export const useNavigationStore = create<NavigationStore>()(
       set({ loading3DScene: isLoading });
     },
 
+    setActivationInProgress: (inProgress: boolean) => {
+      set({ activationInProgress: inProgress });
+    },
+
     activate3DSceneAndTutorial: () => {
       const state = get();
+
+      // RACE CONDITION GUARD: Previne ativações simultâneas
+      if (state.activationInProgress) {
+        return;
+      }
 
       // CRÍTICO: Só ativa se estivermos no modo 3D, scene pronto E ainda não estiver showing tutorial
       if (state.portfolioMode === PortfolioModes.THREE_D &&
           state.is3DSceneReady &&
           !state.showTutorial) {
+
+        // Marca como em progresso para prevenir calls simultâneas
+        set({ activationInProgress: true });
+
+        // Ativa tutorial
         set({
           showTutorial: true,
-          loading3DScene: false
+          loading3DScene: false,
+          activationInProgress: false // Reset flag
         });
       }
     },
@@ -743,23 +763,12 @@ export const useNavigationStore = create<NavigationStore>()(
         // Reset tutorial completed quando muda modo
         tutorialCompleted: mode !== PortfolioModes.THREE_D,
         // Reset 3D scene ready state quando muda modo
-        is3DSceneReady: mode !== PortfolioModes.THREE_D ? false : get().is3DSceneReady
+        is3DSceneReady: mode !== PortfolioModes.THREE_D ? false : get().is3DSceneReady,
+        // Reset activation flag quando muda modo
+        activationInProgress: false
       });
 
-      // FALLBACK: Se modo 3D, cria timeout de fallback para casos extremos (chunk loading issues)
-      if (mode === PortfolioModes.THREE_D) {
-        setTimeout(() => {
-          const currentState = get();
-          // CRÍTICO: Só força ativação se AINDA estiver loading E não estiver showing tutorial
-          if (currentState.loading3DScene &&
-              currentState.portfolioMode === PortfolioModes.THREE_D &&
-              !currentState.showTutorial &&
-              !currentState.is3DSceneReady) {
-            console.warn('3D Scene loading timeout - forcing activation for UX');
-            currentState.activate3DSceneAndTutorial();
-          }
-        }, 5000);
-      }
+      // REMOVED: Timeout logic movido para componente com useEffect e cleanup adequado
 
       // Não salva mais no localStorage - sempre volta à seleção no refresh
     },

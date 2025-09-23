@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigationStore } from '../stores/navigation.store';
 import { PortfolioModes } from '../constants/navigationConfig';
@@ -26,33 +26,30 @@ const PortfolioModeSelector: React.FC = () => {
   //   });
   // });
 
-  // DEBUGGING: Create a simplified handler to test pure interaction
-  const handleSimpleMouseEnter = () => {
-    console.log('🔍 SIMPLE HOVER ENTER - absolutely nothing else happens');
-  };
-
-  // DEBUGGING: Temporarily removed all preloading to isolate the issue
-  const handleMouseEnter = React.useCallback(() => {
-    console.log('🔍 HOVER ENTER - no preloading');
+  // OPTIMIZED: Stable hover handler with useCallback
+  const handleMouseEnter = useCallback(() => {
+    // Minimal hover logic - no side effects
   }, []);
 
-  const handleMouseLeave = React.useCallback(() => {
-    console.log('🔍 HOVER LEAVE - no preloading');
+  const handleMouseLeave = useCallback(() => {
+    // Minimal hover logic - no side effects
   }, []);
 
-  const handleModeSelect = (mode: typeof PortfolioModes[keyof typeof PortfolioModes]) => {
+  // OPTIMIZED: Stable mode selection handler with useCallback
+  const handleModeSelect = useCallback((mode: typeof PortfolioModes[keyof typeof PortfolioModes]) => {
     setPortfolioMode(mode);
     hidePortfolioModeSelector();
-  };
+  }, [setPortfolioMode, hidePortfolioModeSelector]);
 
-  // Show loading indicator when transitioning to 3D mode
-  const isTransitioning = loading3DScene;
+  // OPTIMIZED: Memoized transition state
+  const isTransitioning = useMemo(() => loading3DScene, [loading3DScene]);
 
-  const toggleLanguage = () => {
+  // OPTIMIZED: Stable language toggle with useCallback
+  const toggleLanguage = useCallback(() => {
     const currentLang = i18n.language;
     const newLang = currentLang === 'pt' ? 'en' : 'pt';
     i18n.changeLanguage(newLang);
-  };
+  }, [i18n]);
 
   // DEBUGGING: Removed cleanup as we removed the timeout
 
@@ -125,7 +122,7 @@ const PortfolioModeSelector: React.FC = () => {
               className="relative w-[280px] h-[140px] md:w-[320px] md:h-[160px] overflow-hidden group cursor-pointer flex items-center justify-center bg-black/30 rounded-xl transition-all duration-300"
               // DEBUGGING: Removed hover:bg-black/20 to test CSS hover interference
               onClick={() => handleModeSelect(PortfolioModes.THREE_D)}
-              onMouseEnter={handleSimpleMouseEnter} // DEBUGGING: Using ultra-simple handler
+              onMouseEnter={handleMouseEnter} // OPTIMIZED: Using stable callback
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, type: 'spring', stiffness: 300 }}

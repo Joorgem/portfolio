@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense } from "react";
+import React, { useEffect, useRef, Suspense } from "react";
 
 // Lazy loading do HeroZustand para otimização de performance
 // PRODUCTION FIX: Smart preloading to prevent race conditions
@@ -18,6 +18,8 @@ import { PortfolioModes } from "./constants/navigationConfig";
 const App = () => {
   const initializeTutorial = useNavigationStore(state => state.initializeTutorial);
   const portfolioMode = useNavigationStore(state => state.portfolioMode);
+  // Timeout management refs following React best practices
+  const timeoutRef = useRef(null);
 
   // Inicializa o tutorial na primeira renderização
   useEffect(() => {
@@ -43,6 +45,42 @@ const App = () => {
       body.classList.remove('mode-3d', 'mode-onepage');
     };
   }, [portfolioMode]);
+
+  // TIMEOUT FALLBACK: Smart timeout management with proper cleanup
+  useEffect(() => {
+    // Clear any existing timeout first
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+
+    // Only set timeout for 3D mode
+    if (portfolioMode === PortfolioModes.THREE_D) {
+      timeoutRef.current = setTimeout(() => {
+        const currentState = useNavigationStore.getState();
+
+        // Only activate if still in loading state and conditions are met
+        if (currentState.loading3DScene &&
+            currentState.portfolioMode === PortfolioModes.THREE_D &&
+            !currentState.showTutorial &&
+            !currentState.is3DSceneReady &&
+            !currentState.activationInProgress) {
+          console.warn('3D Scene loading timeout - forcing activation for UX');
+          currentState.activate3DSceneAndTutorial();
+        }
+
+        timeoutRef.current = null; // Clear ref after execution
+      }, 5000);
+    }
+
+    // Cleanup function following React patterns
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    };
+  }, [portfolioMode]); // Only depend on portfolioMode to avoid unnecessary resets
 
   return (
     <div className={`bg-black relative ${
