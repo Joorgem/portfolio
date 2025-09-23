@@ -18,13 +18,13 @@ const PortfolioModeSelector: React.FC = () => {
   const isMobile = false; // DEBUGGING: Hardcoded to test
 
   // DEBUGGING: Log all re-renders to identify the cause
-  React.useEffect(() => {
-    console.log('🔄 PortfolioModeSelector RE-RENDER:', {
-      showModeSelector,
-      loading3DScene,
-      isMobile
-    });
-  });
+  // React.useEffect(() => {
+  //   console.log('🔄 PortfolioModeSelector RE-RENDER:', {
+  //     showModeSelector,
+  //     loading3DScene,
+  //     isMobile
+  //   });
+  // });
 
   // DEBUGGING: Create a simplified handler to test pure interaction
   const handleSimpleMouseEnter = () => {

@@ -717,8 +717,10 @@ export const useNavigationStore = create<NavigationStore>()(
     activate3DSceneAndTutorial: () => {
       const state = get();
 
-      // Só ativa se estivermos no modo 3D e o scene estiver pronto
-      if (state.portfolioMode === PortfolioModes.THREE_D && state.is3DSceneReady) {
+      // CRÍTICO: Só ativa se estivermos no modo 3D, scene pronto E ainda não estiver showing tutorial
+      if (state.portfolioMode === PortfolioModes.THREE_D &&
+          state.is3DSceneReady &&
+          !state.showTutorial) {
         set({
           showTutorial: true,
           loading3DScene: false
@@ -748,8 +750,11 @@ export const useNavigationStore = create<NavigationStore>()(
       if (mode === PortfolioModes.THREE_D) {
         setTimeout(() => {
           const currentState = get();
-          // Se ainda estiver loading após 5 segundos, força ativação (failsafe)
-          if (currentState.loading3DScene && currentState.portfolioMode === PortfolioModes.THREE_D) {
+          // CRÍTICO: Só força ativação se AINDA estiver loading E não estiver showing tutorial
+          if (currentState.loading3DScene &&
+              currentState.portfolioMode === PortfolioModes.THREE_D &&
+              !currentState.showTutorial &&
+              !currentState.is3DSceneReady) {
             console.warn('3D Scene loading timeout - forcing activation for UX');
             currentState.activate3DSceneAndTutorial();
           }
