@@ -44,6 +44,8 @@ interface NavigationStoreState {
   visitedSections: string[];
   // Scroll lock for modals/overlays
   scrollLocked: boolean;
+  // 3D Scene Ready state
+  is3DSceneReady: boolean;
   // CONTINUITY FIX: Preserva estado final para transição suave de saída
   finalZoomProgress: number;        // Zoom progress quando entrou na seção (98%)
   finalOrbitAngle: number;          // Ângulo orbital quando entrou na seção
@@ -81,6 +83,8 @@ interface NavigationStoreActions {
   // Scroll lock actions
   lockScroll: () => void;
   unlockScroll: () => void;
+  // 3D Scene Ready actions
+  set3DSceneReady: (_isReady: boolean) => void;
   // Portfolio mode actions
   setPortfolioMode: (_mode: PortfolioMode) => void;
   initializePortfolioMode: () => void;
@@ -141,6 +145,9 @@ export const useNavigationStore = create<NavigationStore>()(
     
     // Scroll lock state
     scrollLocked: false,
+    
+    // 3D Scene Ready state
+    is3DSceneReady: false,
     
     // CONTINUITY FIX: Estado preservado para transições suaves
     finalZoomProgress: 0,
@@ -208,6 +215,11 @@ export const useNavigationStore = create<NavigationStore>()(
     handleScroll: (deltaY: number, isInsideContent: boolean = false) => {
       const state = get();
       
+      // CRITICAL: If 3D scene is not ready, ignore all scroll events
+      if (!state.is3DSceneReady) {
+        return;
+      }
+
       // CRITICAL: If scroll is locked (e.g., by DomeGallery), ignore all scroll events
       if (state.scrollLocked) {
         return;
@@ -674,6 +686,11 @@ export const useNavigationStore = create<NavigationStore>()(
 
     unlockScroll: () => {
       set({ scrollLocked: false });
+    },
+
+    // 3D Scene Ready actions
+    set3DSceneReady: (isReady: boolean) => {
+      set({ is3DSceneReady: isReady });
     },
 
     // ===================================

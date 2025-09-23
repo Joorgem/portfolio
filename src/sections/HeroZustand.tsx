@@ -28,6 +28,8 @@ const HeroZustand: React.FC = () => {
   const startNavigation = useNavigationStore(state => state.startNavigation);
   const handleScroll = useNavigationStore(state => state.handleScroll);
   const canInteract = useNavigationStore(state => state.canInteract);
+  const set3DSceneReady = useNavigationStore(state => state.set3DSceneReady);
+  const is3DSceneReady = useNavigationStore(state => state.is3DSceneReady);
   
   // MOBILE FIX: Escala adaptativa baseada no viewport
   const getAstronautScale = () => {
@@ -62,6 +64,11 @@ const HeroZustand: React.FC = () => {
     let touchStartTime = 0;
     let lastTouchY = 0;
     
+    // Only attach listeners if the 3D scene is ready
+    if (!is3DSceneReady) {
+      return;
+    }
+
     // Handler de wheel
     const handleWheel = (e: WheelEvent) => {
       const state = useNavigationStore.getState().navigationState;
@@ -188,6 +195,15 @@ const HeroZustand: React.FC = () => {
       useNavigationStore.getState().cleanup();
     };
   }, [handleScroll]);
+
+  // Set 3D scene ready after initial render
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      set3DSceneReady(true);
+    }, 1000); // Give Three.js scene some time to stabilize
+
+    return () => clearTimeout(timeout);
+  }, [set3DSceneReady]);
   
   // Monitor de desenvolvimento - DESATIVADO
   const DevMonitor: React.FC = () => {
