@@ -16,7 +16,6 @@ import { useNavigationStore } from "./stores/navigation.store";
 import { PortfolioModes } from "./constants/navigationConfig";
 
 const App = () => {
-  const initializeTutorial = useNavigationStore(state => state.initializeTutorial);
   const portfolioMode = useNavigationStore(state => state.portfolioMode);
   // Timeout management refs following React best practices
   const timeoutRef = useRef(null);
@@ -25,8 +24,10 @@ const App = () => {
   useEffect(() => {
     const timestamp = new Date().toISOString();
     console.log(`🎭 [${timestamp}] App: Calling initializeTutorial()`);
-    initializeTutorial();
-  }, [initializeTutorial]);
+
+    // CRITICAL FIX: Call directly from store to avoid dependency issues
+    useNavigationStore.getState().initializeTutorial();
+  }, []); // Empty dependency array - only run once on mount
 
   // Aplica classes CSS no body baseado no modo do portfolio
   useEffect(() => {

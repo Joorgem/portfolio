@@ -660,6 +660,15 @@ export const useNavigationStore = create<NavigationStore>()(
         stackTrace: new Error().stack
       });
 
+      // CRITICAL FIX: Só inicializa se realmente estiver no estado inicial
+      // Previne reset durante HMR ou re-renders
+      if (currentState.portfolioMode !== PortfolioModes.CHOOSING ||
+          currentState.loading3DScene ||
+          currentState.showTutorial) {
+        console.log(`🛡️  [${timestamp}] initializeTutorial: BLOCKED - Portfolio already in use, preventing reset`);
+        return;
+      }
+
       // Tutorial será ativado automaticamente quando o usuário selecionar o modo 3D
       // Não precisa mais fazer nada aqui
 
