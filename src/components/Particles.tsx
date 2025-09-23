@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo, useCallback } from 'react';
 import { Renderer, Camera, Geometry, Program, Mesh } from 'ogl';
 
 interface ParticlesProps {
@@ -99,7 +99,7 @@ const fragment = /* glsl */ `
   }
 `;
 
-const Particles: React.FC<ParticlesProps> = ({
+const Particles: React.FC<ParticlesProps> = React.memo(({
   particleCount = 200,
   particleSpread = 10,
   speed = 0.1,
@@ -116,7 +116,47 @@ const Particles: React.FC<ParticlesProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const mouseRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
+  // Refs estáveis para evitar re-criação do useEffect principal
+  const animationStateRef = useRef<{
+    renderer?: Renderer;
+    program?: Program;
+    particles?: Mesh;
+    animationFrameId?: number;
+  }>({});
 
+  // Refs para valores dinâmicos do animation loop
+  const dynamicPropsRef = useRef({
+    speed,
+    disableRotation,
+    moveParticlesOnHover,
+    particleHoverFactor
+  });
+
+  // Atualizar refs quando props mudam
+  dynamicPropsRef.current = {
+    speed,
+    disableRotation,
+    moveParticlesOnHover,
+    particleHoverFactor
+  };
+
+  // Memoizar cores de forma mais estável
+  const palette = useMemo(() => {
+    const colors = particleColors && particleColors.length > 0 ? particleColors : defaultColors;
+    return [...colors]; // Shallow copy para garantir nova referência apenas quando necessário
+  }, [JSON.stringify(particleColors)]); // Serialização para comparação deep
+
+  // Handler de mouse simplificado e estável
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    const y = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
+    mouseRef.current = { x, y };
+  }, []); // Sem dependências - função completamente estável
+
+
+  // useEffect principal - apenas para criação/destruição do canvas
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -129,6 +169,9 @@ const Particles: React.FC<ParticlesProps> = ({
     const camera = new Camera(gl, { fov: 15 });
     camera.position.set(0, 0, cameraDistance);
 
+    // Store refs para acesso em outros effects
+    animationStateRef.current.renderer = renderer;
+
     const resize = () => {
       const width = container.clientWidth;
       const height = container.clientHeight;
@@ -138,22 +181,10 @@ const Particles: React.FC<ParticlesProps> = ({
     window.addEventListener('resize', resize, false);
     resize();
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = container.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      const y = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
-      mouseRef.current = { x, y };
-    };
-
-    if (moveParticlesOnHover) {
-      container.addEventListener('mousemove', handleMouseMove);
-    }
-
     const count = particleCount;
     const positions = new Float32Array(count * 3);
     const randoms = new Float32Array(count * 4);
     const colors = new Float32Array(count * 3);
-    const palette = particleColors && particleColors.length > 0 ? particleColors : defaultColors;
 
     for (let i = 0; i < count; i++) {
       let x: number, y: number, z: number, len: number;
@@ -192,6 +223,10 @@ const Particles: React.FC<ParticlesProps> = ({
 
     const particles = new Mesh(gl, { mode: gl.POINTS, geometry, program });
 
+    // Store refs para acesso em outros effects
+    animationStateRef.current.program = program;
+    animationStateRef.current.particles = particles;
+
     let animationFrameId: number;
     let lastTime = performance.now();
     let elapsed = 0;
@@ -200,54 +235,76 @@ const Particles: React.FC<ParticlesProps> = ({
       animationFrameId = requestAnimationFrame(update);
       const delta = t - lastTime;
       lastTime = t;
-      elapsed += delta * speed;
+
+      // Usar refs dinâmicas para valores que podem mudar
+      const { speed: currentSpeed, disableRotation: currentDisableRotation, moveParticlesOnHover: currentMoveParticlesOnHover, particleHoverFactor: currentParticleHoverFactor } = dynamicPropsRef.current;
+
+      elapsed += delta * currentSpeed;
 
       program.uniforms.uTime.value = elapsed * 0.001;
 
-      if (moveParticlesOnHover) {
-        particles.position.x = -mouseRef.current.x * particleHoverFactor;
-        particles.position.y = -mouseRef.current.y * particleHoverFactor;
+      if (currentMoveParticlesOnHover) {
+        particles.position.x = -mouseRef.current.x * currentParticleHoverFactor;
+        particles.position.y = -mouseRef.current.y * currentParticleHoverFactor;
       } else {
         particles.position.x = 0;
         particles.position.y = 0;
       }
 
-      if (!disableRotation) {
+      if (!currentDisableRotation) {
         particles.rotation.x = Math.sin(elapsed * 0.0002) * 0.1;
         particles.rotation.y = Math.cos(elapsed * 0.0005) * 0.15;
-        particles.rotation.z += 0.01 * speed;
+        particles.rotation.z += 0.01 * currentSpeed;
       }
 
       renderer.render({ scene: particles, camera });
     };
 
     animationFrameId = requestAnimationFrame(update);
+    animationStateRef.current.animationFrameId = animationFrameId;
 
     return () => {
       window.removeEventListener('resize', resize);
-      if (moveParticlesOnHover) {
-        container.removeEventListener('mousemove', handleMouseMove);
+      if (animationStateRef.current.animationFrameId) {
+        cancelAnimationFrame(animationStateRef.current.animationFrameId);
       }
-      cancelAnimationFrame(animationFrameId);
       if (container.contains(gl.canvas)) {
         container.removeChild(gl.canvas);
       }
+      // Limpar refs
+      animationStateRef.current = {};
     };
   }, [
     particleCount,
-    particleSpread,
-    speed,
-    moveParticlesOnHover,
-    particleHoverFactor,
-    alphaParticles,
-    particleColors,
-    particleBaseSize,
-    sizeRandomness,
     cameraDistance,
-    disableRotation
+    palette // Apenas dependências que realmente precisam recriar o canvas
   ]);
 
+  // useEffect separado para mouse handling - não recria o canvas
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container || !moveParticlesOnHover) return;
+
+    container.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      container.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, [moveParticlesOnHover, handleMouseMove]);
+
+  // useEffect para atualizações dinâmicas sem reiniciar canvas
+  useEffect(() => {
+    // Atualizar uniforms dinamicamente se o programa já existe
+    if (animationStateRef.current.program) {
+      const program = animationStateRef.current.program;
+      program.uniforms.uSpread.value = particleSpread;
+      program.uniforms.uBaseSize.value = particleBaseSize;
+      program.uniforms.uSizeRandomness.value = sizeRandomness;
+      program.uniforms.uAlphaParticles.value = alphaParticles ? 1 : 0;
+    }
+  }, [particleSpread, particleBaseSize, sizeRandomness, alphaParticles]);
+
   return <div ref={containerRef} className={`relative w-full h-full ${className}`} />;
-};
+});
 
 export default Particles;

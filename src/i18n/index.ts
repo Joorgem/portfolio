@@ -12,6 +12,7 @@ import enExperiences from './locales/en/experiences.json';
 import enCourses from './locales/en/courses.json';
 import enHero from './locales/en/hero.json';
 import enTutorial from './locales/en/tutorial.json';
+import enModeSelector from './locales/en/modeSelector.json';
 
 import ptCommon from './locales/pt/common.json';
 import ptAbout from './locales/pt/about.json';
@@ -22,6 +23,7 @@ import ptExperiences from './locales/pt/experiences.json';
 import ptCourses from './locales/pt/courses.json';
 import ptHero from './locales/pt/hero.json';
 import ptTutorial from './locales/pt/tutorial.json';
+import ptModeSelector from './locales/pt/modeSelector.json';
 
 const resources = {
   en: {
@@ -34,6 +36,7 @@ const resources = {
     courses: enCourses,
     hero: enHero,
     tutorial: enTutorial,
+    modeSelector: enModeSelector,
   },
   pt: {
     common: ptCommon,
@@ -45,6 +48,7 @@ const resources = {
     courses: ptCourses,
     hero: ptHero,
     tutorial: ptTutorial,
+    modeSelector: ptModeSelector,
   },
 };
 
@@ -55,7 +59,7 @@ i18n
     lng: 'en', // default language
     fallbackLng: 'en',
     
-    ns: ['common', 'about', 'contact', 'navigation', 'projects', 'experiences', 'courses', 'hero', 'tutorial'],
+    ns: ['common', 'about', 'contact', 'navigation', 'projects', 'experiences', 'courses', 'hero', 'tutorial', 'modeSelector'],
     defaultNS: 'common',
     
     detection: {

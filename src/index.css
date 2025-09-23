@@ -53,9 +53,27 @@ body {
   background: #000000;
   font-family: "Funnel Display", sans-serif;
   color: white;
-  overflow: hidden; /* Remove scroll completamente */
-  height: 100vh; /* Altura fixa da viewport */
   cursor: none;
+}
+
+/* Overflow hidden apenas para modo 3D */
+body.mode-3d {
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* Scroll normal para modo one page */
+body.mode-onepage {
+  overflow-x: hidden; /* Força que nunca haverá scroll horizontal */
+  overflow-y: hidden; /* Remove scroll do body - OnePagePortfolio container terá o scroll */
+  min-height: 100vh;
+  scroll-behavior: smooth;
+  scroll-padding-top: 4rem; /* Compensação do header fixo (h-16 = 64px = 4rem) */
+}
+
+/* Garante que HTML também não tenha overflow horizontal no modo one page */
+html:has(body.mode-onepage) {
+  overflow-x: hidden;
 }
 
 /* Scroll Indicator Animations */

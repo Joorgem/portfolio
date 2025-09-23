@@ -21,14 +21,14 @@ const DomeGalleryCard: React.FC<DomeGalleryCardProps> = ({
   return (
     <motion.div
       ref={cardRef}
-      className={`group relative bg-transparent transition-all duration-300 overflow-visible ${className}`}
+      className={`group relative bg-transparent transition-all duration-300 overflow-hidden ${className}`}
       whileHover={{ scale: 1.01 }}
       transition={{ duration: 0.2 }}
     >
-      
+
       {/* DomeGallery - sem limitações de overflow - tamanho otimizado */}
-      <div className="relative h-full overflow-visible">
-        <div className="absolute inset-0 scale-90 md:scale-95 flex items-center justify-center overflow-visible">
+      <div className="relative h-full overflow-hidden">
+        <div className="absolute inset-0 scale-90 md:scale-95 flex items-center justify-center overflow-hidden">
           <DomeGallery
             photos={photos}
             fit={0.6}

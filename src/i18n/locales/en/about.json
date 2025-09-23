@@ -2,30 +2,47 @@
   "title": "About",
   "name": "Jorge Molina",
   "description": "Turning ideas into code since 2020",
+  "hero": {
+    "taglineWords": ["Data Engineer", "Full Stack Developer", "Problem Solver", "Code Architect"],
+    "subtitle": "Transforming ideas into code since 2020",
+    "cta": {
+      "primary": "Explore My Work",
+      "secondary": "Get In Touch"
+    }
+  },
   "whatMovesMe": {
     "title": "What Moves Me",
+    "subtitle": "The driving forces behind my passion",
     "items": {
       "learn": "Learning something new every day",
-      "exercise": "handstand",
-      "nutrition": "Eating well",
+      "exercise": "Staying upside down (handstand)",
+      "nutrition": "Eating well and staying healthy",
       "people": "Being around people who inspire me"
     }
+  },
+  "techStackPreview": {
+    "title": "Tech Stack",
+    "subtitle": "",
+    "seeAllLink": "See all skills"
   },
   "currently": {
     "title": "Currently",
     "location": "Brazil",
-    "role": "sSr. Data Engineer at Globant",
-    "openToProjects": "Open to new projects."
+    "role": "Mid Data Engineer at Globant",
+    "openToProjects": "Open to new projects",
+    "status": "Available for opportunities"
+  },
+  "social": {
+    "linkedin": "Connect on LinkedIn",
+    "github": "View GitHub Profile",
+    "email": "Send Email"
   },
   "gallery": {
     "title": "Photo Gallery"
   },
-  "techStack": {
-    "title": "Tech Stack"
-  },
   "resume": {
     "title": "Resume",
-    "downloadButton": "Download PDF",
+    "downloadButton": "Resume",
     "downloading": "Downloading..."
   }
 }

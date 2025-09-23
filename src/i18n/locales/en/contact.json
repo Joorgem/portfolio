@@ -3,7 +3,7 @@
   "description": "From full-stack web development and mobile applications to custom software solutions, API integrations, database design, and cloud deployments - let's turn your ideas into innovative digital experiences.",
   "social": {
     "linkedin": "LinkedIn Profile",
-    "github": "GitHub Profile", 
+    "github": "GitHub Profile",
     "email": "Send Email"
   },
   "form": {
@@ -16,5 +16,12 @@
     "sending": "Sending...",
     "successMessage": "Your message has been sent!",
     "errorMessage": "Something went wrong!"
+  },
+  "gallery": {
+    "title": "Photo Gallery",
+    "subtitle": "A glimpse into my world beyond code"
+  },
+  "footer": {
+    "text": "Made with passion"
   }
 }

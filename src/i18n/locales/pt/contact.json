@@ -1,5 +1,5 @@
 {
-  "title": "Vamos Conversar", 
+  "title": "Vamos Conversar",
   "description": "Do desenvolvimento web full-stack e aplicações mobile a soluções de software customizadas, integrações de API, design de banco de dados e implantações na nuvem - vamos transformar suas ideias em experiências digitais inovadoras.",
   "social": {
     "linkedin": "Perfil LinkedIn",
@@ -9,12 +9,19 @@
   "form": {
     "fields": {
       "name": "Nome Completo",
-      "email": "Email", 
+      "email": "Email",
       "message": "Mensagem"
     },
     "submit": "Enviar",
     "sending": "Enviando...",
     "successMessage": "Sua mensagem foi enviada!",
     "errorMessage": "Algo deu errado!"
+  },
+  "gallery": {
+    "title": "Galeria de Fotos",
+    "subtitle": "Um vislumbre do meu mundo além do código"
+  },
+  "footer": {
+    "text": "Feito com paixão"
   }
 }

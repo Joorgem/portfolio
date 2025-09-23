@@ -27,7 +27,6 @@ const PageContainer = ({ sectionId, backgroundColor = "#0a0a0a", children }) => 
   const currentSection = useNavigationStore(state => state.currentSection);
   const pageVisible = useNavigationStore(state => state.pageVisible);
   const initiateExit = useNavigationStore(state => state.initiateExit);
-  const startFadeOutAnimation = useNavigationStore(state => state.startFadeOutAnimation);
   const isMobile = useMediaQuery({ maxWidth: 853 });
   
   const [shouldRender, setShouldRender] = useState(false);

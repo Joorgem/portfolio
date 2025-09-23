@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import ProjectShowcase from "../components/ProjectShowcase";
 import { myProjects } from "../constants";
 import { motion } from "framer-motion";
-import Particles from "../components/Particles";
 import { useTranslation } from "react-i18next";
 
 const Projects: React.FC = () => {
@@ -22,43 +21,10 @@ const Projects: React.FC = () => {
     },
     projects: t('projects', { returnObjects: true }) as any[]
   };
-  const [showParticles, setShowParticles] = useState(false);
-
-  // Delay particles to avoid initial render lag
-  useEffect(() => {
-    const timer = setTimeout(() => setShowParticles(true), 400);
-    return () => clearTimeout(timer);
-  }, []);
 
   return (
-    <section className="relative bg-black w-full min-h-screen">
-      {/* Background with particles - behind content */}
-      {showParticles && (
-        <div className="absolute inset-0 -z-10">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
-          >
-            <Particles
-              className="absolute inset-0 w-full h-full"
-              particleColors={['#ffffff', '#f8fafc', '#e2e8f0']}
-              particleCount={100}
-              particleSpread={10}
-              speed={0.04}
-              particleBaseSize={50}
-              sizeRandomness={1.0}
-              cameraDistance={18}
-              moveParticlesOnHover={true}
-              particleHoverFactor={0.4}
-              alphaParticles={true}
-              disableRotation={false}
-            />
-          </motion.div>
-        </div>
-      )}
+    <section className="relative bg-transparent w-full">
       
-      {/* Minimalist Header - Full Screen */}
       <div className="relative z-10 min-h-screen flex flex-col justify-center text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -78,7 +44,6 @@ const Projects: React.FC = () => {
 
       </div>
       
-      {/* Projects List with new minimalist design */}
       <div className="relative z-10">
         {myProjects.map((project, index) => {
           const translatedProject = (projectsData.projects as any[])[index] || {
@@ -101,7 +66,6 @@ const Projects: React.FC = () => {
         })}
       </div>
 
-      {/* Minimalist Footer */}
       <div className="relative z-10 py-32 text-center">
         <motion.div
           initial={{ opacity: 0 }}

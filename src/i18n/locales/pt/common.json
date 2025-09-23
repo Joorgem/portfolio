@@ -11,8 +11,14 @@
     "loaded": "Carregado"
   },
   "navigation": {
-    "backToMain": "Voltar para navegação principal"
+    "backToMain": "Voltar para navegação principal",
+    "about": "Sobre",
+    "projects": "Projetos",
+    "experience": "Experiência",
+    "courses": "Cursos",
+    "contact": "Contato"
   },
+  "switchTo3D": "Mudar para Experiência 3D",
   "alert": {
     "failed": "Falhou",
     "success": "Sucesso"

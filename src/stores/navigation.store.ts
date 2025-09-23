@@ -1,11 +1,14 @@
 // src/stores/navigation.store.ts
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
-import { 
-  NAVIGATION_CONFIG, 
-  ANIMATION_CONSTANTS, 
+import {
+  NAVIGATION_CONFIG,
+  ANIMATION_CONSTANTS,
   NavigationStates,
-  type NavigationState
+  PortfolioModes,
+  STORAGE_KEYS,
+  type NavigationState,
+  type PortfolioMode
 } from '../constants/navigationConfig';
 
 
@@ -29,6 +32,11 @@ interface NavigationStoreState {
   _animation: AnimationState;
   zoomOutProgress: number;
   hoveredPlanet: string | null;
+  // Navigation dots hover state (one-page mode)
+  hoveredNavigationDot: string | null;
+  // Portfolio mode state
+  portfolioMode: PortfolioMode;
+  showModeSelector: boolean;
   // Tutorial states
   showTutorial: boolean;
   tutorialCompleted: boolean;
@@ -60,6 +68,8 @@ interface NavigationStoreActions {
   completeExit: () => void;
   cleanup: () => void;
   setHoveredPlanet: (_planet: string | null) => void;
+  // Navigation dots actions (one-page mode)
+  setHoveredNavigationDot: (_dotId: string | null) => void;
   // Tutorial actions
   initializeTutorial: () => void;
   closeTutorial: () => void;
@@ -71,6 +81,13 @@ interface NavigationStoreActions {
   // Scroll lock actions
   lockScroll: () => void;
   unlockScroll: () => void;
+  // Portfolio mode actions
+  setPortfolioMode: (_mode: PortfolioMode) => void;
+  initializePortfolioMode: () => void;
+  showPortfolioModeSelector: () => void;
+  hidePortfolioModeSelector: () => void;
+  // One-page mode actions
+  setCurrentSection: (_sectionId: string) => void;
   // CONTINUITY FIX: Preserva estado final
   saveFinalCameraState: (_zoomProgress: number, _orbitAngle: number, _radius: number, _height: number) => void;
 }
@@ -92,7 +109,7 @@ export const useNavigationStore = create<NavigationStore>()(
     zoomProgress: 0,            // Progresso do zoom (0 a 1)
     fadeProgress: 0,            // Progresso do fade (0 a 1)
     pageVisible: false,         // Visibilidade da página da seção
-    canvas3DActive: true,       // Estado do loop de renderização
+    canvas3DActive: false,      // Estado do loop de renderização (inicia desabilitado para performance)
     
     // Valores de animação (não causam re-render)
     _animation: {
@@ -107,7 +124,14 @@ export const useNavigationStore = create<NavigationStore>()(
     
     // Hover do planeta
     hoveredPlanet: null,
-    
+
+    // Navigation dots hover (one-page mode)
+    hoveredNavigationDot: null,
+
+    // Portfolio mode states
+    portfolioMode: PortfolioModes.CHOOSING,
+    showModeSelector: true,
+
     // Tutorial states
     showTutorial: false,
     tutorialCompleted: false,
@@ -592,13 +616,21 @@ export const useNavigationStore = create<NavigationStore>()(
     setHoveredPlanet: (planet: string | null) => {
       set({ hoveredPlanet: planet });
     },
+
+    // Navigation dots hover (one-page mode)
+    setHoveredNavigationDot: (dotId: string | null) => {
+      set({ hoveredNavigationDot: dotId });
+    },
     
     // ===================================
     // TUTORIAL
     // ===================================
     initializeTutorial: () => {
-      // Always show tutorial on page load
-      set({ showTutorial: true });
+      // Initialize portfolio mode first
+      get().initializePortfolioMode();
+
+      // Tutorial será ativado automaticamente quando o usuário selecionar o modo 3D
+      // Não precisa mais fazer nada aqui
     },
     
     closeTutorial: () => {
@@ -645,6 +677,56 @@ export const useNavigationStore = create<NavigationStore>()(
 
     unlockScroll: () => {
       set({ scrollLocked: false });
+    },
+
+    // ===================================
+    // PORTFOLIO MODE MANAGEMENT
+    // ===================================
+    setPortfolioMode: (mode: PortfolioMode) => {
+      set({
+        portfolioMode: mode,
+        // Ativa canvas 3D apenas se modo 3D for selecionado
+        canvas3DActive: mode === PortfolioModes.THREE_D,
+        // Ativa tutorial se for modo 3D
+        showTutorial: mode === PortfolioModes.THREE_D,
+        // Reset tutorial completed quando muda modo
+        tutorialCompleted: mode !== PortfolioModes.THREE_D
+      });
+      // Não salva mais no localStorage - sempre volta à seleção no refresh
+    },
+
+    initializePortfolioMode: () => {
+      // Limpa qualquer preferência salva anteriormente
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem(STORAGE_KEYS.PORTFOLIO_MODE);
+      }
+
+      // Sempre volta à tela de seleção no refresh/carregamento da página
+      set({
+        portfolioMode: PortfolioModes.CHOOSING,
+        showModeSelector: true,
+        // Canvas permanece desabilitado até escolha
+        canvas3DActive: false
+      });
+    },
+
+    showPortfolioModeSelector: () => {
+      set({ showModeSelector: true, portfolioMode: PortfolioModes.CHOOSING });
+    },
+
+    hidePortfolioModeSelector: () => {
+      set({ showModeSelector: false });
+    },
+
+    // Funções removidas - não salva mais preferência no localStorage
+    // savePortfolioModePreference: Removida - sempre volta à seleção
+    // loadPortfolioModePreference: Removida - sempre volta à seleção
+
+    // ===================================
+    // ONE-PAGE MODE ACTIONS
+    // ===================================
+    setCurrentSection: (sectionId: string) => {
+      set({ currentSection: sectionId });
     },
 
     // CONTINUITY FIX: Salva estado final da câmera para uso na saída

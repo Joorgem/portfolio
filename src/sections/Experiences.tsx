@@ -6,18 +6,15 @@ import { motion } from "framer-motion";
 const Experiences: React.FC = () => {
   const { t, i18n } = useTranslation('experiences');
   
-  // Set English as default language only on first visit, without overriding user choice
   useEffect(() => {
-    // Only set to English if no language preference exists yet
     if (!localStorage.getItem('portfolio_language')) {
       i18n.changeLanguage('en');
     }
-  }, [i18n]); // Empty dependency array - runs only once on mount
+  }, [i18n]);
 
   return (
-    <section className="relative bg-transparent w-full min-h-screen">{/* Particles inherit from Hero background */}
+    <section className="relative bg-transparent w-full">
       
-      {/* Minimalist Header - Full Screen */}
       <div className="relative z-10 min-h-screen flex flex-col justify-center text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -36,7 +33,6 @@ const Experiences: React.FC = () => {
         </motion.div>
       </div>
       
-      {/* Timeline Content */}
       <div className="relative z-10">
         <Timeline useTranslatedData={true} showTitle={false} />
       </div>

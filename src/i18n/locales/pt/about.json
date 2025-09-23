@@ -2,30 +2,47 @@
   "title": "Sobre",
   "name": "Jorge Molina",
   "description": "Transformando ideias em código desde 2020",
+  "hero": {
+    "taglineWords": ["Engenheiro de Dados", "Desenvolvedor Full Stack", "Solucionador de Problemas", "Arquiteto de Código"],
+    "subtitle": "Transformando ideias em código desde 2020",
+    "cta": {
+      "primary": "Explore Meu Trabalho",
+      "secondary": "Entre em Contato"
+    }
+  },
   "whatMovesMe": {
     "title": "O que Me Move",
+    "subtitle": "As forças motrizes da minha paixão",
     "items": {
       "learn": "Aprender algo novo todos os dias",
-      "exercise": "Ficar de ponta cabeça",
-      "nutrition": "Me alimentar bem",
+      "exercise": "Ficar de ponta cabeça (handstand)",
+      "nutrition": "Me alimentar bem e manter a saúde",
       "people": "Estar perto de pessoas que me inspiram"
     }
+  },
+  "techStackPreview": {
+    "title": "Tecnologias",
+    "subtitle": "",
+    "seeAllLink": "Ver todas as habilidades"
   },
   "currently": {
     "title": "Atualmente",
     "location": "Brasil",
-    "role": "Engenheiro de Dados sSr. na Globant",
-    "openToProjects": "Aberto a novos projetos."
+    "role": "Engenheiro de Dados Pleno na Globant",
+    "openToProjects": "Aberto a novos projetos",
+    "status": "Disponível para oportunidades"
+  },
+  "social": {
+    "linkedin": "Conectar no LinkedIn",
+    "github": "Ver Perfil no GitHub",
+    "email": "Enviar Email"
   },
   "gallery": {
     "title": "Galeria de Fotos"
   },
-  "techStack": {
-    "title": "Tecnologias"
-  },
   "resume": {
     "title": "Currículo",
-    "downloadButton": "Baixar PDF",
+    "downloadButton": "Currículo",
     "downloading": "Baixando..."
   }
 }

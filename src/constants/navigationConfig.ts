@@ -98,9 +98,22 @@ export const NavigationStates = {
 export type NavigationState = typeof NavigationStates[keyof typeof NavigationStates];
 
 /**
+ * Portfolio mode constants
+ * Defines the available viewing modes for the portfolio
+ */
+export const PortfolioModes = {
+  CHOOSING: 'choosing',    // User is selecting between modes
+  THREE_D: '3d',          // Full 3D interactive experience
+  ONE_PAGE: 'onepage',    // Simplified one page view
+} as const;
+
+export type PortfolioMode = typeof PortfolioModes[keyof typeof PortfolioModes];
+
+/**
  * Local storage keys for persistence
  */
 export const STORAGE_KEYS = {
   TUTORIAL_COMPLETED: 'portfolio_tutorial_completed',
   VISITED_SECTIONS: 'portfolio_visited_sections',
+  PORTFOLIO_MODE: 'portfolio_mode_preference',
 } as const;

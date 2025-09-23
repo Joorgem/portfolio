@@ -1,21 +1,9 @@
 {
   "sectionTitle": "My Work Experience",
-  "sectionSubtitle": "Professional journey in full-stack web development and innovative technological solutions",
+  "sectionSubtitle": "Professional journey in web development and innovative solutions",
   "experiences": [
     {
-      "title": "Developer",
-      "job": "Available Solutions & Capabilities",
-      "date": "Present",
-      "contents": [
-        "Complete e-commerce with admin panel, product management and payment systems",
-        "Executive dashboards with real-time analytics and automated reporting",
-        "Interactive 3D web applications and advanced visual experiences", 
-        "Automation systems, scalable APIs and external service integrations",
-        "Cloud architecture with automated deployment and performance monitoring"
-      ]
-    },
-    {
-      "title": "sSr Data Engineer",
+      "title": "Mid Data Engineer",
       "job": "Globant",
       "date": "2024 - Present",
       "contents": [

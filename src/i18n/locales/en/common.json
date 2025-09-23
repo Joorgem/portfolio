@@ -11,8 +11,14 @@
     "loaded": "Loaded"
   },
   "navigation": {
-    "backToMain": "Back to main navigation"
+    "backToMain": "Back to main navigation",
+    "about": "About",
+    "projects": "Projects",
+    "experience": "Experience",
+    "courses": "Courses",
+    "contact": "Contact"
   },
+  "switchTo3D": "Switch to 3D Experience",
   "alert": {
     "failed": "Failed",
     "success": "Success"
