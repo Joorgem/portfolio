@@ -650,8 +650,20 @@ export const useNavigationStore = create<NavigationStore>()(
     // TUTORIAL
     // ===================================
     initializeTutorial: () => {
+      const timestamp = new Date().toISOString();
+      const currentState = get();
+
+      console.log(`🎪 [${timestamp}] initializeTutorial CALLED:`, {
+        currentPortfolioMode: currentState.portfolioMode,
+        currentLoading3DScene: currentState.loading3DScene,
+        currentShowModeSelector: currentState.showModeSelector,
+        stackTrace: new Error().stack
+      });
+
       // Tutorial será ativado automaticamente quando o usuário selecionar o modo 3D
       // Não precisa mais fazer nada aqui
+
+      console.log(`✅ [${timestamp}] initializeTutorial COMPLETED - No state changes`);
     },
     
     closeTutorial: () => {
@@ -840,6 +852,16 @@ export const useNavigationStore = create<NavigationStore>()(
     },
 
     initializePortfolioMode: () => {
+      const timestamp = new Date().toISOString();
+      const currentState = get();
+
+      console.log(`🔥🔥🔥 [${timestamp}] initializePortfolioMode CALLED - THIS IS THE CULPRIT:`, {
+        currentPortfolioMode: currentState.portfolioMode,
+        currentLoading3DScene: currentState.loading3DScene,
+        currentShowModeSelector: currentState.showModeSelector,
+        stackTrace: new Error().stack
+      });
+
       // Limpa qualquer preferência salva anteriormente
       if (typeof window !== 'undefined') {
         localStorage.removeItem(STORAGE_KEYS.PORTFOLIO_MODE);
@@ -856,10 +878,24 @@ export const useNavigationStore = create<NavigationStore>()(
         is3DSceneReady: false,
         showTutorial: false
       });
+
+      console.log(`💥💥💥 [${timestamp}] initializePortfolioMode COMPLETED - STATE RESET TO CHOOSING`);
     },
 
     showPortfolioModeSelector: () => {
+      const timestamp = new Date().toISOString();
+      const currentState = get();
+
+      console.log(`🔄🔄🔄 [${timestamp}] showPortfolioModeSelector CALLED - POTENTIAL CULPRIT:`, {
+        currentPortfolioMode: currentState.portfolioMode,
+        currentLoading3DScene: currentState.loading3DScene,
+        currentShowModeSelector: currentState.showModeSelector,
+        stackTrace: new Error().stack
+      });
+
       set({ showModeSelector: true, portfolioMode: PortfolioModes.CHOOSING });
+
+      console.log(`💀💀💀 [${timestamp}] showPortfolioModeSelector COMPLETED - FORCED RESET TO CHOOSING`);
     },
 
     hidePortfolioModeSelector: () => {

@@ -23,6 +23,8 @@ const App = () => {
 
   // Inicializa o tutorial na primeira renderização
   useEffect(() => {
+    const timestamp = new Date().toISOString();
+    console.log(`🎭 [${timestamp}] App: Calling initializeTutorial()`);
     initializeTutorial();
   }, [initializeTutorial]);
 
