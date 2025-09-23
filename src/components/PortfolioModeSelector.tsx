@@ -1,23 +1,43 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigationStore } from '../stores/navigation.store';
 import { PortfolioModes } from '../constants/navigationConfig';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'react-responsive';
 import Particles from './Particles';
+import { preloadHeroZustand } from '../utils/preloadHeroZustand';
 
 const PortfolioModeSelector: React.FC = () => {
   const { t, i18n } = useTranslation();
   const showModeSelector = useNavigationStore(state => state.showModeSelector);
   const setPortfolioMode = useNavigationStore(state => state.setPortfolioMode);
   const hidePortfolioModeSelector = useNavigationStore(state => state.hidePortfolioModeSelector);
+  const loading3DScene = useNavigationStore(state => state.loading3DScene);
   const isMobile = useMediaQuery({ maxWidth: 853 });
+
+  // Local state for preloading management
+  const [isPreloading, setIsPreloading] = useState(false);
+
+  // PRODUCTION FIX: Preload on hover to reduce loading time
+  const handlePreload3D = async () => {
+    if (!isPreloading) {
+      setIsPreloading(true);
+      try {
+        await preloadHeroZustand();
+      } catch (error) {
+        console.warn('Preload failed:', error);
+      }
+    }
+  };
 
   const handleModeSelect = (mode: typeof PortfolioModes[keyof typeof PortfolioModes]) => {
     setPortfolioMode(mode);
     hidePortfolioModeSelector();
   };
+
+  // Show loading indicator when transitioning to 3D mode
+  const isTransitioning = loading3DScene;
 
   const toggleLanguage = () => {
     const currentLang = i18n.language;
@@ -27,7 +47,7 @@ const PortfolioModeSelector: React.FC = () => {
 
   return (
     <AnimatePresence>
-      {showModeSelector && (
+      {(showModeSelector || isTransitioning) && (
         <motion.div
           className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-black cursor-default"
           initial={{ opacity: 0 }}
@@ -75,16 +95,45 @@ const PortfolioModeSelector: React.FC = () => {
           </motion.div>
 
 
-          <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
-            {/* 3D Mode */}
+          {/* Show simplified loading view when transitioning */}
+          {isTransitioning && !showModeSelector ? (
             <motion.div
+              className="flex flex-col items-center justify-center"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="w-16 h-16 border-3 border-white border-t-transparent rounded-full animate-spin mb-4"></div>
+              <h2 className="text-white text-2xl font-light mb-2">Preparing 3D Experience</h2>
+              <p className="text-white/60 text-sm">This will just take a moment...</p>
+            </motion.div>
+          ) : (
+            <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
+              {/* 3D Mode */}
+              <motion.div
               className="relative w-[280px] h-[140px] md:w-[320px] md:h-[160px] overflow-hidden group cursor-pointer flex items-center justify-center bg-black/30 hover:bg-black/20 rounded-xl transition-all duration-300"
               onClick={() => handleModeSelect(PortfolioModes.THREE_D)}
+              onMouseEnter={handlePreload3D} // PRODUCTION FIX: Preload on hover
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, type: 'spring', stiffness: 300 }}
               whileHover={{ scale: 1.05 }}
             >
+              {/* Loading overlay when transitioning */}
+              {isTransitioning && (
+                <motion.div
+                  className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-10"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div className="flex flex-col items-center">
+                    <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin mb-2"></div>
+                    <p className="text-white/80 text-sm font-light">Loading 3D...</p>
+                  </div>
+                </motion.div>
+              )}
+
               <h2
                 className="text-white text-5xl text-center"
                 style={{ fontFamily: 'Funnel Display', fontWeight: 800 }}
@@ -92,7 +141,7 @@ const PortfolioModeSelector: React.FC = () => {
                 {t('modeSelector:3d.title')}
               </h2>
               <p className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/70 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                {t('modeSelector:3d.description')}
+                {isPreloading ? 'Ready to launch...' : t('modeSelector:3d.description')}
               </p>
             </motion.div>
 
@@ -112,7 +161,8 @@ const PortfolioModeSelector: React.FC = () => {
                 {t('modeSelector:onepage.title')}
               </h2>
             </motion.div>
-          </div>
+            </div>
+          )}
 
         </motion.div>
       )}

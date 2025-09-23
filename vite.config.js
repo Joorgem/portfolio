@@ -28,38 +28,37 @@ export default defineConfig({
     // Bundle optimization
     rollupOptions: {
       output: {
-        // More granular chunking strategy - only for actually used dependencies
+        // PRODUCTION FIX: Less aggressive chunking to prevent race conditions
         manualChunks: (id) => {
-          // Three.js core otimizado
+          // Critical dependencies stay in main chunk to prevent loading delays
+          // ZUSTAND removed from separate chunk - keep in main for critical state management
+
+          // Three.js core - only split truly large dependencies
           if (id.includes('three') && !id.includes('@react-three')) {
             return 'three-core';
           }
-          // React Three Fiber separado
-          if (id.includes('@react-three/fiber')) {
-            return 'three-react-fiber';
+
+          // Keep React Three ecosystem together for better loading
+          if (id.includes('@react-three/fiber') || id.includes('@react-three/drei')) {
+            return 'three-react';
           }
-          // React Three Drei separado
-          if (id.includes('@react-three/drei')) {
-            return 'three-react-drei';
-          }
-          // State management
-          if (id.includes('zustand')) {
-            return 'state';
-          }
-          // Framer Motion
+
+          // Large animation library can be separate
           if (id.includes('framer-motion')) {
             return 'framer';
           }
-          // i18n
+
+          // i18n can be separate as it's not critical for initial load
           if (id.includes('react-i18next') || id.includes('i18next')) {
             return 'i18n';
           }
-          // UI libraries
-          if (id.includes('clsx') || id.includes('react-responsive')) {
-            return 'ui-vendor';
-          }
-          // Node modules vendor chunk para libs pequenas
+
+          // Only split truly large vendor libraries
           if (id.includes('node_modules')) {
+            // Keep critical libs in main chunk
+            if (id.includes('zustand') || id.includes('clsx') || id.includes('react-responsive')) {
+              return undefined; // Stay in main chunk
+            }
             return 'vendor';
           }
         },
@@ -98,8 +97,8 @@ export default defineConfig({
       }
     },
     
-    // Increase chunk size warning limit for 3D applications
-    chunkSizeWarningLimit: 1000,
+    // PRODUCTION FIX: Increased chunk size limit to accommodate critical dependencies in main chunk
+    chunkSizeWarningLimit: 1500, // Increased from 1000 to allow critical libs in main
     
     // Use default minification (esbuild) - faster and included
     minify: true,
@@ -111,26 +110,29 @@ export default defineConfig({
     cssMinify: true,
   },
   
-  // Enhanced performance optimizations - configuração segura
+  // PRODUCTION FIX: Enhanced optimizations with critical dependencies pre-bundled
   optimizeDeps: {
     include: [
       'three',
       '@react-three/fiber',
       '@react-three/drei',
-      'zustand',
+      'zustand', // Critical for state management - pre-bundle to prevent delays
+      'zustand/middleware', // Include middleware for subscribeWithSelector
       'framer-motion',
       'react',
       'react-dom',
       'react-i18next',
       'i18next',
-      'i18next-browser-languagedetector'
+      'i18next-browser-languagedetector',
+      'clsx', // Critical utility - pre-bundle
+      'react-responsive' // Critical for mobile detection - pre-bundle
     ],
     exclude: [
       // Exclude heavy development dependencies
       '@vitejs/plugin-react'
     ],
-    // Removido force: true que estava causando problemas de cache
-    // force: true
+    // Force refresh of deps to ensure consistency across environments
+    force: process.env.NODE_ENV === 'production'
   },
   
   // Resolve optimizations

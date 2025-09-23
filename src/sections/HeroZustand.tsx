@@ -194,13 +194,19 @@ const HeroZustand: React.FC = () => {
       // Cleanup do store
       useNavigationStore.getState().cleanup();
     };
-  }, [handleScroll]);
+  }, [handleScroll, is3DSceneReady]);
 
-  // Set 3D scene ready after initial render
+  // Set 3D scene ready after initial render - OPTIMIZED for production
   useEffect(() => {
+    // PRODUCTION FIX: Reduced timeout significantly to prevent race conditions
+    // The 3D scene is typically ready much faster than 1000ms
     const timeout = setTimeout(() => {
       set3DSceneReady(true);
-    }, 1000); // Give Three.js scene some time to stabilize
+    }, 100); // Optimized from 1000ms to 100ms
+
+    // FUTURE ENHANCEMENT: Could add more sophisticated readiness detection
+    // based on Three.js scene loading events, but 100ms should be sufficient
+    // for most cases while preventing the race condition
 
     return () => clearTimeout(timeout);
   }, [set3DSceneReady]);

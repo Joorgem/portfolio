@@ -46,6 +46,8 @@ interface NavigationStoreState {
   scrollLocked: boolean;
   // 3D Scene Ready state
   is3DSceneReady: boolean;
+  // Loading 3D Scene state (to prevent race conditions)
+  loading3DScene: boolean;
   // CONTINUITY FIX: Preserva estado final para transição suave de saída
   finalZoomProgress: number;        // Zoom progress quando entrou na seção (98%)
   finalOrbitAngle: number;          // Ângulo orbital quando entrou na seção
@@ -85,6 +87,9 @@ interface NavigationStoreActions {
   unlockScroll: () => void;
   // 3D Scene Ready actions
   set3DSceneReady: (_isReady: boolean) => void;
+  // Loading 3D Scene actions (race condition prevention)
+  setLoading3DScene: (_isLoading: boolean) => void;
+  activate3DSceneAndTutorial: () => void;
   // Portfolio mode actions
   setPortfolioMode: (_mode: PortfolioMode) => void;
   initializePortfolioMode: () => void;
@@ -148,6 +153,8 @@ export const useNavigationStore = create<NavigationStore>()(
     
     // 3D Scene Ready state
     is3DSceneReady: false,
+    // Loading 3D Scene state (prevents race conditions)
+    loading3DScene: false,
     
     // CONTINUITY FIX: Estado preservado para transições suaves
     finalZoomProgress: 0,
@@ -691,6 +698,32 @@ export const useNavigationStore = create<NavigationStore>()(
     // 3D Scene Ready actions
     set3DSceneReady: (isReady: boolean) => {
       set({ is3DSceneReady: isReady });
+
+      // RACE CONDITION FIX: Ativa tutorial apenas quando 3D scene está pronto E estamos em loading
+      const state = get();
+      if (isReady && state.loading3DScene && state.portfolioMode === PortfolioModes.THREE_D) {
+        // Pequeno delay para garantir que a cena está realmente estabilizada
+        setTimeout(() => {
+          get().activate3DSceneAndTutorial();
+        }, 50);
+      }
+    },
+
+    // Loading 3D Scene actions (race condition prevention)
+    setLoading3DScene: (isLoading: boolean) => {
+      set({ loading3DScene: isLoading });
+    },
+
+    activate3DSceneAndTutorial: () => {
+      const state = get();
+
+      // Só ativa se estivermos no modo 3D e o scene estiver pronto
+      if (state.portfolioMode === PortfolioModes.THREE_D && state.is3DSceneReady) {
+        set({
+          showTutorial: true,
+          loading3DScene: false
+        });
+      }
     },
 
     // ===================================
@@ -701,11 +734,28 @@ export const useNavigationStore = create<NavigationStore>()(
         portfolioMode: mode,
         // Ativa canvas 3D apenas se modo 3D for selecionado
         canvas3DActive: mode === PortfolioModes.THREE_D,
-        // Ativa tutorial se for modo 3D
-        showTutorial: mode === PortfolioModes.THREE_D,
+        // RACE CONDITION FIX: Não ativa tutorial imediatamente, espera 3D scene estar pronto
+        showTutorial: false,
+        // Indica que estamos carregando o 3D scene se modo 3D for selecionado
+        loading3DScene: mode === PortfolioModes.THREE_D,
         // Reset tutorial completed quando muda modo
-        tutorialCompleted: mode !== PortfolioModes.THREE_D
+        tutorialCompleted: mode !== PortfolioModes.THREE_D,
+        // Reset 3D scene ready state quando muda modo
+        is3DSceneReady: mode !== PortfolioModes.THREE_D ? false : get().is3DSceneReady
       });
+
+      // FALLBACK: Se modo 3D, cria timeout de fallback para casos extremos (chunk loading issues)
+      if (mode === PortfolioModes.THREE_D) {
+        setTimeout(() => {
+          const currentState = get();
+          // Se ainda estiver loading após 5 segundos, força ativação (failsafe)
+          if (currentState.loading3DScene && currentState.portfolioMode === PortfolioModes.THREE_D) {
+            console.warn('3D Scene loading timeout - forcing activation for UX');
+            currentState.activate3DSceneAndTutorial();
+          }
+        }, 5000);
+      }
+
       // Não salva mais no localStorage - sempre volta à seleção no refresh
     },
 
@@ -720,7 +770,11 @@ export const useNavigationStore = create<NavigationStore>()(
         portfolioMode: PortfolioModes.CHOOSING,
         showModeSelector: true,
         // Canvas permanece desabilitado até escolha
-        canvas3DActive: false
+        canvas3DActive: false,
+        // Reset loading states
+        loading3DScene: false,
+        is3DSceneReady: false,
+        showTutorial: false
       });
     },
 

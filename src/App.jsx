@@ -1,7 +1,10 @@
 import React, { useEffect, Suspense } from "react";
 
 // Lazy loading do HeroZustand para otimização de performance
-const HeroZustand = React.lazy(() => import("./sections/HeroZustand"));
+// PRODUCTION FIX: Smart preloading to prevent race conditions
+import { preloadHeroZustand } from "./utils/preloadHeroZustand";
+
+const HeroZustand = React.lazy(() => preloadHeroZustand());
 import SectionPagesZustand from "./pages/SectionPagesZustand";
 import CustomCursor from "./components/CustomCursor";
 import MobileBottomNav from "./components/MobileBottomNav";
