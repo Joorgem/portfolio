@@ -50,6 +50,8 @@ interface NavigationStoreState {
   loading3DScene: boolean;
   // Activation in progress flag (prevents simultaneous activations)
   activationInProgress: boolean;
+  // StrictMode protection flag
+  _isInitialized: boolean;
   // CONTINUITY FIX: Preserva estado final para transição suave de saída
   finalZoomProgress: number;        // Zoom progress quando entrou na seção (98%)
   finalOrbitAngle: number;          // Ângulo orbital quando entrou na seção
@@ -110,8 +112,39 @@ export type NavigationStore = NavigationStoreState & NavigationStoreActions;
 // Using centralized navigation configuration
 const CONFIG = NAVIGATION_CONFIG;
 
+// Global state change monitor for debugging
+let lastPortfolioMode: string = 'choosing';
+
 export const useNavigationStore = create<NavigationStore>()(
-  subscribeWithSelector((set, get) => ({
+  subscribeWithSelector((set, get) => {
+    // ULTRA-DEBUG: Monitor ALL state changes
+    const originalSet = set;
+    const monitoredSet = (partial: any, replace?: boolean) => {
+      const currentState = get();
+
+      // Detect portfolioMode changes
+      let newPortfolioMode = null;
+      if (typeof partial === 'function') {
+        const tempState = partial(currentState);
+        newPortfolioMode = tempState.portfolioMode;
+      } else if (partial && typeof partial === 'object') {
+        newPortfolioMode = partial.portfolioMode;
+      }
+
+      if (newPortfolioMode && newPortfolioMode !== lastPortfolioMode) {
+        const timestamp = new Date().toISOString();
+        console.log(`🚨🚨🚨 [${timestamp}] PORTFOLIO MODE CHANGE DETECTED:`, {
+          from: lastPortfolioMode,
+          to: newPortfolioMode,
+          stackTrace: new Error('Portfolio mode change').stack?.split('\n').slice(0, 5).join('\n')
+        });
+        lastPortfolioMode = newPortfolioMode;
+      }
+
+      return originalSet(partial, replace);
+    };
+
+    return ({
     // ===================================
     // ESTADO (STATE)
     // ===================================
@@ -160,6 +193,8 @@ export const useNavigationStore = create<NavigationStore>()(
     loading3DScene: false,
     // Activation in progress flag (prevents simultaneous activations)
     activationInProgress: false,
+    // StrictMode protection flag
+    _isInitialized: false,
     
     // CONTINUITY FIX: Estado preservado para transições suaves
     finalZoomProgress: 0,
@@ -657,22 +692,23 @@ export const useNavigationStore = create<NavigationStore>()(
         currentPortfolioMode: currentState.portfolioMode,
         currentLoading3DScene: currentState.loading3DScene,
         currentShowModeSelector: currentState.showModeSelector,
+        isInitialized: currentState._isInitialized,
         stackTrace: new Error().stack
       });
 
-      // CRITICAL FIX: Só inicializa se realmente estiver no estado inicial
-      // Previne reset durante HMR ou re-renders
-      if (currentState.portfolioMode !== PortfolioModes.CHOOSING ||
-          currentState.loading3DScene ||
-          currentState.showTutorial) {
-        console.log(`🛡️  [${timestamp}] initializeTutorial: BLOCKED - Portfolio already in use, preventing reset`);
+      // STRICTMODE FIX: Só executa na primeira vez
+      if (currentState._isInitialized) {
+        console.log(`🛡️  [${timestamp}] initializeTutorial: BLOCKED - Already initialized, preventing StrictMode double execution`);
         return;
       }
+
+      // Marca como inicializado para prevenir execuções duplas
+      monitoredSet({ _isInitialized: true });
 
       // Tutorial será ativado automaticamente quando o usuário selecionar o modo 3D
       // Não precisa mais fazer nada aqui
 
-      console.log(`✅ [${timestamp}] initializeTutorial COMPLETED - No state changes`);
+      console.log(`✅ [${timestamp}] initializeTutorial COMPLETED - Marked as initialized`);
     },
     
     closeTutorial: () => {
@@ -830,7 +866,7 @@ export const useNavigationStore = create<NavigationStore>()(
         activationInProgress: currentState.activationInProgress
       });
 
-      set({
+      monitoredSet({
         portfolioMode: mode,
         // Ativa canvas 3D apenas se modo 3D for selecionado
         canvas3DActive: mode === PortfolioModes.THREE_D,
@@ -902,7 +938,7 @@ export const useNavigationStore = create<NavigationStore>()(
         stackTrace: new Error().stack
       });
 
-      set({ showModeSelector: true, portfolioMode: PortfolioModes.CHOOSING });
+      monitoredSet({ showModeSelector: true, portfolioMode: PortfolioModes.CHOOSING });
 
       console.log(`💀💀💀 [${timestamp}] showPortfolioModeSelector COMPLETED - FORCED RESET TO CHOOSING`);
     },
