@@ -198,9 +198,15 @@ const HeroZustand: React.FC = () => {
 
   // Set 3D scene ready after initial render - OPTIMIZED for production
   useEffect(() => {
+    const timestamp = new Date().toISOString();
+
+    console.log(`🎯 [${timestamp}] HeroZustand: Setting 100ms timeout for 3D scene ready`);
+
     // PRODUCTION FIX: Reduced timeout significantly to prevent race conditions
     // The 3D scene is typically ready much faster than 1000ms
     const timeout = setTimeout(() => {
+      const readyTimestamp = new Date().toISOString();
+      console.log(`🎊 [${readyTimestamp}] HeroZustand: Timeout fired - calling set3DSceneReady(true)`);
       set3DSceneReady(true);
     }, 100); // Optimized from 1000ms to 100ms
 
@@ -208,7 +214,10 @@ const HeroZustand: React.FC = () => {
     // based on Three.js scene loading events, but 100ms should be sufficient
     // for most cases while preventing the race condition
 
-    return () => clearTimeout(timeout);
+    return () => {
+      console.log(`🧽 [${new Date().toISOString()}] HeroZustand: Cleaning up 3D scene ready timeout`);
+      clearTimeout(timeout);
+    };
   }, [set3DSceneReady]);
   
   // Monitor de desenvolvimento - DESATIVADO

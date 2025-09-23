@@ -17,14 +17,16 @@ const PortfolioModeSelector: React.FC = () => {
   // const isMobile = useMediaQuery({ maxWidth: 853 }); // DEBUGGING: Removed to test
   const isMobile = false; // DEBUGGING: Hardcoded to test
 
-  // DEBUGGING: Log all re-renders to identify the cause
-  // React.useEffect(() => {
-  //   console.log('🔄 PortfolioModeSelector RE-RENDER:', {
-  //     showModeSelector,
-  //     loading3DScene,
-  //     isMobile
-  //   });
-  // });
+  // ULTRA-DEBUG: Complete state tracking
+  React.useEffect(() => {
+    const timestamp = new Date().toISOString();
+    console.log(`🔄 [${timestamp}] PortfolioModeSelector RE-RENDER:`, {
+      showModeSelector,
+      loading3DScene,
+      isMobile,
+      renderCount: ++window.renderCount || (window.renderCount = 1)
+    });
+  });
 
   // OPTIMIZED: Stable hover handler with useCallback
   const handleMouseEnter = useCallback(() => {
@@ -37,9 +39,20 @@ const PortfolioModeSelector: React.FC = () => {
 
   // OPTIMIZED: Stable mode selection handler with useCallback
   const handleModeSelect = useCallback((mode: typeof PortfolioModes[keyof typeof PortfolioModes]) => {
+    const timestamp = new Date().toISOString();
+
+    console.log(`🖱️  [${timestamp}] handleModeSelect CLICKED:`, {
+      selectedMode: mode,
+      currentMode: useNavigationStore.getState().portfolioMode,
+      currentShowModeSelector: showModeSelector,
+      currentLoading3DScene: loading3DScene
+    });
+
     setPortfolioMode(mode);
     hidePortfolioModeSelector();
-  }, [setPortfolioMode, hidePortfolioModeSelector]);
+
+    console.log(`✅ [${timestamp}] handleModeSelect COMPLETED`);
+  }, [setPortfolioMode, hidePortfolioModeSelector, showModeSelector, loading3DScene]);
 
   // OPTIMIZED: Memoized transition state
   const isTransitioning = useMemo(() => loading3DScene, [loading3DScene]);

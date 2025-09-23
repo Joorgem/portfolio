@@ -48,16 +48,35 @@ const App = () => {
 
   // TIMEOUT FALLBACK: Smart timeout management with proper cleanup
   useEffect(() => {
+    const timestamp = new Date().toISOString();
+
+    console.log(`⏲️  [${timestamp}] App Timeout Effect TRIGGERED:`, {
+      portfolioMode,
+      hasExistingTimeout: !!timeoutRef.current
+    });
+
     // Clear any existing timeout first
     if (timeoutRef.current) {
+      console.log(`🗑️  [${timestamp}] App: Clearing existing timeout`);
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
     }
 
     // Only set timeout for 3D mode
     if (portfolioMode === PortfolioModes.THREE_D) {
+      console.log(`⏳ [${timestamp}] App: Setting 5s timeout for 3D mode`);
+
       timeoutRef.current = setTimeout(() => {
+        const timeoutTimestamp = new Date().toISOString();
         const currentState = useNavigationStore.getState();
+
+        console.log(`⏰ [${timeoutTimestamp}] App Timeout FIRED:`, {
+          loading3DScene: currentState.loading3DScene,
+          portfolioMode: currentState.portfolioMode,
+          showTutorial: currentState.showTutorial,
+          is3DSceneReady: currentState.is3DSceneReady,
+          activationInProgress: currentState.activationInProgress
+        });
 
         // Only activate if still in loading state and conditions are met
         if (currentState.loading3DScene &&
@@ -65,17 +84,22 @@ const App = () => {
             !currentState.showTutorial &&
             !currentState.is3DSceneReady &&
             !currentState.activationInProgress) {
-          console.warn('3D Scene loading timeout - forcing activation for UX');
+          console.warn(`🚨 [${timeoutTimestamp}] 3D Scene loading timeout - forcing activation for UX`);
           currentState.activate3DSceneAndTutorial();
+        } else {
+          console.log(`⏸️  [${timeoutTimestamp}] App Timeout: Conditions not met for forced activation`);
         }
 
         timeoutRef.current = null; // Clear ref after execution
       }, 5000);
+    } else {
+      console.log(`❌ [${timestamp}] App: Not 3D mode, no timeout set`);
     }
 
     // Cleanup function following React patterns
     return () => {
       if (timeoutRef.current) {
+        console.log(`🧹 [${new Date().toISOString()}] App Cleanup: Clearing timeout on unmount/change`);
         clearTimeout(timeoutRef.current);
         timeoutRef.current = null;
       }

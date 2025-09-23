@@ -702,15 +702,37 @@ export const useNavigationStore = create<NavigationStore>()(
 
     // 3D Scene Ready actions
     set3DSceneReady: (isReady: boolean) => {
+      const timestamp = new Date().toISOString();
+      const currentState = get();
+
+      console.log(`🎬 [${timestamp}] set3DSceneReady CALLED:`, {
+        isReady,
+        currentIs3DSceneReady: currentState.is3DSceneReady,
+        loading3DScene: currentState.loading3DScene,
+        portfolioMode: currentState.portfolioMode,
+        showTutorial: currentState.showTutorial,
+        activationInProgress: currentState.activationInProgress
+      });
+
       set({ is3DSceneReady: isReady });
 
       // RACE CONDITION FIX: Ativa tutorial apenas quando 3D scene está pronto E estamos em loading
       const state = get();
       if (isReady && state.loading3DScene && state.portfolioMode === PortfolioModes.THREE_D) {
+        console.log(`⏰ [${timestamp}] set3DSceneReady: Scheduling activation in 50ms`);
+
         // Pequeno delay para garantir que a cena está realmente estabilizada
         setTimeout(() => {
+          console.log(`🚀 [${timestamp}] set3DSceneReady: Calling activate3DSceneAndTutorial`);
           get().activate3DSceneAndTutorial();
         }, 50);
+      } else {
+        console.log(`❌ [${timestamp}] set3DSceneReady: Conditions not met for activation:`, {
+          isReady,
+          loading3DScene: state.loading3DScene,
+          portfolioMode: state.portfolioMode,
+          conditionsMet: isReady && state.loading3DScene && state.portfolioMode === PortfolioModes.THREE_D
+        });
       }
     },
 
@@ -724,10 +746,20 @@ export const useNavigationStore = create<NavigationStore>()(
     },
 
     activate3DSceneAndTutorial: () => {
+      const timestamp = new Date().toISOString();
       const state = get();
+
+      console.log(`🔥 [${timestamp}] activate3DSceneAndTutorial CALLED:`, {
+        portfolioMode: state.portfolioMode,
+        is3DSceneReady: state.is3DSceneReady,
+        showTutorial: state.showTutorial,
+        loading3DScene: state.loading3DScene,
+        activationInProgress: state.activationInProgress
+      });
 
       // RACE CONDITION GUARD: Previne ativações simultâneas
       if (state.activationInProgress) {
+        console.log(`⚠️  [${timestamp}] activate3DSceneAndTutorial: BLOCKED - activationInProgress is true`);
         return;
       }
 
@@ -735,6 +767,8 @@ export const useNavigationStore = create<NavigationStore>()(
       if (state.portfolioMode === PortfolioModes.THREE_D &&
           state.is3DSceneReady &&
           !state.showTutorial) {
+
+        console.log(`✨ [${timestamp}] activate3DSceneAndTutorial: CONDITIONS MET - Activating tutorial`);
 
         // Marca como em progresso para prevenir calls simultâneas
         set({ activationInProgress: true });
@@ -745,6 +779,17 @@ export const useNavigationStore = create<NavigationStore>()(
           loading3DScene: false,
           activationInProgress: false // Reset flag
         });
+
+        console.log(`🎉 [${timestamp}] activate3DSceneAndTutorial: COMPLETED - Tutorial activated`);
+      } else {
+        console.log(`❌ [${timestamp}] activate3DSceneAndTutorial: CONDITIONS NOT MET:`, {
+          is3DMode: state.portfolioMode === PortfolioModes.THREE_D,
+          is3DSceneReady: state.is3DSceneReady,
+          tutorialNotShowing: !state.showTutorial,
+          allConditions: state.portfolioMode === PortfolioModes.THREE_D &&
+                        state.is3DSceneReady &&
+                        !state.showTutorial
+        });
       }
     },
 
@@ -752,6 +797,18 @@ export const useNavigationStore = create<NavigationStore>()(
     // PORTFOLIO MODE MANAGEMENT
     // ===================================
     setPortfolioMode: (mode: PortfolioMode) => {
+      const timestamp = new Date().toISOString();
+      const currentState = get();
+
+      console.log(`🎯 [${timestamp}] setPortfolioMode CALLED:`, {
+        newMode: mode,
+        currentMode: currentState.portfolioMode,
+        currentLoading3DScene: currentState.loading3DScene,
+        currentShowTutorial: currentState.showTutorial,
+        currentIs3DSceneReady: currentState.is3DSceneReady,
+        activationInProgress: currentState.activationInProgress
+      });
+
       set({
         portfolioMode: mode,
         // Ativa canvas 3D apenas se modo 3D for selecionado
@@ -766,6 +823,15 @@ export const useNavigationStore = create<NavigationStore>()(
         is3DSceneReady: mode !== PortfolioModes.THREE_D ? false : get().is3DSceneReady,
         // Reset activation flag quando muda modo
         activationInProgress: false
+      });
+
+      console.log(`✅ [${timestamp}] setPortfolioMode COMPLETED:`, {
+        newState: {
+          portfolioMode: mode,
+          loading3DScene: mode === PortfolioModes.THREE_D,
+          showTutorial: false,
+          is3DSceneReady: mode !== PortfolioModes.THREE_D ? false : get().is3DSceneReady
+        }
       });
 
       // REMOVED: Timeout logic movido para componente com useEffect e cleanup adequado
@@ -797,7 +863,19 @@ export const useNavigationStore = create<NavigationStore>()(
     },
 
     hidePortfolioModeSelector: () => {
+      const timestamp = new Date().toISOString();
+      const currentState = get();
+
+      console.log(`🙈 [${timestamp}] hidePortfolioModeSelector CALLED:`, {
+        currentShowModeSelector: currentState.showModeSelector,
+        portfolioMode: currentState.portfolioMode,
+        loading3DScene: currentState.loading3DScene,
+        showTutorial: currentState.showTutorial
+      });
+
       set({ showModeSelector: false });
+
+      console.log(`✅ [${timestamp}] hidePortfolioModeSelector COMPLETED`);
     },
 
     // Funções removidas - não salva mais preferência no localStorage
