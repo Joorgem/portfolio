@@ -48,6 +48,12 @@ const PortfolioModeSelector: React.FC = () => {
       currentLoading3DScene: loading3DScene
     });
 
+    try {
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('portfolio_mode_intent', JSON.stringify({ mode, ts: Date.now() }));
+      }
+    } catch {}
+
     setPortfolioMode(mode);
     hidePortfolioModeSelector();
 

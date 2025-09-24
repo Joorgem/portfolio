@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, Suspense } from "react";
 
-// Lazy loading do HeroZustand para otimização de performance
+// Lazy loading do HeroZustand para otimizaÃ§Ã£o de performance
 // PRODUCTION FIX: Smart preloading to prevent race conditions
 import { preloadHeroZustand } from "./utils/preloadHeroZustand";
 
@@ -20,10 +20,10 @@ const App = () => {
   // Timeout management refs following React best practices
   const timeoutRef = useRef(null);
 
-  // Inicializa o tutorial na primeira renderização
+  // Inicializa o tutorial na primeira renderizaÃ§Ã£o
   useEffect(() => {
     const timestamp = new Date().toISOString();
-    console.log(`🎭 [${timestamp}] App: Calling initializeTutorial()`);
+    console.log(`ðŸŽ­ [${timestamp}] App: Calling initializeTutorial()`);
 
     // CRITICAL FIX: Call directly from store to avoid dependency issues
     useNavigationStore.getState().initializeTutorial();
@@ -53,27 +53,27 @@ const App = () => {
   useEffect(() => {
     const timestamp = new Date().toISOString();
 
-    console.log(`⏲️  [${timestamp}] App Timeout Effect TRIGGERED:`, {
+    console.log(`â²ï¸  [${timestamp}] App Timeout Effect TRIGGERED:`, {
       portfolioMode,
       hasExistingTimeout: !!timeoutRef.current
     });
 
     // Clear any existing timeout first
     if (timeoutRef.current) {
-      console.log(`🗑️  [${timestamp}] App: Clearing existing timeout`);
+      console.log(`ðŸ—‘ï¸  [${timestamp}] App: Clearing existing timeout`);
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
     }
 
     // Only set timeout for 3D mode
     if (portfolioMode === PortfolioModes.THREE_D) {
-      console.log(`⏳ [${timestamp}] App: Setting 5s timeout for 3D mode`);
+      console.log(`â³ [${timestamp}] App: Setting 5s timeout for 3D mode`);
 
       timeoutRef.current = setTimeout(() => {
         const timeoutTimestamp = new Date().toISOString();
         const currentState = useNavigationStore.getState();
 
-        console.log(`⏰ [${timeoutTimestamp}] App Timeout FIRED:`, {
+        console.log(`â° [${timeoutTimestamp}] App Timeout FIRED:`, {
           loading3DScene: currentState.loading3DScene,
           portfolioMode: currentState.portfolioMode,
           showTutorial: currentState.showTutorial,
@@ -87,22 +87,22 @@ const App = () => {
             !currentState.showTutorial &&
             !currentState.is3DSceneReady &&
             !currentState.activationInProgress) {
-          console.warn(`🚨 [${timeoutTimestamp}] 3D Scene loading timeout - forcing activation for UX`);
+          console.warn(`ðŸš¨ [${timeoutTimestamp}] 3D Scene loading timeout - forcing activation for UX`);
           currentState.activate3DSceneAndTutorial();
         } else {
-          console.log(`⏸️  [${timeoutTimestamp}] App Timeout: Conditions not met for forced activation`);
+          console.log(`â¸ï¸  [${timeoutTimestamp}] App Timeout: Conditions not met for forced activation`);
         }
 
         timeoutRef.current = null; // Clear ref after execution
       }, 5000);
     } else {
-      console.log(`❌ [${timestamp}] App: Not 3D mode, no timeout set`);
+      console.log(`âŒ [${timestamp}] App: Not 3D mode, no timeout set`);
     }
 
     // Cleanup function following React patterns
     return () => {
       if (timeoutRef.current) {
-        console.log(`🧹 [${new Date().toISOString()}] App Cleanup: Clearing timeout on unmount/change`);
+        console.log(`ðŸ§¹ [${new Date().toISOString()}] App Cleanup: Clearing timeout on unmount/change`);
         clearTimeout(timeoutRef.current);
         timeoutRef.current = null;
       }
@@ -119,22 +119,22 @@ const App = () => {
       {/* Cursor customizado */}
       <CustomCursor />
 
-      {/* Seletor de modo de portfólio - Aparece primeiro */}
+      {/* Seletor de modo de portfÃ³lio - Aparece primeiro */}
       <PortfolioModeSelector />
 
       {/* Componentes do modo 3D - Renderizados apenas no modo 3D */}
       {portfolioMode === PortfolioModes.THREE_D && (
         <>
-          {/* Menu de navegação inferior para mobile */}
+          {/* Menu de navegaÃ§Ã£o inferior para mobile */}
           <MobileBottomNav />
 
           {/* Progress tracker para desktop */}
           <NavigationProgress />
 
-          {/* Tutorial de navegação */}
+          {/* Tutorial de navegaÃ§Ã£o */}
           <NavigationTutorial />
 
-          {/* Cena 3D principal com navegação usando Zustand - Lazy loaded */}
+          {/* Cena 3D principal com navegaÃ§Ã£o usando Zustand - Lazy loaded */}
           <Suspense fallback={
             <div className="fixed inset-0 z-0 bg-black flex items-center justify-center">
               <div className="text-white/60 text-sm font-light tracking-wide">
@@ -145,7 +145,7 @@ const App = () => {
             <HeroZustand />
           </Suspense>
 
-          {/* Páginas das seções com Zustand */}
+          {/* PÃ¡ginas das seÃ§Ãµes com Zustand */}
           <SectionPagesZustand />
         </>
       )}
