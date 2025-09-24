@@ -1,224 +1,98 @@
-# Portfolio 3D Espacial - Contexto para IA
+# Portfolio 3D — Guia para Agentes/Colaboradores
 
-## Conceito do Projeto
+Este repositório contém um portfólio interativo com dois modos:
+- Modo 3D imersivo (astronauta + planetas como seções)
+- Modo One Page (scroll tradicional)
 
-Este Ã© um portfolio interativo 3D onde o usuÃ¡rio navega como astronauta pelo espaÃ§o, visitando planetas que representam seÃ§Ãµes (About, Projects, Experience, Contact, Courses). A navegaÃ§Ã£o Ã© cinematogrÃ¡fica com transiÃ§Ãµes suaves entre mundos 3D e 2D.
+Abaixo estão os pontos essenciais para entender e evoluir o projeto com segurança, performance e previsibilidade.
 
-## Stack TecnolÃ³gica Principal
+## Stack
+- React 19 + TypeScript + Vite 6
+- Three.js + @react-three/fiber + @react-three/drei
+- Zustand 5 para estado global
+- Framer Motion 12 para animações de UI
+- Tailwind CSS 4 para estilos
 
-- **React 19** + **TypeScript** + **Vite 6.1**
-- **Three.js 0.173** + **@react-three/fiber 9.0** + **@react-three/drei 10.0**
-- **Zustand 5.0** para state management
-- **Framer Motion 12.23** para animaÃ§Ãµes UI
-- **Tailwind CSS 4.0** para styling
+## Arquitetura de Estado (Zustand)
 
-## Arquitetura Core
+### Estados de navegação 3D
+Ciclo principal do modo 3D (sem relação com seleção de modo):
+- idle ? orbiting ? zooming_in ? entering ? in_section ? exiting ? zooming_out ? idle
+Configurações sensíveis a dispositivo (ver `src/constants/navigationConfig.ts`).
 
-### Estado Central (navigation.store.ts)
-O sistema Ã© governado por 7 estados especÃ­ficos no Zustand:
-```
-idle â†’ orbiting â†’ zooming_in â†’ entering â†’ in_section â†’ exiting â†’ zooming_out â†’ idle
-```
+### Máquina de Modo do Portfólio
+A seleção e ativação de modo agora é regida por um estado explícito no store:
+- `portfolioMode`: `'choosing' | '3d' | 'onepage'`
+- `modeStatus`: `'selector' | 'loading-3d' | 'ready-3d' | 'ready-onepage'`
+- `showModeSelector`: controla overlay de seleção
+- `loading3DScene` e `is3DSceneReady`: sinalizam carregamento e prontidão 3D
 
-ConfiguraÃ§Ãµes crÃ­ticas adaptÃ¡veis mobile/desktop:
-- `zoomInSensitivity`: mobile 0.0015, desktop 0.0008
-- `scrollThrottle`: mobile 5ms, desktop 12ms
-- `zoomAutoComplete`: 0.65 threshold
+Fonte da verdade: `src/stores/navigation.store.ts`.
 
-### Componentes Arquiteturais
+Regras:
+- A UI chama apenas `setPortfolioMode('3d' | 'onepage')` e `hide/showPortfolioModeSelector()`. Transições derivadas são calculadas no store (não na UI).
+- Ao entrar em `'3d'`, o store seta `modeStatus: 'loading-3d'`, mostra loading e agenda um fallback de 5s; quando a cena estiver pronta, o store promove para `'ready-3d'` e abre o tutorial (se ainda não concluído na sessão).
+- `sessionStorage` guarda uma intenção efêmera do modo (TTL ~4s) para evitar pisca ao carregar chunks (não persiste preferências de longo prazo).
+- App.jsx não possui mais timeouts — todo fallback/timeout acontece no store.
 
-**App.jsx**: Orquestrador principal
-- CustomCursor, MobileBottomNav, NavigationTutorial, HeroZustand, SectionPagesZustand
+Do/Don’t:
+- Do: pré-carregar o chunk do Hero 3D no mount do App e no clique do modo 3D (ver `preloadHeroZustand`).
+- Don’t: manipular `showModeSelector`, `loading3DScene`, `is3DSceneReady` diretamente fora do store.
+- Don’t: chamar `setPortfolioMode('choosing')` a partir de componentes; use `showPortfolioModeSelector()`.
 
-**HeroZustand.tsx**: Engine 3D
-- Canvas Three.js com configuraÃ§Ãµes responsivas
-- Astronaut model com escalas dinÃ¢micas por viewport
-- NavigationSystemStable para hitboxes planetÃ¡rias
-- CameraControllerZustand para movimentos cinematogrÃ¡ficos
+## Componentes Principais
+- `src/App.jsx`: orquestra UI e aplica classes `mode-3d`/`mode-onepage`; pré-carrega a cena 3D e inicializa tutorial.
+- `src/sections/HeroZustand.tsx`: cena 3D (Canvas, astronauta, navegação, câmera). Listeners de wheel/touch só atuam quando `is3DSceneReady = true`.
+- `src/components/PortfolioModeSelector.tsx`: overlay de seleção; chama `preloadHeroZustand()` ao escolher 3D e delega transição ao store.
+- `src/pages/SectionPagesZustand.jsx`: páginas 2D das seções quando em 3D.
+- `src/components/OnePagePortfolio.tsx`: modo One Page completo.
 
-**SectionPagesZustand.jsx**: Roteador visual
-- RenderizaÃ§Ã£o condicional baseada no estado Zustand
-- PageContainer com animaÃ§Ãµes Framer Motion
-- LanguageToggle para internacionalizaÃ§Ã£o
+## Boas Práticas de Performance
+- Three.js/R3F
+  - Evite criar objetos Three dentro de `useFrame`.
+  - Reuse geometrias/materiais (useMemo/useRef).
+  - Gatilhe listeners apenas quando `is3DSceneReady`.
+  - Ajuste DPR e frameloop conforme `canvas3DActive`.
+- Framer Motion
+  - Prefira transforms, use `will-change` quando necessário.
+- React
+  - Use seletor do Zustand para evitar renders desnecessários.
+  - Lazy-load do Hero 3D com pré-carregamento proativo.
 
-## Fluxo de NavegaÃ§Ã£o
+## Persistência & Tutorial
+- O tutorial é “por sessão” (não persiste em localStorage); `tutorialCompleted` reseta a cada sessão por design.
+- A intenção de modo é guardada em `sessionStorage` com TTL curto para evitar regressões de overlay/volta para `choosing` durante carregamento.
 
-1. **IDLE**: Estado inicial, visÃ£o geral do espaÃ§o
-2. **ORBITING**: Click em planeta inicia Ã³rbita
-3. **ZOOMING_IN**: Scroll/swipe para cima inicia aproximaÃ§Ã£o
-4. **ENTERING**: TransiÃ§Ã£o automÃ¡tica com fade
-5. **IN_SECTION**: ConteÃºdo 2D da seÃ§Ã£o
-6. **EXITING**: ESC ou scroll para baixo sai
-7. **ZOOMING_OUT**: Retorno ao espaÃ§o
+## Detalhes de Build/Tipos
+- Import do GLTFLoader deve usar sufixo `.js` para compatibilidade com bundler: `three/examples/jsm/loaders/GLTFLoader.js`.
+- Tipos podem divergir entre `@types/three` e `three-stdlib`; se necessário, faça cast intermediário com `unknown` ao converter `GLTF` carregado.
+- TypeScript está em modo strict; mantenha props e generics explícitos.
 
-Controles:
-- Desktop: Mouse wheel + Click + ESC
-- Mobile: Touch/Swipe + Tap + Gestos especÃ­ficos
+## Comandos
+- `npm run dev` — desenvolvimento
+- `npm run build` — build de produção
+- `npm run typecheck` — checagem de tipos
+- `npm run validate` — pipeline rápida (typecheck)
 
-## Design System
+## Regras Críticas (não quebrar)
+- Não alterar a semântica de `modeStatus` e transições do store sem revisar UI acoplada.
+- Não reintroduzir timeouts concorrentes fora do store para 3D.
+- Não persistir estados de tutorial/visitedSections em localStorage (intencionalmente por sessão).
+- Testar modo 3D: clique único deve ativar loading e transicionar para tutorial sem recarregar/voltar para `choosing`.
 
-### Cores CSS Custom Properties
-```css
---color-primary: #000000;     /* Base preta */
---color-midnight: #06091f;    /* Escuro profundo */
---color-aqua: #33c2cc;        /* Acento ciano */
---color-mint: #57db96;        /* Acento verde */
---color-royal: #5c33cc;       /* Acento roxo */
-```
-
-### Tipografia
-```css
-font-family: "Funnel Display", sans-serif;
-background: #000000;
-color: white;
-cursor: none; /* Cursor customizado sempre */
-```
-
-## OtimizaÃ§Ãµes CrÃ­ticas
-
-### Performance 3D
-```jsx
-// Canvas condicional
-<Canvas frameloop={canvas3DActive ? 'always' : 'demand'} />
-
-// ReutilizaÃ§Ã£o de objetos
-const tempVec = useMemo(() => new THREE.Vector3());
-useFrame(() => ref.current.position.lerp(tempVec.set(x, y, z), 0.1));
-
-// PartÃ­culas adaptÃ¡veis
-quantity={isMobile ? 50 : 100}
-```
-
-### Mobile Responsivo
-```javascript
-// Escalas dinÃ¢micas por viewport
-const getAstronautScale = () => {
-  const width = window.innerWidth;
-  if (width < 375) return 0.3;
-  if (width < 768) return 0.35;
-  return 0.4;
-};
-
-// Touch handling com threshold
-if (Math.abs(deltaY) > 2) {
-  e.preventDefault();
-  handleScroll(-deltaY * 3, false);
-}
-```
-
-### Estado Zustand
-```typescript
-// Acesso direto para performance
-useFrame(() => {
-  ref.current.position.x = useStore.getState().x;
-});
-
-// Throttling de eventos
-if (now - lastScrollTime < CONFIG.scrollThrottle) return;
-```
-
-## PadrÃµes e Melhores PrÃ¡ticas
-
-### Zustand Store Patterns
-- Use slices pattern para organizaÃ§Ã£o
-- Acesso direto ao state em loops de performance
-- Middleware subscribeWithSelector para otimizaÃ§Ã£o
-
-### React Three Fiber
-- Sempre reutilize geometrias e materiais com useMemo
-- Evite criaÃ§Ã£o de objetos Three.js em useFrame
-- Use refs para mutaÃ§Ã£o direta de propriedades
-- Configure DPR adaptÃ¡vel para performance
-
-### Framer Motion
-- Use will-change para propriedades animadas
-- Prefira transforms sobre other properties
-- Layout animations com configuraÃ§Ãµes especÃ­ficas
-- startTransition para operaÃ§Ãµes custosas
-
-## Funcionalidades EspecÃ­ficas
-
-### Sistema de Tutorial
-- localStorage persistence para nÃ£o repetir
-- NavigationTutorial.tsx com step-by-step guidance
-- initializeTutorial/completeTutorial no store
-
-### InternacionalizaÃ§Ã£o
-- useTranslations hook com pt/en
-- LanguageToggle aparece em seÃ§Ãµes especÃ­ficas
-- Estrutura em locales/translations.ts
-
-### Performance Monitoring
-```javascript
-// Canvas 3D inteligente
-frameloop={canvas3DActive ? 'always' : 'demand'}
-
-// Lazy loading de seÃ§Ãµes
-{shouldRender && <motion.div><About /></motion.div>}
-```
-
-## Comandos de Desenvolvimento
-
-```bash
-npm run dev          # Desenvolvimento
-npm run build        # Build produÃ§Ã£o
-npm run lint         # Linting
-npm run typecheck    # Type checking
-npm run validate     # ValidaÃ§Ã£o completa
-```
-
-## Regras CrÃ­ticas - NÃƒO QUEBRAR
-
-### Estado Zustand
-- NUNCA altere a ordem dos estados
-- SEMPRE use transiÃ§Ãµes corretas entre estados
-- MANTENHA configuraÃ§Ãµes mobile/desktop separadas
-
-### Performance 3D
-- NÃƒO crie objetos Three.js em loops
-- SEMPRE reutilize geometrias/materiais
-- MONITORE frameloop do Canvas
-
-### Mobile
-- PRESERVE sensibilidades de touch especÃ­ficas
-- MANTENHA escalas adaptÃ¡veis por viewport
-- TESTE em dispositivos reais sempre
-
-### Debugging
-```typescript
-// Debug mode para hitboxes
-debugMode={true}
-
-// Estado atual
-console.log('Estado:', navigationState);
-
-// Dev monitor
-const DevMonitor = () => process.env.NODE_ENV === 'development' ? <FPSStats /> : null;
-```
-
-## Estrutura de Arquivos Importantes
-
+## Estrutura
 ```
 src/
-â”œâ”€â”€ App.jsx                    # Orquestrador principal
-â”œâ”€â”€ stores/navigation.store.ts # Estado central crÃ­tico
-â”œâ”€â”€ sections/                  # SeÃ§Ãµes do portfolio
-â”œâ”€â”€ components/
-â”‚   â”œâ”€â”€ CameraController.Zustand.tsx  # Controle cinematogrÃ¡fico
-â”‚   â”œâ”€â”€ NavigationSystemStable.tsx    # Hitboxes planetÃ¡rias
-â”‚   â”œâ”€â”€ CustomCursor.tsx              # Cursor personalizado
-â”‚   â””â”€â”€ ScrollIndicator.tsx           # Indicadores visuais
-â”œâ”€â”€ pages/SectionPagesZustand.jsx     # Roteador visual
-â”œâ”€â”€ locales/translations.ts           # Sistema i18n
-â””â”€â”€ constants/navigationPoints.ts     # Pontos de navegaÃ§Ã£o
+  App.jsx
+  stores/navigation.store.ts
+  sections/HeroZustand.tsx
+  components/PortfolioModeSelector.tsx
+  components/ui/video-text.tsx
+  pages/SectionPagesZustand.jsx
+  constants/navigationConfig.ts
 ```
 
-## ResoluÃ§Ã£o de Problemas Comuns
-
-- **Estado quebrado**: Verificar navigation.store.ts transitions
-- **Performance issues**: Monitor Canvas frameloop e object creation
-- **Mobile issues**: Verificar touch handlers e escalas
-- **AnimaÃ§Ãµes quebradas**: Inspect Framer Motion conflicts
-- **3D rendering**: Debug Three.js objects lifecycle
-
-Este projeto representa estado da arte em portfolios interativos, mantendo sempre foco em performance, responsividade e experiÃªncia cinematogrÃ¡fica Ãºnica.
+## Troubleshooting
+- “Precisa clicar duas vezes no 3D”: verifique se `modeStatus` progride de `selector` ? `loading-3d` ? `ready-3d` e se o fallback do store (5s) está ativo; confirme que `preloadHeroZustand` roda no mount e no clique.
+- Tipos de GLTF: alinhar import do loader e usar cast `unknown` ? tipo interno quando necessário.
+- Event listeners sem efeito: confirmar `is3DSceneReady = true` antes de processar scroll/touch.

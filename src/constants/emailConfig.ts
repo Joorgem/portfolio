@@ -23,12 +23,17 @@ export interface EmailConfig {
  * - VITE_EMAILJS_PUBLIC_KEY
  * - VITE_RECIPIENT_EMAIL
  */
+const env = (name: string) => (import.meta as any).env?.[name] as string | undefined;
+
 export const EMAIL_CONFIG: EmailConfig = {
-  serviceId: "service_ea205oa",
-  templateId: "template_o2y5538", 
-  publicKey: "i2duMx6NvyyeZvrwf",
-  recipientEmail: "contato@jorgemolina.dev",
-  recipientName: "Jorge"
+  // Read from Vite env vars with safe fallbacks to keep local/dev working.
+  // For public repositories, prefer setting these via .env and restricting
+  // allowed origins in your EmailJS dashboard.
+  serviceId: env('VITE_EMAILJS_SERVICE_ID') ?? "service_ea205oa",
+  templateId: env('VITE_EMAILJS_TEMPLATE_ID') ?? "template_o2y5538",
+  publicKey: env('VITE_EMAILJS_PUBLIC_KEY') ?? "i2duMx6NvyyeZvrwf",
+  recipientEmail: env('VITE_RECIPIENT_EMAIL') ?? "contato@jorgemolina.dev",
+  recipientName: env('VITE_RECIPIENT_NAME') ?? "Jorge"
 } as const;
 
 /**
