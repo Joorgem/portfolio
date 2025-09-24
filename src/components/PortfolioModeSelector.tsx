@@ -1,67 +1,30 @@
-
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigationStore } from '../stores/navigation.store';
 import { PortfolioModes } from '../constants/navigationConfig';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'react-responsive';
 import Particles from './Particles';
-// import { preloadHeroZustand } from '../utils/preloadHeroZustand'; // DEBUGGING: Removed to isolate issue
+import { preloadHeroZustand } from '../utils/preloadHeroZustand';
 
 const PortfolioModeSelector: React.FC = () => {
   const { t, i18n } = useTranslation();
   const showModeSelector = useNavigationStore(state => state.showModeSelector);
+  const modeStatus = useNavigationStore(state => state.modeStatus);
   const setPortfolioMode = useNavigationStore(state => state.setPortfolioMode);
   const hidePortfolioModeSelector = useNavigationStore(state => state.hidePortfolioModeSelector);
-  const loading3DScene = useNavigationStore(state => state.loading3DScene);
-  // const isMobile = useMediaQuery({ maxWidth: 853 }); // DEBUGGING: Removed to test
-  const isMobile = false; // DEBUGGING: Hardcoded to test
+  const isMobile = useMediaQuery({ maxWidth: 853 });
 
-  // ULTRA-DEBUG: Complete state tracking
-  React.useEffect(() => {
-    const timestamp = new Date().toISOString();
-    console.log(`🔄 [${timestamp}] PortfolioModeSelector RE-RENDER:`, {
-      showModeSelector,
-      loading3DScene,
-      isMobile,
-      renderCount: ++window.renderCount || (window.renderCount = 1)
-    });
-  });
-
-  // OPTIMIZED: Stable hover handler with useCallback
-  const handleMouseEnter = useCallback(() => {
-    // Minimal hover logic - no side effects
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    // Minimal hover logic - no side effects
-  }, []);
-
-  // OPTIMIZED: Stable mode selection handler with useCallback
   const handleModeSelect = useCallback((mode: typeof PortfolioModes[keyof typeof PortfolioModes]) => {
-    const timestamp = new Date().toISOString();
-
-    console.log(`🖱️  [${timestamp}] handleModeSelect CLICKED:`, {
-      selectedMode: mode,
-      currentMode: useNavigationStore.getState().portfolioMode,
-      currentShowModeSelector: showModeSelector,
-      currentLoading3DScene: loading3DScene
-    });
-
-    try {
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem('portfolio_mode_intent', JSON.stringify({ mode, ts: Date.now() }));
-      }
-    } catch {}
+    if (mode === PortfolioModes.THREE_D) {
+      preloadHeroZustand();
+    }
 
     setPortfolioMode(mode);
     hidePortfolioModeSelector();
+  }, [setPortfolioMode, hidePortfolioModeSelector]);
 
-    console.log(`✅ [${timestamp}] handleModeSelect COMPLETED`);
-  }, [setPortfolioMode, hidePortfolioModeSelector, showModeSelector, loading3DScene]);
-
-  // OPTIMIZED: Memoized transition state
-  const isTransitioning = useMemo(() => loading3DScene, [loading3DScene]);
+  const isTransitioning = modeStatus === 'loading-3d';
 
   // OPTIMIZED: Stable language toggle with useCallback
   const toggleLanguage = useCallback(() => {
@@ -70,7 +33,6 @@ const PortfolioModeSelector: React.FC = () => {
     i18n.changeLanguage(newLang);
   }, [i18n]);
 
-  // DEBUGGING: Removed cleanup as we removed the timeout
 
   return (
     <AnimatePresence>
@@ -141,7 +103,7 @@ const PortfolioModeSelector: React.FC = () => {
               className="relative w-[280px] h-[140px] md:w-[320px] md:h-[160px] overflow-hidden group cursor-pointer flex items-center justify-center bg-black/30 rounded-xl transition-all duration-300"
               // DEBUGGING: Removed hover:bg-black/20 to test CSS hover interference
               onClick={() => handleModeSelect(PortfolioModes.THREE_D)}
-              onMouseEnter={handleMouseEnter} // OPTIMIZED: Using stable callback
+              // OPTIMIZED: Using stable callback
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, type: 'spring', stiffness: 300 }}
@@ -199,3 +161,9 @@ const PortfolioModeSelector: React.FC = () => {
 };
 
 export default PortfolioModeSelector;
+
+
+
+
+
+

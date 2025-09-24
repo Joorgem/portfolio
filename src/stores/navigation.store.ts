@@ -6,11 +6,14 @@ import {
   ANIMATION_CONSTANTS,
   NavigationStates,
   PortfolioModes,
-  STORAGE_KEYS,
   type NavigationState,
   type PortfolioMode
 } from '../constants/navigationConfig';
 
+
+type ModeStatus = 'selector' | 'loading-3d' | 'ready-3d' | 'ready-onepage';
+
+const MODE_ACTIVATION_TIMEOUT_MS = 5000;
 
 // Animation internal state interface
 interface AnimationState {
@@ -37,6 +40,7 @@ interface NavigationStoreState {
   // Portfolio mode state
   portfolioMode: PortfolioMode;
   showModeSelector: boolean;
+  modeStatus: ModeStatus;
   // Tutorial states
   showTutorial: boolean;
   tutorialCompleted: boolean;
@@ -48,6 +52,7 @@ interface NavigationStoreState {
   is3DSceneReady: boolean;
   // Loading 3D Scene state (to prevent race conditions)
   loading3DScene: boolean;
+  pendingModeIntent: ModeIntent | null;
   // Activation in progress flag (prevents simultaneous activations)
   activationInProgress: boolean;
   // StrictMode protection flag
@@ -94,7 +99,7 @@ interface NavigationStoreActions {
   // Loading 3D Scene actions (race condition prevention)
   setLoading3DScene: (_isLoading: boolean) => void;
   setActivationInProgress: (_inProgress: boolean) => void;
-  activate3DSceneAndTutorial: () => void;
+  activate3DSceneAndTutorial: (_force?: boolean) => void;
   // Portfolio mode actions
   setPortfolioMode: (_mode: PortfolioMode) => void;
   initializePortfolioMode: () => void;
@@ -109,11 +114,140 @@ interface NavigationStoreActions {
 // Complete store type
 export type NavigationStore = NavigationStoreState & NavigationStoreActions;
 
+let modeActivationTimeout: number | null = null;
+
+const clearModeActivationTimeout = () => {
+  if (modeActivationTimeout) {
+    clearTimeout(modeActivationTimeout);
+    modeActivationTimeout = null;
+  }
+};
+
+const scheduleModeActivationTimeout = (get: () => NavigationStore) => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  clearModeActivationTimeout();
+
+  modeActivationTimeout = window.setTimeout(() => {
+    const state = get();
+    if (
+      state.portfolioMode === PortfolioModes.THREE_D &&
+      state.modeStatus === 'loading-3d' &&
+      !state.showTutorial
+    ) {
+      state.activate3DSceneAndTutorial(true);
+    }
+  }, MODE_ACTIVATION_TIMEOUT_MS);
+};
+
 // Using centralized navigation configuration
 const CONFIG = NAVIGATION_CONFIG;
 
+const MODE_INTENT_SESSION_KEY = 'portfolio_mode_intent';
+const MODE_INTENT_TTL_MS = 4000;
+
+interface ModeIntent {
+  mode: PortfolioMode;
+  timestamp: number;
+}
+
+type InitialModeState = {
+  portfolioMode: PortfolioMode;
+  showModeSelector: boolean;
+  modeStatus: ModeStatus;
+  canvas3DActive: boolean;
+  loading3DScene: boolean;
+  pendingIntent: ModeIntent | null;
+};
+
+
+const readModeIntent = (): ModeIntent | null => {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+  try {
+    const raw = window.sessionStorage.getItem(MODE_INTENT_SESSION_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as ModeIntent;
+    if (!parsed?.mode || typeof parsed.timestamp !== 'number') {
+      window.sessionStorage.removeItem(MODE_INTENT_SESSION_KEY);
+      return null;
+    }
+    if (Date.now() - parsed.timestamp > MODE_INTENT_TTL_MS) {
+      window.sessionStorage.removeItem(MODE_INTENT_SESSION_KEY);
+      return null;
+    }
+    return parsed;
+  } catch (error) {
+    console.warn('[navigation.store] Failed to read mode intent from sessionStorage', error);
+    return null;
+  }
+};
+
+const writeModeIntent = (intent: ModeIntent | null) => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+  try {
+    if (intent) {
+      window.sessionStorage.setItem(MODE_INTENT_SESSION_KEY, JSON.stringify(intent));
+    } else {
+      window.sessionStorage.removeItem(MODE_INTENT_SESSION_KEY);
+    }
+  } catch (error) {
+    console.warn('[navigation.store] Failed to persist mode intent', error);
+  }
+};
+
+const deriveInitialModeState = (): InitialModeState => {
+  const intent = readModeIntent();
+
+  if (!intent) {
+    return {
+      portfolioMode: PortfolioModes.CHOOSING,
+      showModeSelector: true,
+      modeStatus: 'selector',
+      canvas3DActive: false,
+      loading3DScene: false,
+      pendingIntent: null,
+    };
+  }
+
+  if (intent.mode === PortfolioModes.THREE_D) {
+    return {
+      portfolioMode: PortfolioModes.THREE_D,
+      showModeSelector: false,
+      modeStatus: 'loading-3d',
+      canvas3DActive: true,
+      loading3DScene: true,
+      pendingIntent: intent,
+    };
+  }
+
+  if (intent.mode === PortfolioModes.ONE_PAGE) {
+    return {
+      portfolioMode: PortfolioModes.ONE_PAGE,
+      showModeSelector: false,
+      modeStatus: 'ready-onepage',
+      canvas3DActive: false,
+      loading3DScene: false,
+      pendingIntent: intent,
+    };
+  }
+
+  return {
+    portfolioMode: PortfolioModes.CHOOSING,
+    showModeSelector: true,
+    modeStatus: 'selector',
+    canvas3DActive: false,
+    loading3DScene: false,
+    pendingIntent: null,
+  };
+};
 // Global state change monitor for debugging
-let lastPortfolioMode: string = 'choosing';
+let lastPortfolioMode: PortfolioMode = PortfolioModes.CHOOSING;
 
 export const useNavigationStore = create(
   subscribeWithSelector<NavigationStore>((set, get) => {
@@ -132,18 +266,19 @@ export const useNavigationStore = create(
       }
 
       if (newPortfolioMode && newPortfolioMode !== lastPortfolioMode) {
-        const timestamp = new Date().toISOString();
-        console.log(`🚨🚨🚨 [${timestamp}] PORTFOLIO MODE CHANGE DETECTED:`, {
-          from: lastPortfolioMode,
-          to: newPortfolioMode,
-          stackTrace: new Error('Portfolio mode change').stack?.split('\n').slice(0, 5).join('\n')
-        });
+        const previousMode = lastPortfolioMode;
         lastPortfolioMode = newPortfolioMode;
+        console.debug('[navigation.store] portfolioMode change', { from: previousMode, to: newPortfolioMode });
       }
 
-      return originalSet(partial, replace);
+      if (replace === true) {
+        return originalSet(partial, true);
+      }
+
+      return originalSet(partial, false);
     };
 
+    const modeSeed = deriveInitialModeState();
     return {
     // ===================================
     // ESTADO (STATE)
@@ -154,7 +289,7 @@ export const useNavigationStore = create(
     zoomProgress: 0,            // Progresso do zoom (0 a 1)
     fadeProgress: 0,            // Progresso do fade (0 a 1)
     pageVisible: false,         // Visibilidade da página da seção
-    canvas3DActive: false,      // Estado do loop de renderização (inicia desabilitado para performance)
+    canvas3DActive: modeSeed.canvas3DActive,
     
     // Valores de animação (não causam re-render)
     _animation: {
@@ -174,8 +309,9 @@ export const useNavigationStore = create(
     hoveredNavigationDot: null,
 
     // Portfolio mode states
-    portfolioMode: PortfolioModes.CHOOSING,
-    showModeSelector: true,
+    portfolioMode: modeSeed.portfolioMode,
+    showModeSelector: modeSeed.showModeSelector,
+    modeStatus: modeSeed.modeStatus,
 
     // Tutorial states
     showTutorial: false,
@@ -190,7 +326,8 @@ export const useNavigationStore = create(
     // 3D Scene Ready state
     is3DSceneReady: false,
     // Loading 3D Scene state (prevents race conditions)
-    loading3DScene: false,
+    loading3DScene: modeSeed.loading3DScene,
+    pendingModeIntent: modeSeed.pendingIntent,
     // Activation in progress flag (prevents simultaneous activations)
     activationInProgress: false,
     // StrictMode protection flag
@@ -759,41 +896,25 @@ export const useNavigationStore = create(
 
     // 3D Scene Ready actions
     set3DSceneReady: (isReady: boolean) => {
-      const timestamp = new Date().toISOString();
-      const currentState = get();
+      if (!isReady) {
+        set({ is3DSceneReady: false });
+        return;
+      }
 
-      console.log(`🎬 [${timestamp}] set3DSceneReady CALLED:`, {
-        isReady,
-        currentIs3DSceneReady: currentState.is3DSceneReady,
-        loading3DScene: currentState.loading3DScene,
-        portfolioMode: currentState.portfolioMode,
-        showTutorial: currentState.showTutorial,
-        activationInProgress: currentState.activationInProgress
+      const state = get();
+      if (state.portfolioMode !== PortfolioModes.THREE_D) {
+        return;
+      }
+
+      set({
+        is3DSceneReady: true,
+        pendingModeIntent: null
       });
 
-      set({ is3DSceneReady: isReady });
-
-      // RACE CONDITION FIX: Ativa tutorial apenas quando 3D scene está pronto E estamos em loading
-      const state = get();
-      if (isReady && state.loading3DScene && state.portfolioMode === PortfolioModes.THREE_D) {
-        console.log(`⏰ [${timestamp}] set3DSceneReady: Scheduling activation in 50ms`);
-
-        // Pequeno delay para garantir que a cena está realmente estabilizada
-        setTimeout(() => {
-          console.log(`🚀 [${timestamp}] set3DSceneReady: Calling activate3DSceneAndTutorial`);
-          get().activate3DSceneAndTutorial();
-        }, 50);
-      } else {
-        console.log(`❌ [${timestamp}] set3DSceneReady: Conditions not met for activation:`, {
-          isReady,
-          loading3DScene: state.loading3DScene,
-          portfolioMode: state.portfolioMode,
-          conditionsMet: isReady && state.loading3DScene && state.portfolioMode === PortfolioModes.THREE_D
-        });
-      }
+      state.activate3DSceneAndTutorial();
     },
 
-    // Loading 3D Scene actions (race condition prevention)
+// Loading 3D Scene actions (race condition prevention)
     setLoading3DScene: (isLoading: boolean) => {
       set({ loading3DScene: isLoading });
     },
@@ -802,181 +923,142 @@ export const useNavigationStore = create(
       set({ activationInProgress: inProgress });
     },
 
-    activate3DSceneAndTutorial: () => {
-      const timestamp = new Date().toISOString();
+    activate3DSceneAndTutorial: (force = false) => {
       const state = get();
-
-      console.log(`🔥 [${timestamp}] activate3DSceneAndTutorial CALLED:`, {
-        portfolioMode: state.portfolioMode,
-        is3DSceneReady: state.is3DSceneReady,
-        showTutorial: state.showTutorial,
-        loading3DScene: state.loading3DScene,
-        activationInProgress: state.activationInProgress
-      });
-
-      // RACE CONDITION GUARD: Previne ativações simultâneas
-      if (state.activationInProgress) {
-        console.log(`⚠️  [${timestamp}] activate3DSceneAndTutorial: BLOCKED - activationInProgress is true`);
+      if (state.portfolioMode !== PortfolioModes.THREE_D) {
         return;
       }
 
-      // CRÍTICO: Só ativa se estivermos no modo 3D, scene pronto E ainda não estiver showing tutorial
-      if (state.portfolioMode === PortfolioModes.THREE_D &&
-          state.is3DSceneReady &&
-          !state.showTutorial) {
-
-        console.log(`✨ [${timestamp}] activate3DSceneAndTutorial: CONDITIONS MET - Activating tutorial`);
-
-        // Marca como em progresso para prevenir calls simultâneas
-        set({ activationInProgress: true });
-
-        // Ativa tutorial
-        set({
-          showTutorial: true,
-          loading3DScene: false,
-          activationInProgress: false // Reset flag
-        });
-
-        console.log(`🎉 [${timestamp}] activate3DSceneAndTutorial: COMPLETED - Tutorial activated`);
-      } else {
-        console.log(`❌ [${timestamp}] activate3DSceneAndTutorial: CONDITIONS NOT MET:`, {
-          is3DMode: state.portfolioMode === PortfolioModes.THREE_D,
-          is3DSceneReady: state.is3DSceneReady,
-          tutorialNotShowing: !state.showTutorial,
-          allConditions: state.portfolioMode === PortfolioModes.THREE_D &&
-                        state.is3DSceneReady &&
-                        !state.showTutorial
-        });
+      if (!state.is3DSceneReady && !force) {
+        return;
       }
+
+      clearModeActivationTimeout();
+      writeModeIntent(null);
+
+      const shouldShowTutorial = !state.tutorialCompleted;
+
+      set({
+        modeStatus: 'ready-3d',
+        loading3DScene: false,
+        showModeSelector: false,
+        is3DSceneReady: true,
+        showTutorial: shouldShowTutorial,
+        activationInProgress: false,
+        pendingModeIntent: null
+      });
     },
 
-    // ===================================
+// ===================================
     // PORTFOLIO MODE MANAGEMENT
     // ===================================
+
     setPortfolioMode: (mode: PortfolioMode) => {
-      const timestamp = new Date().toISOString();
-      const currentState = get();
+      if (mode === PortfolioModes.CHOOSING) {
+        clearModeActivationTimeout();
+        writeModeIntent(null);
 
-      console.log(`🎯 [${timestamp}] setPortfolioMode CALLED:`, {
-        newMode: mode,
-        currentMode: currentState.portfolioMode,
-        currentLoading3DScene: currentState.loading3DScene,
-        currentShowTutorial: currentState.showTutorial,
-        currentIs3DSceneReady: currentState.is3DSceneReady,
-        activationInProgress: currentState.activationInProgress
-      });
-
-      set({
-        portfolioMode: mode,
-        // Ativa canvas 3D apenas se modo 3D for selecionado
-        canvas3DActive: mode === PortfolioModes.THREE_D,
-        // RACE CONDITION FIX: Não ativa tutorial imediatamente, espera 3D scene estar pronto
-        showTutorial: false,
-        // Indica que estamos carregando o 3D scene se modo 3D for selecionado
-        loading3DScene: mode === PortfolioModes.THREE_D,
-        // Reset tutorial completed quando muda modo
-        tutorialCompleted: mode !== PortfolioModes.THREE_D,
-        // Reset 3D scene ready state quando muda modo
-        is3DSceneReady: mode !== PortfolioModes.THREE_D ? false : get().is3DSceneReady,
-        // Reset activation flag quando muda modo
-        activationInProgress: false
-      });
-
-      console.log(`✅ [${timestamp}] setPortfolioMode COMPLETED:`, {
-        newState: {
-          portfolioMode: mode,
-          loading3DScene: mode === PortfolioModes.THREE_D,
+        set({
+          portfolioMode: PortfolioModes.CHOOSING,
+          showModeSelector: true,
+          modeStatus: 'selector',
+          canvas3DActive: false,
+          loading3DScene: false,
+          is3DSceneReady: false,
           showTutorial: false,
-          is3DSceneReady: mode !== PortfolioModes.THREE_D ? false : get().is3DSceneReady
-        }
-      });
+          activationInProgress: false,
+          pendingModeIntent: null
+        });
 
-      // REMOVED: Timeout logic movido para componente com useEffect e cleanup adequado
-
-      // Não salva mais no localStorage - sempre volta à seleção no refresh
-    },
-
-    initializePortfolioMode: () => {
-      const timestamp = new Date().toISOString();
-      const currentState = get();
-
-      console.log(`🔥🔥🔥 [${timestamp}] initializePortfolioMode CALLED - THIS IS THE CULPRIT:`, {
-        currentPortfolioMode: currentState.portfolioMode,
-        currentLoading3DScene: currentState.loading3DScene,
-        currentShowModeSelector: currentState.showModeSelector,
-        stackTrace: new Error().stack
-      });
-
-      // Limpa qualquer preferência salva anteriormente
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem(STORAGE_KEYS.PORTFOLIO_MODE);
+        return;
       }
 
-      // Sempre volta à tela de seleção no refresh/carregamento da página
+      if (mode === PortfolioModes.ONE_PAGE) {
+        clearModeActivationTimeout();
+        writeModeIntent({ mode, timestamp: Date.now() });
+
+        set({
+          portfolioMode: PortfolioModes.ONE_PAGE,
+          showModeSelector: false,
+          modeStatus: 'ready-onepage',
+          canvas3DActive: false,
+          loading3DScene: false,
+          is3DSceneReady: false,
+          showTutorial: false,
+          activationInProgress: false,
+          pendingModeIntent: null
+        });
+
+        return;
+      }
+
+      const intent: ModeIntent = { mode: PortfolioModes.THREE_D, timestamp: Date.now() };
+      writeModeIntent(intent);
+
+      set({
+        portfolioMode: PortfolioModes.THREE_D,
+        showModeSelector: false,
+        modeStatus: 'loading-3d',
+        canvas3DActive: true,
+        loading3DScene: true,
+        is3DSceneReady: false,
+        showTutorial: false,
+        tutorialCompleted: false,
+        activationInProgress: false,
+        pendingModeIntent: intent
+      });
+
+      scheduleModeActivationTimeout(get);
+    },
+
+initializePortfolioMode: () => {
+      clearModeActivationTimeout();
+      writeModeIntent(null);
+
       set({
         portfolioMode: PortfolioModes.CHOOSING,
         showModeSelector: true,
-        // Canvas permanece desabilitado até escolha
+        modeStatus: 'selector',
         canvas3DActive: false,
-        // Reset loading states
         loading3DScene: false,
         is3DSceneReady: false,
-        showTutorial: false
+        showTutorial: false,
+        tutorialCompleted: false,
+        activationInProgress: false,
+        pendingModeIntent: null
       });
-
-      console.log(`💥💥💥 [${timestamp}] initializePortfolioMode COMPLETED - STATE RESET TO CHOOSING`);
     },
 
-    showPortfolioModeSelector: () => {
-      const timestamp = new Date().toISOString();
-      const currentState = get();
+showPortfolioModeSelector: () => {
+      const state = get();
 
-      console.log(`showPortfolioModeSelector CALLED [${timestamp}]:`, {
-        currentPortfolioMode: currentState.portfolioMode,
-        currentLoading3DScene: currentState.loading3DScene,
-        currentShowModeSelector: currentState.showModeSelector,
-        stackTrace: new Error().stack
-      });
-
-      if (currentState.loading3DScene) {
-        console.log(`showPortfolioModeSelector SKIPPED [${timestamp}] - 3D scene still loading`, {
-          portfolioMode: currentState.portfolioMode,
-          activationInProgress: currentState.activationInProgress
+      if (state.portfolioMode === PortfolioModes.THREE_D) {
+        set({
+          showModeSelector: true,
+          activationInProgress: false
         });
         return;
       }
 
-      if (currentState.showModeSelector && currentState.portfolioMode === PortfolioModes.CHOOSING) {
-        console.log(`showPortfolioModeSelector NO-OP [${timestamp}] - selector already visible`);
-        return;
-      }
+      clearModeActivationTimeout();
+      writeModeIntent(null);
 
       set({
-        showModeSelector: true,
         portfolioMode: PortfolioModes.CHOOSING,
+        showModeSelector: true,
+        modeStatus: 'selector',
         loading3DScene: false,
-        activationInProgress: false
+        canvas3DActive: false,
+        activationInProgress: false,
+        pendingModeIntent: null
       });
-
-      console.log(`showPortfolioModeSelector COMPLETED [${timestamp}] - selector shown with choosing state`);
     },
-    
-    hidePortfolioModeSelector: () => {
-      const timestamp = new Date().toISOString();
-      const currentState = get();
 
-      console.log(`hidePortfolioModeSelector CALLED [${timestamp}]:`, {
-        currentShowModeSelector: currentState.showModeSelector,
-        portfolioMode: currentState.portfolioMode,
-        loading3DScene: currentState.loading3DScene,
-        showTutorial: currentState.showTutorial
-      });
-
+hidePortfolioModeSelector: () => {
       set({ showModeSelector: false });
-
-      console.log(`hidePortfolioModeSelector COMPLETED [${timestamp}]`);
     },
-    // Funções removidas - não salva mais preferência no localStorage
+
+// Funções removidas - não salva mais preferência no localStorage
     // savePortfolioModePreference: Removida - sempre volta à seleção
     // loadPortfolioModePreference: Removida - sempre volta à seleção
 
@@ -999,3 +1081,35 @@ export const useNavigationStore = create(
   }
   })
 );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if (typeof window !== 'undefined') {
+  const initialState = useNavigationStore.getState();
+  if (initialState.modeStatus === 'loading-3d') {
+    scheduleModeActivationTimeout(() => useNavigationStore.getState());
+  }
+}
+
+
+
+
+
+
+
+
+

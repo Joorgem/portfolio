@@ -3,7 +3,7 @@ import { useMotionValue, useSpring } from "motion/react"
 import { useFrame } from "@react-three/fiber"
 import * as THREE from 'three'
 import { GLTF } from 'three-stdlib'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { useNavigationStore } from '../stores/navigation.store'
 
 interface AstronautWithCurtainProps {
@@ -55,7 +55,7 @@ export const AstronautWithCurtain = forwardRef<THREE.Group, AstronautWithCurtain
           const loader = new GLTFLoader();
           loader.load(
             '/models/ManInBlackHole.glb',
-            (result) => resolve(result as GLTFResult),
+            (result) => resolve(result as unknown as GLTFResult),
             undefined,
             reject
           );
@@ -168,7 +168,8 @@ export const AstronautWithCurtain = forwardRef<THREE.Group, AstronautWithCurtain
   });
 
   // Só renderiza o modelo se estiver carregado E tutorial fechado
-  const shouldShowModel = modelLoaded && !showTutorial && modelAssets;
+  const readyModel = modelLoaded && !showTutorial ? modelAssets : null;
+  const shouldShowModel = Boolean(readyModel);
 
   return (
     <group
@@ -179,8 +180,8 @@ export const AstronautWithCurtain = forwardRef<THREE.Group, AstronautWithCurtain
       onPointerDown={handlePointerDown}
       visible={shouldShowModel}
     >
-      {shouldShowModel && (
-        <primitive object={modelAssets!.scene} />
+      {readyModel && (
+        <primitive object={readyModel.scene} />
       )}
     </group>
   );
@@ -188,3 +189,6 @@ export const AstronautWithCurtain = forwardRef<THREE.Group, AstronautWithCurtain
 
 // Remove o preload global pois agora fazemos loading manual
 export default AstronautWithCurtain;
+
+
+
