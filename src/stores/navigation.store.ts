@@ -822,20 +822,10 @@ export const useNavigationStore = create(
     // TUTORIAL
     // ===================================
     initializeTutorial: () => {
-      const timestamp = new Date().toISOString();
       const currentState = get();
-
-      console.log(`🎪 [${timestamp}] initializeTutorial CALLED:`, {
-        currentPortfolioMode: currentState.portfolioMode,
-        currentLoading3DScene: currentState.loading3DScene,
-        currentShowModeSelector: currentState.showModeSelector,
-        isInitialized: currentState._isInitialized,
-        stackTrace: new Error().stack
-      });
 
       // STRICTMODE FIX: Só executa na primeira vez
       if (currentState._isInitialized) {
-        console.log(`🛡️  [${timestamp}] initializeTutorial: BLOCKED - Already initialized, preventing StrictMode double execution`);
         return;
       }
 
@@ -844,8 +834,6 @@ export const useNavigationStore = create(
 
       // Tutorial será ativado automaticamente quando o usuário selecionar o modo 3D
       // Não precisa mais fazer nada aqui
-
-      console.log(`✅ [${timestamp}] initializeTutorial COMPLETED - Marked as initialized`);
     },
     
     closeTutorial: () => {
