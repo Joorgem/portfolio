@@ -115,8 +115,8 @@ const CONFIG = NAVIGATION_CONFIG;
 // Global state change monitor for debugging
 let lastPortfolioMode: string = 'choosing';
 
-export const useNavigationStore = create<NavigationStore>()(
-  subscribeWithSelector((set, get) => {
+export const useNavigationStore = create(
+  subscribeWithSelector<NavigationStore>((set, get) => {
     // ULTRA-DEBUG: Monitor ALL state changes - wrap the original set function
     const originalSet = set;
     set = (partial: any, replace?: boolean) => {
@@ -144,7 +144,7 @@ export const useNavigationStore = create<NavigationStore>()(
       return originalSet(partial, replace);
     };
 
-    return ({
+    return {
     // ===================================
     // ESTADO (STATE)
     // ===================================
@@ -960,6 +960,22 @@ export const useNavigationStore = create<NavigationStore>()(
 
       console.log(`showPortfolioModeSelector COMPLETED [${timestamp}] - selector shown with choosing state`);
     },
+    
+    hidePortfolioModeSelector: () => {
+      const timestamp = new Date().toISOString();
+      const currentState = get();
+
+      console.log(`hidePortfolioModeSelector CALLED [${timestamp}]:`, {
+        currentShowModeSelector: currentState.showModeSelector,
+        portfolioMode: currentState.portfolioMode,
+        loading3DScene: currentState.loading3DScene,
+        showTutorial: currentState.showTutorial
+      });
+
+      set({ showModeSelector: false });
+
+      console.log(`hidePortfolioModeSelector COMPLETED [${timestamp}]`);
+    },
     // Funções removidas - não salva mais preferência no localStorage
     // savePortfolioModePreference: Removida - sempre volta à seleção
     // loadPortfolioModePreference: Removida - sempre volta à seleção
@@ -980,5 +996,6 @@ export const useNavigationStore = create<NavigationStore>()(
         finalCameraHeight: height
       });
     }
-  }))
+  }
+  })
 );
