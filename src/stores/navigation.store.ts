@@ -931,34 +931,35 @@ export const useNavigationStore = create<NavigationStore>()(
       const timestamp = new Date().toISOString();
       const currentState = get();
 
-      console.log(`🔄🔄🔄 [${timestamp}] showPortfolioModeSelector CALLED - POTENTIAL CULPRIT:`, {
+      console.log(`showPortfolioModeSelector CALLED [${timestamp}]:`, {
         currentPortfolioMode: currentState.portfolioMode,
         currentLoading3DScene: currentState.loading3DScene,
         currentShowModeSelector: currentState.showModeSelector,
         stackTrace: new Error().stack
       });
 
-      set({ showModeSelector: true, portfolioMode: PortfolioModes.CHOOSING });
+      if (currentState.loading3DScene) {
+        console.log(`showPortfolioModeSelector SKIPPED [${timestamp}] - 3D scene still loading`, {
+          portfolioMode: currentState.portfolioMode,
+          activationInProgress: currentState.activationInProgress
+        });
+        return;
+      }
 
-      console.log(`💀💀💀 [${timestamp}] showPortfolioModeSelector COMPLETED - FORCED RESET TO CHOOSING`);
-    },
+      if (currentState.showModeSelector && currentState.portfolioMode === PortfolioModes.CHOOSING) {
+        console.log(`showPortfolioModeSelector NO-OP [${timestamp}] - selector already visible`);
+        return;
+      }
 
-    hidePortfolioModeSelector: () => {
-      const timestamp = new Date().toISOString();
-      const currentState = get();
-
-      console.log(`🙈 [${timestamp}] hidePortfolioModeSelector CALLED:`, {
-        currentShowModeSelector: currentState.showModeSelector,
-        portfolioMode: currentState.portfolioMode,
-        loading3DScene: currentState.loading3DScene,
-        showTutorial: currentState.showTutorial
+      set({
+        showModeSelector: true,
+        portfolioMode: PortfolioModes.CHOOSING,
+        loading3DScene: false,
+        activationInProgress: false
       });
 
-      set({ showModeSelector: false });
-
-      console.log(`✅ [${timestamp}] hidePortfolioModeSelector COMPLETED`);
+      console.log(`showPortfolioModeSelector COMPLETED [${timestamp}] - selector shown with choosing state`);
     },
-
     // Funções removidas - não salva mais preferência no localStorage
     // savePortfolioModePreference: Removida - sempre volta à seleção
     // loadPortfolioModePreference: Removida - sempre volta à seleção
