@@ -111,7 +111,7 @@ export const myProjects: Project[] = [
       "Modern TypeScript architecture with Vite, Tailwind CSS 4.0 and mobile-first responsive design."
     ],
     href: "https://jorgemolina.dev/",
-    repositoryUrl: "#",
+    repositoryUrl: "https://github.com/Joorgem/portfolio",
     logo: "",
     image: "/assets/projects/portfolio-3d.jpg",
     media: [
@@ -356,3 +356,4 @@ export const courses: Course[] = [
     link: "https://udemy.com",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
   }];
+
