@@ -10,7 +10,7 @@ Personal, immersive web portfolio with a 3D astronaut experience (React + Three.
 [![Zustand](https://img.shields.io/badge/Zustand-5.0-2D2D2D?style=for-the-badge)](https://zustand-demo.pmnd.rs/)
 
 ## Overview
-- Two modes: Immersive 3D (astronaut + planets as sections) and One Page (classic scroll).
+- Two modes: Immersive 3D and One Page (classic scroll).
 - Cinematic transitions from space to section content with a 7‑state 3D navigation system.
 - Mobile‑first: adaptive scaling, gesture handling, throttling, and progressive loading.
 
