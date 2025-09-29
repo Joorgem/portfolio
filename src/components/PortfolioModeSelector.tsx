@@ -92,9 +92,7 @@ const PortfolioModeSelector: React.FC = () => {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="w-16 h-16 border-3 border-white border-t-transparent rounded-full animate-spin mb-4"></div>
-              <h2 className="text-white text-2xl font-light mb-2">Preparing 3D Experience</h2>
-              <p className="text-white/60 text-sm">This will just take a moment...</p>
+              <div className="w-16 h-16 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
             </motion.div>
           ) : (
             <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
@@ -118,8 +116,7 @@ const PortfolioModeSelector: React.FC = () => {
                   transition={{ duration: 0.2 }}
                 >
                   <div className="flex flex-col items-center">
-                    <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin mb-2"></div>
-                    <p className="text-white/80 text-sm font-light">Loading 3D...</p>
+                    <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                   </div>
                 </motion.div>
               )}
