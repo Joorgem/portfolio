@@ -2,7 +2,6 @@ import React, { Suspense, useRef, useEffect, useCallback } from "react";
 import { Canvas } from "@react-three/fiber";
 import { useMediaQuery } from "react-responsive";
 import { Group } from 'three';
-import HeroTextFixed from "../components/HeroTextFixed";
 import { Astronaut } from "../components/Astronaut";
 import Loader from "../components/Loader";
 import NavigationSystemStable from "../components/NavigationSystemStable";
@@ -226,10 +225,6 @@ const HeroZustand: React.FC = () => {
       className={`relative w-screen h-screen overflow-hidden bg-transparent transition-opacity duration-500 ${isSceneVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
       aria-hidden={!isSceneVisible}
     >{/* Partículas agora no App.jsx */}
-      {/* Texto Hero - Visível apenas no estado inicial */}
-      {navigationState === 'idle' && (
-        <HeroTextFixed />
-      )}
       
       {/* Canvas 3D Principal */}
       <div className="fixed inset-0 z-0">
@@ -374,7 +369,7 @@ const HeroZustand: React.FC = () => {
 
       {/* Language Toggle - Apenas Desktop */}
       {navigationState !== 'in_section' && !isMobile && (
-        <div className="fixed top-8 right-52 z-[9999] flex items-start">
+        <div className="fixed top-8 right-8 z-[9999] flex items-start">
           <LanguageToggle />
         </div>
       )}

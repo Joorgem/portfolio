@@ -69,22 +69,22 @@ export const myProjects: Project[] = [
     image: "/assets/projects/solto-homepage.jpg",
     media: [
       {
-        type: "gif",
-        src: "/assets/projects/solto-demo.gif",
+        type: "video",
+        src: "/assets/projects-optimized/solto-demo-opt.mp4",
         alt: "SOLTO Demo - complete navigation",
         category: "web",
         priority: 1
       },
       {
-        type: "gif",
-        src: "/assets/projects/solto-mobile.gif",
+        type: "video",
+        src: "/assets/projects-optimized/solto-mobile-opt.mp4",
         alt: "Responsive mobile interface",
         category: "mobile",
         priority: 1
       },
       {
-        type: "gif", 
-        src: "/assets/projects/solto-admin.gif",
+        type: "video",
+        src: "/assets/projects-optimized/solto-admin-opt.mp4",
         alt: "SOLTO administrative panel",
         category: "admin",
         priority: 1
@@ -116,15 +116,15 @@ export const myProjects: Project[] = [
     image: "/assets/projects/portfolio-3d.jpg",
     media: [
       {
-        type: "gif",
-        src: "/assets/projects/portifolio3d-demo.gif",
+        type: "video",
+        src: "/assets/projects-optimized/portifolio3d-demo-opt.mp4",
         alt: "3D Portfolio navigation demo",
         category: "web",
         priority: 1
       },
       {
-        type: "gif",
-        src: "/assets/projects/portifolio3d-mobile.gif",
+        type: "video",
+        src: "/assets/projects-optimized/portifolio3d-mobile-opt.mp4",
         alt: "3D Portfolio mobile interface",
         category: "mobile",
         priority: 1
@@ -157,8 +157,8 @@ export const myProjects: Project[] = [
     image: "/assets/projects/storehub-dashboard.jpg",
     media: [
       {
-        type: "gif",
-        src: "/assets/projects/storehub-demo.gif",
+        type: "video",
+        src: "/assets/projects-optimized/storehub-demo-opt.mp4",
         alt: "StoreHub system demonstration",
         category: "web",
         priority: 1

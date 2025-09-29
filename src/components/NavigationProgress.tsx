@@ -291,10 +291,10 @@ const NavigationProgress: React.FC = () => {
     <AnimatePresence>
       {!shouldHide && (
         <motion.div
-          className="fixed right-8 top-8 z-[9998] flex flex-col items-end gap-6"
-          initial={{ opacity: 0, x: 20, y: -10 }}
+          className="fixed left-8 top-8 z-[9998] flex flex-col items-start gap-6"
+          initial={{ opacity: 0, x: -20, y: -10 }}
           animate={{ opacity: 1, x: 0, y: 0 }}
-          exit={{ opacity: 0, x: 20, y: -10 }}
+          exit={{ opacity: 0, x: -20, y: -10 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
           {/* Progress dots */}
@@ -308,7 +308,7 @@ const NavigationProgress: React.FC = () => {
                   key={point.id}
                   layout
                   layoutId={`nav-dot-${point.id}`}
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ 
                     delay: index * 0.1 + 0.2,

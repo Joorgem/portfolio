@@ -10,7 +10,6 @@ import enNavigation from './locales/en/navigation.json';
 import enProjects from './locales/en/projects.json';
 import enExperiences from './locales/en/experiences.json';
 import enCourses from './locales/en/courses.json';
-import enHero from './locales/en/hero.json';
 import enTutorial from './locales/en/tutorial.json';
 import enModeSelector from './locales/en/modeSelector.json';
 
@@ -21,7 +20,6 @@ import ptNavigation from './locales/pt/navigation.json';
 import ptProjects from './locales/pt/projects.json';
 import ptExperiences from './locales/pt/experiences.json';
 import ptCourses from './locales/pt/courses.json';
-import ptHero from './locales/pt/hero.json';
 import ptTutorial from './locales/pt/tutorial.json';
 import ptModeSelector from './locales/pt/modeSelector.json';
 
@@ -34,7 +32,6 @@ const resources = {
     projects: enProjects,
     experiences: enExperiences,
     courses: enCourses,
-    hero: enHero,
     tutorial: enTutorial,
     modeSelector: enModeSelector,
   },
@@ -46,7 +43,6 @@ const resources = {
     projects: ptProjects,
     experiences: ptExperiences,
     courses: ptCourses,
-    hero: ptHero,
     tutorial: ptTutorial,
     modeSelector: ptModeSelector,
   },
@@ -59,7 +55,7 @@ i18n
     lng: 'en', // default language
     fallbackLng: 'en',
     
-    ns: ['common', 'about', 'contact', 'navigation', 'projects', 'experiences', 'courses', 'hero', 'tutorial', 'modeSelector'],
+    ns: ['common', 'about', 'contact', 'navigation', 'projects', 'experiences', 'courses', 'tutorial', 'modeSelector'],
     defaultNS: 'common',
     
     detection: {
