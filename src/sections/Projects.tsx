@@ -5,26 +5,24 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
 const Projects: React.FC = () => {
-  const { t } = useTranslation('projects');
+  const { t } = useTranslation("projects");
   const projectsData = {
-    sectionTitle: t('sectionTitle'),
-    sectionSubtitle: t('sectionSubtitle'),
-    scrollText: t('scrollText'),
-    endText: t('endText'),
+    sectionTitle: t("sectionTitle"),
+    sectionSubtitle: t("sectionSubtitle"),
+    scrollText: t("scrollText"),
     labels: {
-      technologies: t('labels.technologies'),
-      links: t('labels.links'),
-      viewProject: t('labels.viewProject'),
-      code: t('labels.code'),
-      viewDetails: t('labels.viewDetails'),
-      projectDetails: t('labels.projectDetails')
+      technologies: t("labels.technologies"),
+      links: t("labels.links"),
+      viewProject: t("labels.viewProject"),
+      code: t("labels.code"),
+      viewDetails: t("labels.viewDetails"),
+      projectDetails: t("labels.projectDetails"),
     },
-    projects: t('projects', { returnObjects: true }) as any[]
+    projects: t("projects", { returnObjects: true }) as any[],
   };
 
   return (
     <section className="relative bg-transparent w-full">
-      
       <div className="relative z-10 min-h-screen flex flex-col justify-center text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -36,22 +34,21 @@ const Projects: React.FC = () => {
               {projectsData.sectionTitle}
             </span>
           </h2>
-          
+
           <p className="text-lg text-gray-200 max-w-2xl mx-auto leading-relaxed">
             {projectsData.sectionSubtitle}
           </p>
         </motion.div>
-
       </div>
-      
+
       <div className="relative z-10">
         {myProjects.map((project, index) => {
           const translatedProject = (projectsData.projects as any[])[index] || {
             title: project.title,
             subDescription: project.subDescription,
-            tags: project.tags
+            tags: project.tags,
           };
-          
+
           return (
             <ProjectShowcase
               key={project.id}
@@ -66,20 +63,7 @@ const Projects: React.FC = () => {
         })}
       </div>
 
-      <div className="relative z-10 py-32 text-center">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="space-y-4"
-        >
-          <div className="w-16 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mx-auto" />
-          <p className="text-sm text-gray-500 font-light tracking-widest uppercase">
-            {projectsData.endText}
-          </p>
-        </motion.div>
-      </div>
+      <div className="relative z-10 py-16" />
     </section>
   );
 };

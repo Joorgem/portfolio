@@ -7,10 +7,11 @@
       "job": "CI&T",
       "date": "Jan 2026 - Presente",
       "contents": [
-        "Fundações de plataforma de dados enterprise codificando infraestrutura e controles de governança com Pulumi (TypeScript) em múltiplos ambientes.",
-        "Controles de privacidade by-design no Snowflake (políticas de mascaramento PII com hashing determinístico) para ambientes regulados.",
-        "Pipelines de ingestão end-to-end com CDC via Fivetran para ADLS (Iceberg) e Snowflake (volumes externos, integração de catálogo).",
-        "Hardening de CI/CD com GitHub Actions reusáveis, gates de ambiente e credenciais por conector."
+        "Atuando em iniciativas de plataforma de dados enterprise e governança, apoiando a implementação de infraestrutura de dados e controles de acesso em múltiplos ambientes.",
+        "Contribuindo com práticas de governança e segurança no Snowflake, incluindo RBAC, políticas de mascaramento e acesso controlado para datasets regulados.",
+        "Suportando onboarding de fontes e workflows de ingestão de dados usando Fivetran, ADLS (Iceberg) e Snowflake para casos de uso de analytics e reporting.",
+        "Melhorando confiabilidade de CI/CD e consistência de deploys com GitHub Actions, práticas de configuração segura e troubleshooting de issues de plataforma e acesso.",
+        "Colaborando na manutenção da plataforma, documentação e resolução técnica de problemas para manter o ambiente estável, seguro e mais fácil de operar."
       ]
     },
     {
@@ -18,21 +19,25 @@
       "job": "Globant",
       "date": "Set 2023 - Jan 2026",
       "contents": [
-        "Plataformas de ingestão e transformação em larga escala com Python, Azure Databricks, PySpark, Delta Lake e SQL, processando 10M+ registros/mês.",
-        "Pipelines ETL/ELT distribuídos orquestrados com Airflow e Azure Data Factory, reduzindo esforço manual de integração em ~80%.",
-        "Frameworks de validação, monitoramento e alertas incluindo detecção de anomalias, schema drift e tracking de SLAs.",
-        "Otimização de queries SQL e estratégias de indexação, reduzindo tempo de execução de ~18s para menos de 3s."
+        "Desenvolvimento e operação de plataformas de ingestão de dados em larga escala usando Python, Azure Databricks, PySpark, Delta Lake e SQL, processando dados de alto volume de APIs, fontes web e sistemas enterprise.",
+        "Design e otimização de workflows ETL/ELT orquestrados com Airflow e Azure Data Factory para datasets estruturados e semi-estruturados.",
+        "Construção de frameworks de qualidade de dados, monitoramento e alertas, incluindo checks de completude, detecção de anomalias, tratamento de schema drift e tracking de SLAs.",
+        "Otimização de transformações SQL, estratégias de indexação e planos de query para workloads analíticos de alto volume.",
+        "Desenvolvimento de automação backend e serviços usando Python e Azure Functions para orquestrar fluxos de ingestão, gerenciar retries e tratar recuperação de falhas.",
+        "Implementação de dashboards de observabilidade usando Power BI e Elasticsearch/Kibana para monitorar freshness, saúde de pipelines, taxas de erro e latência.",
+        "Parceria com times de engenharia, produto e operações em entrega ágil, ownership de componentes de ingestão end-to-end e contribuição em decisões de arquitetura."
       ]
     },
     {
-      "title": "Senior Full-Stack Developer & AI Engineer",
-      "job": "Freelancer",
+      "title": "Freelance Full-Stack Developer & AI Engineer",
+      "job": "Autônomo",
       "date": "Mar 2022 - Presente",
       "contents": [
-        "Entrega de sistemas de produção com Python e SQL, projetando APIs escaláveis suportando 10K+ requests/dia.",
-        "Pipelines de dados escaláveis com Airflow e Databricks/PySpark (batch e streaming), reduzindo ciclos de refresh em até 80%.",
-        "Plataformas cloud-native em Azure, AWS e GCP com Docker, Kubernetes e Terraform, reduzindo custos de infraestrutura em ~35%.",
-        "Monitoramento, avaliação e observabilidade para sistemas de dados e IA com LangSmith e Datadog."
+        "Entrega de aplicações full-stack baseadas em projetos usando TypeScript (React/Next.js, Node.js) e Python, com foco em qualidade de produto, manutenibilidade e entrega confiável.",
+        "Construção de workflows habilitados por IA e aplicações baseadas em retrieval para casos de uso de conhecimento e automação, incluindo integrações LLM, structured outputs e experiências de busca/sumarização.",
+        "Design de serviços backend, integrações de API, fluxos de autenticação e deploys em cloud em stacks web modernas.",
+        "Criação de interfaces polidas e experiências web interativas selecionadas, incluindo trabalho de portfolio pessoal que destaca engenharia frontend, motion e apresentação visual.",
+        "Aplicação de práticas de teste, validação e monitoramento para melhorar estabilidade, confiança de release e confiabilidade geral do produto."
       ]
     },
     {
@@ -40,10 +45,13 @@
       "job": "Santander Group",
       "date": "Ago 2021 - Set 2023",
       "contents": [
-        "Dashboards interativos em Power BI e pipelines de relatórios automatizados com Python, reduzindo esforço manual em ~70%.",
-        "Integração de dados de SAP, APIs, bancos SQL e Azure Data Lake em ambiente analítico centralizado.",
-        "Pipelines de processamento distribuído com PySpark e SparkSQL, melhorando performance 3-5x sobre processos legados.",
-        "Arquiteturas Azure com Synapse Analytics, ADLS e Databricks para reportes near real-time."
+        "Design e entrega de dashboards interativos em Power BI e pipelines de reporting automatizados usando Python, reduzindo esforço manual de reporting e expandindo analytics self-service para times de negócio.",
+        "Integração e padronização de dados de SAP, APIs externas, bancos SQL e Azure Data Lake em ambiente analítico centralizado.",
+        "Construção de pipelines de processamento distribuído com PySpark e SparkSQL, melhorando performance sobre processos legados e acelerando insights para times de negócio.",
+        "Implementação de arquiteturas Azure usando Synapse Analytics, ADLS e Databricks para suportar reporting near real-time.",
+        "Desenvolvimento de rotinas automatizadas de validação de dados, reconciliação e detecção de anomalias para melhorar acurácia e reduzir issues recorrentes.",
+        "Criação e manutenção de dashboards de KPI para finanças, vendas e operações.",
+        "Colaboração com stakeholders cross-funcionais para definir requisitos, manter dicionários de dados, documentar pipelines e traduzir outputs técnicos em insights acionáveis."
       ]
     },
     {
@@ -51,10 +59,11 @@
       "job": "Novelis",
       "date": "Mar 2020 - Fev 2021",
       "contents": [
-        "Consolidação de dados de Oracle, SQL/NoSQL, SAP e fontes IoT de chão de fábrica para monitoramento operacional near real-time.",
-        "Scripts Python automatizados para ingestão e limpeza de dados, reduzindo trabalho manual em planilhas em ~60%.",
-        "Dashboards interativos em Power BI para eficiência de produção, downtime de máquinas e indicadores operacionais críticos.",
-        "Regras de validação e detecção de anomalias, elevando a acurácia dos dados para 95%+."
+        "Consolidação de dados de Oracle, sistemas SQL/NoSQL, SAP e fontes IoT de chão de fábrica, contribuindo para ambiente analítico near real-time para monitoramento operacional.",
+        "Desenvolvimento de scripts Python automatizados para ingestão, padronização e limpeza de dados, reduzindo trabalho manual em planilhas e acelerando atualizações de KPIs.",
+        "Design e entrega de dashboards interativos em Power BI para tracking de eficiência de produção, downtime de máquinas e indicadores operacionais críticos.",
+        "Implementação de regras de validação de dados, reconciliação e detecção de anomalias para melhorar acurácia e confiabilidade dos dados.",
+        "Parceria com engenheiros e supervisores de planta para definir requisitos, documentar fontes de dados e manter dicionários de KPI, traduzindo dados operacionais brutos em insights acionáveis."
       ]
     },
     {

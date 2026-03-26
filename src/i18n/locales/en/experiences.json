@@ -7,10 +7,11 @@
       "job": "CI&T",
       "date": "Jan 2026 - Present",
       "contents": [
-        "Building enterprise data platform foundations with Pulumi (TypeScript), codifying infrastructure and governance controls across multiple environments.",
-        "Implementing privacy-by-design controls in Snowflake (tag-based PII masking with deterministic hashing) for regulated enterprise environments.",
-        "Delivering end-to-end data ingestion pipelines with CDC via Fivetran to ADLS (Iceberg) and Snowflake (external volumes, catalog integration).",
-        "Improving platform reliability through CI/CD hardening with reusable GitHub Actions workflows, environment gates, and connector-specific credentials."
+        "Working on enterprise data platform and governance initiatives, supporting the implementation of data infrastructure and access controls across multiple environments.",
+        "Contributing to Snowflake governance and security practices, including RBAC, masking policies, and controlled access for regulated datasets.",
+        "Supporting source onboarding and data ingestion workflows using Fivetran, ADLS (Iceberg), and Snowflake for analytics and reporting use cases.",
+        "Improving CI/CD reliability and deployment consistency with GitHub Actions, secure configuration practices, and troubleshooting of platform and access-related issues.",
+        "Collaborating on platform maintenance, documentation, and technical problem-solving to help keep the environment stable, secure, and easier to operate."
       ]
     },
     {
@@ -18,21 +19,25 @@
       "job": "Globant",
       "date": "Sep 2023 - Jan 2026",
       "contents": [
-        "Developed large-scale data ingestion platforms using Python, Azure Databricks, PySpark, Delta Lake, and SQL, processing 10M+ records/month.",
-        "Designed distributed ETL/ELT pipelines orchestrated with Airflow and Azure Data Factory, reducing manual integration effort by ~80%.",
-        "Built data validation, monitoring, and alerting frameworks including anomaly detection, schema drift, and SLA tracking.",
-        "Optimized SQL transformations and indexing strategies, reducing query execution from ~18s to under 3s."
+        "Developed and operated large-scale data ingestion platforms using Python, Azure Databricks, PySpark, Delta Lake, and SQL, processing high-volume data from APIs, web sources, and enterprise systems.",
+        "Designed and optimized ETL/ELT workflows orchestrated with Airflow and Azure Data Factory for structured and semi-structured datasets.",
+        "Built data quality, monitoring, and alerting frameworks, including completeness checks, anomaly detection, schema drift handling, and SLA tracking.",
+        "Optimized SQL transformations, indexing strategies, and query plans for high-volume analytical workloads.",
+        "Developed backend automation and services using Python and Azure Functions to orchestrate ingestion flows, manage retries, and handle failure recovery.",
+        "Implemented observability dashboards using Power BI and Elasticsearch/Kibana to track freshness, ingestion health, error rates, and processing latency.",
+        "Partnered with engineering, product, and operations teams in agile delivery, owning ingestion components end to end and contributing to architecture decisions around scalability and reliability."
       ]
     },
     {
-      "title": "Senior Full-Stack Developer & AI Engineer",
-      "job": "Freelancer",
+      "title": "Freelance Full-Stack Developer & AI Engineer",
+      "job": "Self-employed",
       "date": "Mar 2022 - Present",
       "contents": [
-        "Delivering production data and backend systems using Python and SQL, designing scalable APIs supporting 10K+ requests/day.",
-        "Building scalable data pipelines with Airflow and Databricks/PySpark (batch and streaming), reducing refresh cycles by up to 80%.",
-        "Architecting cloud-native data platforms across Azure, AWS, and GCP with Docker, Kubernetes, and Terraform, reducing infrastructure costs by ~35%.",
-        "Implementing monitoring, evaluation, and observability practices for data and AI-driven systems using LangSmith and Datadog."
+        "Delivering project-based full-stack applications using TypeScript (React/Next.js, Node.js) and Python, with focus on product quality, maintainability, and reliable delivery.",
+        "Building AI-enabled workflows and retrieval-based applications for knowledge and automation use cases, including LLM integrations, structured outputs, and search/summarization experiences.",
+        "Designing backend services, API integrations, authentication flows, and cloud deployments across modern web stacks.",
+        "Creating polished user-facing interfaces and selected interactive web experiences, including personal portfolio work that highlights frontend engineering, motion, and visual presentation.",
+        "Applying testing, validation, and monitoring practices to improve stability, release confidence, and overall product reliability."
       ]
     },
     {
@@ -40,10 +45,13 @@
       "job": "Santander Group",
       "date": "Aug 2021 - Sep 2023",
       "contents": [
-        "Designed interactive Power BI dashboards and automated reporting pipelines with Python, reducing manual effort by ~70%.",
-        "Integrated data from SAP, APIs, SQL databases, and Azure Data Lake into a centralized analytical environment.",
-        "Built distributed processing pipelines with PySpark and SparkSQL, achieving 3-5x performance improvements over legacy processes.",
-        "Implemented Azure-based architectures using Synapse Analytics, ADLS, and Databricks for near real-time reporting."
+        "Designed and delivered interactive Power BI dashboards and automated reporting pipelines using Python, reducing manual reporting effort and expanding self-service analytics for business teams.",
+        "Integrated and standardized data from SAP, external APIs, SQL databases, and Azure Data Lake into a centralized analytical environment.",
+        "Built distributed processing pipelines with PySpark and SparkSQL, improving performance over legacy processes and accelerating insights for business teams.",
+        "Implemented Azure-based data architectures using Synapse Analytics, ADLS, and Databricks to support near real-time reporting.",
+        "Developed automated data validation, reconciliation, and anomaly detection routines to improve data accuracy and reduce recurring issues.",
+        "Created and maintained KPI dashboards for finance, sales, and operations.",
+        "Collaborated with cross-functional stakeholders to define requirements, maintain data dictionaries, document pipelines, and translate technical outputs into actionable insights."
       ]
     },
     {
@@ -51,10 +59,11 @@
       "job": "Novelis",
       "date": "Mar 2020 - Feb 2021",
       "contents": [
-        "Consolidated data from Oracle, SQL/NoSQL systems, SAP, and shop-floor IoT sources for near real-time operational monitoring.",
-        "Developed automated Python scripts for data ingestion and cleansing, reducing manual spreadsheet work by ~60%.",
-        "Designed interactive Power BI dashboards for production efficiency, machine downtime, and critical operational indicators.",
-        "Implemented data validation and anomaly detection rules, increasing data accuracy to 95%+."
+        "Consolidated data from Oracle, SQL/NoSQL systems, SAP, and shop-floor IoT sources, contributing to a near real-time analytical environment for operational monitoring.",
+        "Developed automated Python scripts for data ingestion, standardization, and cleansing, reducing manual spreadsheet work and accelerating KPI updates.",
+        "Designed and delivered interactive Power BI dashboards for tracking production efficiency, machine downtime, and critical operational indicators.",
+        "Implemented data validation, reconciliation, and anomaly detection rules to improve data accuracy and reliability.",
+        "Partnered with engineers and plant supervisors to define requirements, document data sources, and maintain KPI dictionaries, translating raw operational data into actionable insights."
       ]
     },
     {
