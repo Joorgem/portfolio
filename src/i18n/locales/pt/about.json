@@ -3,7 +3,7 @@
   "name": "Jorge Molina",
   "description": "Transformando ideias em código desde 2020",
   "hero": {
-    "taglineWords": ["Engenheiro de Dados", "Desenvolvedor Full Stack", "Solucionador de Problemas", "Arquiteto de Código"],
+    "taglineWords": ["AI Data Engineer", "Desenvolvedor Full Stack", "AI Engineer", "Solucionador de Problemas"],
     "subtitle": "Transformando ideias em código desde 2020",
     "cta": {
       "primary": "Explore Meu Trabalho",
@@ -28,7 +28,7 @@
   "currently": {
     "title": "Atualmente",
     "location": "Brasil",
-    "role": "Engenheiro de Dados Pleno na Globant",
+    "role": "Senior Data Engineer na CI&T",
     "openToProjects": "Aberto a novos projetos",
     "status": "Disponível para oportunidades"
   },

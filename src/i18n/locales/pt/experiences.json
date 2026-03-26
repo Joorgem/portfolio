@@ -1,56 +1,69 @@
 {
   "sectionTitle": "Minha Experiência Profissional",
-  "sectionSubtitle": "Trajetória profissional de desenvolvimento web full-stack e soluções tecnológicas inovadoras",
+  "sectionSubtitle": "Trajetória profissional em engenharia de dados, IA e desenvolvimento full-stack",
   "experiences": [
     {
-      "title": "Data Engineer Pleno",
+      "title": "Senior Data Engineer",
+      "job": "CI&T",
+      "date": "Jan 2026 - Presente",
+      "contents": [
+        "Fundações de plataforma de dados enterprise codificando infraestrutura e controles de governança com Pulumi (TypeScript) em múltiplos ambientes.",
+        "Controles de privacidade by-design no Snowflake (políticas de mascaramento PII com hashing determinístico) para ambientes regulados.",
+        "Pipelines de ingestão end-to-end com CDC via Fivetran para ADLS (Iceberg) e Snowflake (volumes externos, integração de catálogo).",
+        "Hardening de CI/CD com GitHub Actions reusáveis, gates de ambiente e credenciais por conector."
+      ]
+    },
+    {
+      "title": "Senior Data Engineer (Full-Stack & Data Products)",
       "job": "Globant",
-      "date": "2024 - Present",
+      "date": "Set 2023 - Jan 2026",
       "contents": [
-        "Desenvolvimento de soluções full-stack com Python/Flask e Azure Databricks para processamento de milhões de registros em escala nacional.",
-        "Implementação de pipelines otimizados e queries SQL para análise em tempo real de auditorias comerciais.",
-        "Criação de aplicações React/TypeScript com arquitetura enterprise, autenticação Azure AD (MSAL) e APIs Node.js/Express.",
-        "Arquitetura backend escalável com Node.js/Express, implementação de JWT, rate limiting e middleware de segurança para aplicações empresariais."
+        "Plataformas de ingestão e transformação em larga escala com Python, Azure Databricks, PySpark, Delta Lake e SQL, processando 10M+ registros/mês.",
+        "Pipelines ETL/ELT distribuídos orquestrados com Airflow e Azure Data Factory, reduzindo esforço manual de integração em ~80%.",
+        "Frameworks de validação, monitoramento e alertas incluindo detecção de anomalias, schema drift e tracking de SLAs.",
+        "Otimização de queries SQL e estratégias de indexação, reduzindo tempo de execução de ~18s para menos de 3s."
       ]
     },
     {
-      "title": "Analista de Business Intelligence Jr",
-      "job": "Mobyan",
-      "date": "2022 - 2024",
+      "title": "Senior Full-Stack Developer & AI Engineer",
+      "job": "Freelancer",
+      "date": "Mar 2022 - Presente",
       "contents": [
-        "Desenvolvimento de relatórios interativos em Python integrando Web, SAP, DataLake, APIs e bancos SQL.",
-        "Processamento de Big Data com PySpark e PySparkSQL no Azure Synapse Analytics.",
-        "Automações com Python, SQL, NoSQL e integração de APIs para otimização de processos financeiros e operacionais."
+        "Entrega de sistemas de produção com Python e SQL, projetando APIs escaláveis suportando 10K+ requests/dia.",
+        "Pipelines de dados escaláveis com Airflow e Databricks/PySpark (batch e streaming), reduzindo ciclos de refresh em até 80%.",
+        "Plataformas cloud-native em Azure, AWS e GCP com Docker, Kubernetes e Terraform, reduzindo custos de infraestrutura em ~35%.",
+        "Monitoramento, avaliação e observabilidade para sistemas de dados e IA com LangSmith e Datadog."
       ]
     },
     {
-      "title": "Estagiário em Excelência Operacional",
+      "title": "Data Engineer",
+      "job": "Santander Group",
+      "date": "Ago 2021 - Set 2023",
+      "contents": [
+        "Dashboards interativos em Power BI e pipelines de relatórios automatizados com Python, reduzindo esforço manual em ~70%.",
+        "Integração de dados de SAP, APIs, bancos SQL e Azure Data Lake em ambiente analítico centralizado.",
+        "Pipelines de processamento distribuído com PySpark e SparkSQL, melhorando performance 3-5x sobre processos legados.",
+        "Arquiteturas Azure com Synapse Analytics, ADLS e Databricks para reportes near real-time."
+      ]
+    },
+    {
+      "title": "Data Analyst Intern",
       "job": "Novelis",
-      "date": "2021 - 2022",
+      "date": "Mar 2020 - Fev 2021",
       "contents": [
-        "Desenvolvimento de dashboards automatizados em Python para monitoramento do sistema WCM (World Class Manufacturing).",
-        "Integração de múltiplas fontes de dados para geração de relatórios em tempo real sobre performance operacional.",
-        "Automação de processos de coleta e análise de dados para suporte aos times de manutenção autônoma."
-      ]
-    },
-    {
-      "title": "Summer Finance Internship",
-      "job": "Isaac - Fintech",
-      "date": "Jan - Mar 2021",
-      "contents": [
-        "Primeiras automações em Python para processos ETL em bases de dados financeiros de escolas particulares.",
-        "Normalização e transformação de dados para integração com sistemas ERP corporativos.",
-        "Início da jornada em programação através de análise de dados e manipulação de grandes volumes de informações."
+        "Consolidação de dados de Oracle, SQL/NoSQL, SAP e fontes IoT de chão de fábrica para monitoramento operacional near real-time.",
+        "Scripts Python automatizados para ingestão e limpeza de dados, reduzindo trabalho manual em planilhas em ~60%.",
+        "Dashboards interativos em Power BI para eficiência de produção, downtime de máquinas e indicadores operacionais críticos.",
+        "Regras de validação e detecção de anomalias, elevando a acurácia dos dados para 95%+."
       ]
     },
     {
       "title": "Engenharia Química",
       "job": "Universidade de São Paulo (USP)",
-      "date": "2017-2023",
+      "date": "2017 - 2023",
       "contents": [
         "Formação em análise de processos industriais, modelagem matemática e otimização de sistemas.",
         "Primeiros projetos pessoais com automações Python para análise de dados e relatórios automatizados.",
-        "Experiência em controle de qualidade e metodologias de validação em laboratórios.",
         "Base sólida em pensamento sistemático e resolução de problemas complexos."
       ]
     }

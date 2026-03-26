@@ -3,7 +3,7 @@
   "name": "Jorge Molina",
   "description": "Turning ideas into code since 2020",
   "hero": {
-    "taglineWords": ["Data Engineer", "Full Stack Developer", "Problem Solver", "Code Architect"],
+    "taglineWords": ["AI Data Engineer", "Full Stack Developer", "AI Engineer", "Problem Solver"],
     "subtitle": "Transforming ideas into code since 2020",
     "cta": {
       "primary": "Explore My Work",
@@ -28,7 +28,7 @@
   "currently": {
     "title": "Currently",
     "location": "Brazil",
-    "role": "Mid Data Engineer at Globant",
+    "role": "Senior Data Engineer at CI&T",
     "openToProjects": "Open to new projects",
     "status": "Available for opportunities"
   },

@@ -1,6 +1,6 @@
 {
-  "sectionTitle": "Formação & Experiências",
-  "sectionSubtitle": "Jornada de aprendizado contínuo em tecnologias modernas e metodologias avançadas",
+  "sectionTitle": "Formação & Cursos",
+  "sectionSubtitle": "Jornada de aprendizado contínuo em engenharia de dados, IA e tecnologias modernas",
   "typeLabels": {
     "course": "Curso",
     "certification": "Certificação",
@@ -8,72 +8,102 @@
   },
   "courses": [
     {
-      "title": "Aplicações React com IA",
-      "institution": "Udemy - JavaScript Mastery",
+      "title": "LangChain- Agentic AI Engineering com LangChain & LangGraph",
+      "institution": "Udemy - Eden Marco",
       "period": "2025",
-      "description": "Desenvolvimento de aplicações React integradas com IA, utilizando OpenAI API, ChatGPT, machine learning e processamento de linguagem natural no frontend.",
+      "description": "Aplicações LLM production-ready com LangChain e LangGraph: AI agents, RAG systems, tool calling, structured outputs e orquestração de workflows multi-step.",
       "type": "course",
-      "technologies": ["JavaScript", "OpenAI API", "Node.js", "React"],
-      "link": "https://www.udemy.com/course/creating-ai-chat-apps-with-the-open-ai-api-in-javascript",
-      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
+      "technologies": ["LangChain", "LangGraph", "RAG", "AI Agents"],
+      "link": "https://www.udemy.com/course/langchain/",
+      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
     },
     {
-      "title": "Bootcamp E-commerce Next.js",
-      "institution": "Fullstack Club",
+      "title": "Snowflake - The Complete Masterclass",
+      "institution": "Udemy - Nikolai Schuler",
       "period": "2025",
-      "description": "Bootcamp intensivo focado no desenvolvimento de aplicações e-commerce completas usando Next.js, TypeScript, Stripe e deploy em produção.",
+      "description": "Snowflake completo: arquitetura, data warehousing, data loading, time travel, data sharing, tasks, streams, access management e performance optimization.",
+      "type": "course",
+      "technologies": ["Snowflake", "SQL", "Data Warehousing", "ETL"],
+      "link": "https://www.udemy.com/course/snowflake-masterclass/",
+      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azuresqldatabase/azuresqldatabase-original.svg"
+    },
+    {
+      "title": "Spark e Python para Big Data com PySpark",
+      "institution": "Udemy - Jose Portilla",
+      "period": "2025",
+      "description": "Big Data com PySpark: DataFrames, Spark SQL, Spark Streaming, MLlib para machine learning e projetos reais de classificação e análise.",
+      "type": "course",
+      "technologies": ["PySpark", "Spark SQL", "Big Data", "MLlib"],
+      "link": "https://www.udemy.com/course/spark-and-python-for-big-data-with-pyspark/",
+      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apachespark/apachespark-original.svg"
+    },
+    {
+      "title": "Formação em Next.js",
+      "institution": "Full Stack Club - Felipe Rocha",
+      "period": "2025",
+      "description": "Formação completa em Next.js com 30+ horas: SSR/SSG, autenticação NextAuth, Prisma, PostgreSQL, shadcn/ui e projetos e-commerce em produção.",
       "type": "extracurricular",
-      "technologies": ["Next.js", "TypeScript", "E-commerce"],
-      "link": "https://www.fullstackclub.com.br/bootcampecommerce",
+      "technologies": ["Next.js", "TypeScript", "Prisma", "PostgreSQL"],
+      "link": "https://www.fullstackclub.com.br/formacaoemnext",
       "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg"
     },
     {
-      "title": "TypeScript Masterclass 2025 Edition - React + NodeJS Project",
-      "institution": "Udemy",
+      "title": "Apache Airflow: The Hands-On Guide",
+      "institution": "Udemy - Marc Lamberti",
       "period": "2024",
-      "description": "TypeScript V5 Updated Course - Full Stack Development, TypeScript with ReactJS, ShadcnUI, Node.js, Express and MongoDB.",
+      "description": "Orquestração de pipelines com Apache Airflow: DAGs, TaskFlow API, XCOMs, sensores, hooks, scaling com Celery/Kubernetes executors e RBAC security.",
       "type": "course",
-      "technologies": ["TypeScript", "React", "Node.js", "MongoDB", "ShadcnUI", "TailwindCSS"],
-      "link": "https://udemy.com/course/typescript-course/",
+      "technologies": ["Airflow", "Python", "Data Pipelines", "ETL"],
+      "link": "https://www.udemy.com/course/the-ultimate-hands-on-course-to-master-apache-airflow/",
+      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apacheairflow/apacheairflow-original.svg"
+    },
+    {
+      "title": "HashiCorp Certified: Terraform Associate",
+      "institution": "Udemy - Bryan Krausen",
+      "period": "2024",
+      "description": "Terraform com labs práticos: módulos, workspaces, remote state, provider versioning, sensitive data e preparação para certificação HashiCorp.",
+      "type": "course",
+      "technologies": ["Terraform", "IaC", "AWS", "DevOps"],
+      "link": "https://www.udemy.com/course/hashicorp-certified-terraform-associate-004/",
+      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/terraform/terraform-original.svg"
+    },
+    {
+      "title": "TypeScript Masterclass 2025 Edition",
+      "institution": "Udemy - Manik (Cloudaffle)",
+      "period": "2024",
+      "description": "TypeScript V5 com Full Stack: interfaces, generics, decorators, conditional types e projeto completo com React, ShadcnUI, Node.js e MongoDB.",
+      "type": "course",
+      "technologies": ["TypeScript", "React", "Node.js", "MongoDB"],
+      "link": "https://www.udemy.com/course/typescript-course/",
       "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg"
     },
     {
       "title": "Docker: Do Básico ao Avançado",
       "institution": "Udemy",
       "period": "2024",
-      "description": "Curso completo de containerização com Docker, orquestração com Kubernetes, CI/CD pipelines e deploy de aplicações em clusters de produção.",
+      "description": "Containerização com Docker: imagens, containers, Dockerfile, multistaging, Docker Compose, Docker Swarm e deploy de aplicações distribuídas.",
       "type": "course",
       "technologies": ["Docker", "Docker Compose", "Docker Swarm", "Containers"],
-      "link": "https://www.udemy.com/course/docker-basico-ao-avancado",
+      "link": "https://www.udemy.com/course/docker-basico-ao-avancado/",
       "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg"
     },
     {
-      "title": "AWS Certified Cloud Practitioner",
+      "title": "AWS Certified Cloud Practitioner CLF-C02",
       "institution": "Udemy - Stephane Maarek",
       "period": "2024",
-      "description": "Curso completo de fundamentos AWS cobrindo EC2, S3, RDS, Lambda, IAM, CloudFormation e preparação para certificação Cloud Practitioner com hands-on labs.",
+      "description": "Fundamentos AWS cobrindo EC2, S3, RDS, Lambda, IAM, CloudFormation e preparação para certificação Cloud Practitioner CLF-C02.",
       "type": "course",
-      "technologies": ["AWS", "EC2", "S3", "RDS", "Lambda", "IAM", "CloudFormation"],
+      "technologies": ["AWS", "EC2", "S3", "Lambda", "IAM"],
       "link": "https://www.udemy.com/course/aws-certified-cloud-practitioner-new/",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg"
-    },
-    {
-      "title": "Three.js para Iniciantes",
-      "institution": "Udemy - Chris Courses",
-      "period": "2024",
-      "description": "Introdução ao Three.js para desenvolvimento web 3D, criação de geometrias, materiais, iluminação e animações básicas para sites interativos.",
-      "type": "course",
-      "technologies": ["Three.js", "WebGL", "JavaScript", "3D Graphics"],
-      "link": "https://udemy.com",
-      "logo": "https://codiland.com/wp-content/uploads/2024/04/logothreejs.png"
     },
     {
       "title": "Inteligência Artificial e Agentes Inteligentes",
       "institution": "Alura",
       "period": "2024",
-      "description": "Curso completo sobre IA, criação de agentes inteligentes, redes neurais, processamento de linguagem natural e implementação de chatbots com Python.",
+      "description": "IA, agentes inteligentes, redes neurais, processamento de linguagem natural e implementação de chatbots com Python.",
       "type": "course",
-      "technologies": ["Python", "IA", "Redes Neurais", "NLP", "Chatbots"],
+      "technologies": ["Python", "IA", "Agentes", "NLP"],
       "link": "https://alura.com.br",
       "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
     },
@@ -81,9 +111,9 @@
       "title": "Python para Ciência de Dados",
       "institution": "Alura",
       "period": "2022",
-      "description": "Formação completa em Python focada em análise de dados, pandas, numpy, matplotlib e machine learning com scikit-learn para projetos reais.",
+      "description": "Formação em Python focada em análise de dados, pandas, numpy, matplotlib e machine learning com scikit-learn.",
       "type": "course",
-      "technologies": ["Python", "Pandas", "NumPy", "Matplotlib", "Scikit-learn"],
+      "technologies": ["Python", "Pandas", "NumPy", "Machine Learning"],
       "link": "https://alura.com.br",
       "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
     },
@@ -91,9 +121,9 @@
       "title": "Bootcamp Completo de Python",
       "institution": "Udemy - Jose Portilla",
       "period": "2021",
-      "description": "Curso completo de Python cobrindo fundamentos, programação orientada a objetos, manipulação de dados, APIs e desenvolvimento web com Flask/Django.",
+      "description": "Python completo: fundamentos, POO, manipulação de dados, APIs e desenvolvimento web com Flask/Django.",
       "type": "course",
-      "technologies": ["Python", "Django", "Flask", "APIs", "OOP"],
+      "technologies": ["Python", "Flask", "Django", "APIs"],
       "link": "https://udemy.com",
       "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
     }

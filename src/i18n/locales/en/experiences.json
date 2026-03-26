@@ -1,56 +1,69 @@
 {
   "sectionTitle": "My Work Experience",
-  "sectionSubtitle": "Professional journey in web development and innovative solutions",
+  "sectionSubtitle": "Professional journey in data engineering, AI, and full-stack development",
   "experiences": [
     {
-      "title": "Mid Data Engineer",
+      "title": "Senior Data Engineer",
+      "job": "CI&T",
+      "date": "Jan 2026 - Present",
+      "contents": [
+        "Building enterprise data platform foundations with Pulumi (TypeScript), codifying infrastructure and governance controls across multiple environments.",
+        "Implementing privacy-by-design controls in Snowflake (tag-based PII masking with deterministic hashing) for regulated enterprise environments.",
+        "Delivering end-to-end data ingestion pipelines with CDC via Fivetran to ADLS (Iceberg) and Snowflake (external volumes, catalog integration).",
+        "Improving platform reliability through CI/CD hardening with reusable GitHub Actions workflows, environment gates, and connector-specific credentials."
+      ]
+    },
+    {
+      "title": "Senior Data Engineer (Full-Stack & Data Products)",
       "job": "Globant",
-      "date": "2024 - Present",
+      "date": "Sep 2023 - Jan 2026",
       "contents": [
-        "Development of full-stack solutions with Python/Flask and Azure Databricks for processing millions of records at national scale.",
-        "Implementation of optimized pipelines and SQL queries for real-time commercial audit analysis.",
-        "Creation of React/TypeScript applications with enterprise architecture, Azure AD (MSAL) authentication, and Node.js/Express APIs.",
-        "Scalable backend architecture with Node.js/Express, JWT implementation, rate limiting, and security middleware for enterprise applications."
+        "Developed large-scale data ingestion platforms using Python, Azure Databricks, PySpark, Delta Lake, and SQL, processing 10M+ records/month.",
+        "Designed distributed ETL/ELT pipelines orchestrated with Airflow and Azure Data Factory, reducing manual integration effort by ~80%.",
+        "Built data validation, monitoring, and alerting frameworks including anomaly detection, schema drift, and SLA tracking.",
+        "Optimized SQL transformations and indexing strategies, reducing query execution from ~18s to under 3s."
       ]
     },
     {
-      "title": "Jr. Business Intelligence Analyst",
-      "job": "Mobyan",
-      "date": "2022 - 2024",
+      "title": "Senior Full-Stack Developer & AI Engineer",
+      "job": "Freelancer",
+      "date": "Mar 2022 - Present",
       "contents": [
-        "Development of interactive reports in Python integrating Web, SAP, DataLake, APIs, and SQL databases.",
-        "Big Data processing with PySpark and PySparkSQL in Azure Synapse Analytics.",
-        "Automations with Python, SQL, NoSQL, and API integration for financial and operational process optimization."
+        "Delivering production data and backend systems using Python and SQL, designing scalable APIs supporting 10K+ requests/day.",
+        "Building scalable data pipelines with Airflow and Databricks/PySpark (batch and streaming), reducing refresh cycles by up to 80%.",
+        "Architecting cloud-native data platforms across Azure, AWS, and GCP with Docker, Kubernetes, and Terraform, reducing infrastructure costs by ~35%.",
+        "Implementing monitoring, evaluation, and observability practices for data and AI-driven systems using LangSmith and Datadog."
       ]
     },
     {
-      "title": "Operational Excellence Intern",
+      "title": "Data Engineer",
+      "job": "Santander Group",
+      "date": "Aug 2021 - Sep 2023",
+      "contents": [
+        "Designed interactive Power BI dashboards and automated reporting pipelines with Python, reducing manual effort by ~70%.",
+        "Integrated data from SAP, APIs, SQL databases, and Azure Data Lake into a centralized analytical environment.",
+        "Built distributed processing pipelines with PySpark and SparkSQL, achieving 3-5x performance improvements over legacy processes.",
+        "Implemented Azure-based architectures using Synapse Analytics, ADLS, and Databricks for near real-time reporting."
+      ]
+    },
+    {
+      "title": "Data Analyst Intern",
       "job": "Novelis",
-      "date": "2021 - 2022",
+      "date": "Mar 2020 - Feb 2021",
       "contents": [
-        "Development of automated dashboards in Python for WCM (World Class Manufacturing) system monitoring.",
-        "Integration of multiple data sources for real-time reporting on operational performance.",
-        "Automation of data collection and analysis processes to support autonomous maintenance teams."
+        "Consolidated data from Oracle, SQL/NoSQL systems, SAP, and shop-floor IoT sources for near real-time operational monitoring.",
+        "Developed automated Python scripts for data ingestion and cleansing, reducing manual spreadsheet work by ~60%.",
+        "Designed interactive Power BI dashboards for production efficiency, machine downtime, and critical operational indicators.",
+        "Implemented data validation and anomaly detection rules, increasing data accuracy to 95%+."
       ]
     },
     {
-      "title": "Summer Finance Internship",
-      "job": "Isaac - Fintech",
-      "date": "Jan - Mar 2021",
-      "contents": [
-        "First Python automations for ETL processes in financial databases of private schools.",
-        "Data normalization and transformation for integration with corporate ERP systems.",
-        "Beginning of programming journey through data analysis and manipulation of large volumes of information."
-      ]
-    },
-    {
-      "title": "Chemical Engineering",
+      "title": "B.Sc. Chemical Engineering",
       "job": "University of São Paulo (USP)",
-      "date": "2017-2023",
+      "date": "2017 - 2023",
       "contents": [
         "Education in industrial process analysis, mathematical modeling, and system optimization.",
         "First personal projects with Python automations for data analysis and automated reporting.",
-        "Experience in quality control and validation methodologies in laboratories.",
         "Solid foundation in systematic thinking and complex problem solving."
       ]
     }
