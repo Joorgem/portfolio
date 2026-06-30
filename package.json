@@ -10,7 +10,13 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "typecheck:watch": "tsc --noEmit --watch",
-    "validate": "npm run typecheck"
+    "validate": "npm run typecheck && npm run lint && npm run validate:data && npm run validate:media",
+    "capture:fernanda": "node scripts/capture-fernanda.mjs",
+    "validate:data": "node --experimental-strip-types scripts/validate-projects.mjs",
+    "validate:media": "node scripts/validate-media.mjs",
+    "typecheck:e2e": "tsc -p tsconfig.e2e.json --noEmit",
+    "test:e2e": "playwright test",
+    "validate:full": "npm run validate && npm run build && npm run test:e2e"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
@@ -45,6 +51,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
+    "@playwright/test": "^1.61.1",
     "@types/node": "^24.2.1",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
@@ -57,6 +64,7 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.18",
     "globals": "^15.14.0",
+    "playwright": "^1.61.1",
     "typescript": "^5.9.2",
     "vite": "^6.1.0"
   }
