@@ -14,6 +14,39 @@
   },
   "projects": [
     {
+      "title": "Fernanda Fiuza",
+      "subDescription": [
+        "Bilingual (PT/EN) portfolio site for movement director, choreographer, and camera operator Fernanda Fiuza, live at fernandafiuza.com.",
+        "Built on Next.js 15 (App Router) with field-level internationalization via next-intl, served as a dark, editorial single-experience.",
+        "Sanity CMS lets Fernanda manage motion projects, photo galleries, and her bio independently — no developer needed.",
+        "Video is hosted and streamed adaptively through Mux, with animated home-grid previews and autoplaying project heroes.",
+        "Deployed on Vercel with ISR, styled with Tailwind CSS v4, and tuned for smooth bilingual View Transitions."
+      ],
+      "tags": [
+        {
+          "name": "Next.js"
+        },
+        {
+          "name": "TypeScript"
+        },
+        {
+          "name": "Sanity"
+        },
+        {
+          "name": "Mux"
+        },
+        {
+          "name": "Tailwind"
+        },
+        {
+          "name": "next-intl"
+        },
+        {
+          "name": "Vercel"
+        }
+      ]
+    },
+    {
       "title": "SOLTO®",
       "subDescription": [
         "E-commerce platform built with Next.js 14, TypeScript and Drizzle ORM.",
@@ -23,14 +56,30 @@
         "Scalable architecture with SSR/SSG, intelligent caching and React Query."
       ],
       "tags": [
-        { "name": "Next.js" },
-        { "name": "TypeScript" },
-        { "name": "Drizzle ORM" },
-        { "name": "React Query" },
-        { "name": "Tailwind" },
-        { "name": "PostgreSQL" },
-        { "name": "Vercel" },
-        { "name": "Stripe" }
+        {
+          "name": "Next.js"
+        },
+        {
+          "name": "TypeScript"
+        },
+        {
+          "name": "Drizzle ORM"
+        },
+        {
+          "name": "React Query"
+        },
+        {
+          "name": "Tailwind"
+        },
+        {
+          "name": "PostgreSQL"
+        },
+        {
+          "name": "Vercel"
+        },
+        {
+          "name": "Stripe"
+        }
       ]
     },
     {
@@ -43,14 +92,30 @@
         "Optimized performance with lazy loading, code splitting and efficient rendering."
       ],
       "tags": [
-        { "name": "Three.js" },
-        { "name": "React" },
-        { "name": "TypeScript" },
-        { "name": "Framer Motion" },
-        { "name": "Zustand" },
-        { "name": "Tailwind" },
-        { "name": "Vite" },
-        { "name": "WebGL" }
+        {
+          "name": "Three.js"
+        },
+        {
+          "name": "React"
+        },
+        {
+          "name": "TypeScript"
+        },
+        {
+          "name": "Framer Motion"
+        },
+        {
+          "name": "Zustand"
+        },
+        {
+          "name": "Tailwind"
+        },
+        {
+          "name": "Vite"
+        },
+        {
+          "name": "WebGL"
+        }
       ]
     },
     {
@@ -63,14 +128,30 @@
         "Azure Static Web Apps deployment with CI/CD pipeline, automated testing suite with Playwright and PowerShell scripts."
       ],
       "tags": [
-        { "name": "React 18" },
-        { "name": "TypeScript" },
-        { "name": "Vite" },
-        { "name": "Azure AD" },
-        { "name": "Node.js" },
-        { "name": "Tailwind" },
-        { "name": "Playwright" },
-        { "name": "Axios" }
+        {
+          "name": "React 18"
+        },
+        {
+          "name": "TypeScript"
+        },
+        {
+          "name": "Vite"
+        },
+        {
+          "name": "Azure AD"
+        },
+        {
+          "name": "Node.js"
+        },
+        {
+          "name": "Tailwind"
+        },
+        {
+          "name": "Playwright"
+        },
+        {
+          "name": "Axios"
+        }
       ]
     }
   ]
