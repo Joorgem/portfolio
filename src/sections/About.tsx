@@ -11,8 +11,7 @@ import { useNavigationStore } from "../stores/navigation.store";
 import { PortfolioModes } from "../constants/navigationConfig";
 
 const About: React.FC = () => {
-  const { t, i18n } = useTranslation("about");
-  const currentLanguage = i18n.language;
+  const { t } = useTranslation("about");
   const portfolioMode = useNavigationStore((state) => state.portfolioMode);
 
   const photos = useMemo(() => {
