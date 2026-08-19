@@ -14,6 +14,39 @@
   },
   "projects": [
     {
+      "title": "Fernanda Fiuza",
+      "subDescription": [
+        "Um portfólio para Fernanda Fiuza — diretora de movimento, coreógrafa e diretora audiovisual, cuja pesquisa CORPO CÂMERA trata a câmera como uma extensão do corpo. Ela dirigiu o movimento de Tove Lo, Marina Sena, IZA e Getúlio Abelha e de marcas como Natura e Cheetos, com trabalhos premiados do Prêmio Arcanjo de Cultura a Cannes.",
+        "O site foi feito para sumir atrás do vídeo: uma home escura e editorial que é, ela própria, uma grade em tela cheia dos seus filmes — cada quadro rodando uma prévia em loop, fazendo a navegação parecer assistir a um reel.",
+        "A parte difícil foi fazer um site saturado de vídeo parecer leve — cada prévia tem streaming adaptativo, ajustada por navegador para a grade rolar fluida e imediata, sem spinners nem travadas.",
+        "A Fernanda gerencia tudo sozinha por um CMS visual: adiciona projetos, organiza galerias de fotos e edita a bio, sem código e sem depender de desenvolvedor.",
+        "Galeria de fotos em tela cheia, PT/EN com troca instantânea de idioma e deploy contínuo — no ar em produção em fernandafiuza.com."
+      ],
+      "tags": [
+        {
+          "name": "Next.js"
+        },
+        {
+          "name": "TypeScript"
+        },
+        {
+          "name": "Sanity"
+        },
+        {
+          "name": "Mux"
+        },
+        {
+          "name": "Tailwind"
+        },
+        {
+          "name": "next-intl"
+        },
+        {
+          "name": "Vercel"
+        }
+      ]
+    },
+    {
       "title": "SOLTO®",
       "subDescription": [
         "Plataforma de e-commerce construída com Next.js 14, TypeScript e Drizzle ORM.",
@@ -23,14 +56,30 @@
         "Arquitetura escalável com SSR/SSG, cache inteligente e React Query."
       ],
       "tags": [
-        { "name": "Next.js" },
-        { "name": "TypeScript" },
-        { "name": "Drizzle ORM" },
-        { "name": "React Query" },
-        { "name": "Tailwind" },
-        { "name": "PostgreSQL" },
-        { "name": "Vercel" },
-        { "name": "Stripe" }
+        {
+          "name": "Next.js"
+        },
+        {
+          "name": "TypeScript"
+        },
+        {
+          "name": "Drizzle ORM"
+        },
+        {
+          "name": "React Query"
+        },
+        {
+          "name": "Tailwind"
+        },
+        {
+          "name": "PostgreSQL"
+        },
+        {
+          "name": "Vercel"
+        },
+        {
+          "name": "Stripe"
+        }
       ]
     },
     {
@@ -43,14 +92,30 @@
         "Performance otimizada com lazy loading, code splitting e renderização eficiente."
       ],
       "tags": [
-        { "name": "Three.js" },
-        { "name": "React" },
-        { "name": "TypeScript" },
-        { "name": "Framer Motion" },
-        { "name": "Zustand" },
-        { "name": "Tailwind" },
-        { "name": "Vite" },
-        { "name": "WebGL" }
+        {
+          "name": "Three.js"
+        },
+        {
+          "name": "React"
+        },
+        {
+          "name": "TypeScript"
+        },
+        {
+          "name": "Framer Motion"
+        },
+        {
+          "name": "Zustand"
+        },
+        {
+          "name": "Tailwind"
+        },
+        {
+          "name": "Vite"
+        },
+        {
+          "name": "WebGL"
+        }
       ]
     },
     {
@@ -63,14 +128,30 @@
         "Deploy no Azure Static Web Apps com pipeline CI/CD, suite de testes automatizados com Playwright e scripts PowerShell."
       ],
       "tags": [
-        { "name": "React 18" },
-        { "name": "TypeScript" },
-        { "name": "Vite" },
-        { "name": "Azure AD" },
-        { "name": "Node.js" },
-        { "name": "Tailwind" },
-        { "name": "Playwright" },
-        { "name": "Axios" }
+        {
+          "name": "React 18"
+        },
+        {
+          "name": "TypeScript"
+        },
+        {
+          "name": "Vite"
+        },
+        {
+          "name": "Azure AD"
+        },
+        {
+          "name": "Node.js"
+        },
+        {
+          "name": "Tailwind"
+        },
+        {
+          "name": "Playwright"
+        },
+        {
+          "name": "Axios"
+        }
       ]
     }
   ]

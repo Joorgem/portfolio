@@ -4,6 +4,11 @@ import { ProjectMedia } from '../constants/index';
 import { Pause, Play, Maximize2, Minimize2 } from 'lucide-react';
 import FullscreenCursor from './FullscreenCursor';
 
+// Showcase sections are min-h-screen, so their players sit at least a viewport
+// apart. Requiring half the player to be visible therefore means at most one
+// video is ever decoding, without tracking which one is "most" visible.
+const VISIBLE_ENOUGH = 0.5;
+
 const LazyMP4 = ({ src, onLoad, className }: {
   src: string;
   onLoad?: () => void;
@@ -86,6 +91,8 @@ interface MediaPlayerProps {
   media: ProjectMedia[];
   className?: string;
   autoPlay?: boolean;
+  /** Play only while this player holds the viewport; pause when it leaves. */
+  playOnVisible?: boolean;
   showControls?: boolean;
   showIndicators?: boolean;
 }
@@ -95,6 +102,7 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
   media,
   className = "",
   autoPlay = true,
+  playOnVisible = false,
   showControls = true,
   showIndicators = true
 }) => {
@@ -102,8 +110,12 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
   const [isPlaying, setIsPlaying] = useState(autoPlay);
   const [isLoading, setIsLoading] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [preloadFully, setPreloadFully] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  // An explicit pause by the viewer outranks the observer, so scrolling past and
+  // back does not restart something they deliberately stopped.
+  const userPausedRef = useRef(false);
 
   const currentMedia = media[currentIndex];
 
@@ -136,12 +148,62 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
     return undefined;
   }, [currentIndex, isPlaying, media.length, currentMedia.type]);
 
+  // Viewport-driven playback. Two observers on purpose: the warm-up one carries a
+  // rootMargin so preload flips to "auto" just before the card arrives, while the
+  // playback one must not -- a rootMargin inflates the root box and would report a
+  // card as half-visible while it is still below the fold.
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!playOnVisible || !el) return undefined;
+
+    const warmUp = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setPreloadFully(true);
+        warmUp.disconnect();
+      },
+      { rootMargin: '300px 0px' }
+    );
+    warmUp.observe(el);
+
+    // Honour the OS motion preference: leave the video paused on its opening frame
+    // and let the viewer start it from the play control.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return () => warmUp.disconnect();
+    }
+
+    const playback = new IntersectionObserver(
+      ([entry]) => {
+        const video = videoRef.current;
+        if (!video) return;
+        // isIntersecting reads true on both sides of a threshold crossing, so the
+        // ratio is what actually says whether the card still holds the viewport.
+        if (entry.intersectionRatio >= VISIBLE_ENOUGH) {
+          if (userPausedRef.current) return;
+          video.play().then(() => setIsPlaying(true)).catch(() => {});
+        } else if (!video.paused) {
+          video.pause();
+          setIsPlaying(false);
+        }
+      },
+      { threshold: [0, VISIBLE_ENOUGH] }
+    );
+    playback.observe(el);
+
+    return () => {
+      warmUp.disconnect();
+      playback.disconnect();
+    };
+  }, [playOnVisible, currentIndex]);
+
   const handlePlay = () => {
     if (currentMedia.type === 'video' && videoRef.current) {
       if (isPlaying) {
         videoRef.current.pause();
+        userPausedRef.current = true;
       } else {
-        videoRef.current.play();
+        userPausedRef.current = false;
+        videoRef.current.play().catch(() => {});
       }
       setIsPlaying(!isPlaying);
     } else {
@@ -201,15 +263,20 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
         return (
           <video
             ref={videoRef}
-            src={currentMedia.src}
+            // The #t=0.1 fragment makes the browser seek and decode one frame, so a
+            // paused video shows its own opening frame instead of a black box -- no
+            // poster file needed. It belongs here and not in constants, because
+            // validate-projects (A4) runs fs.existsSync over every media src.
+            src={`${currentMedia.src}#t=0.1`}
             poster={currentMedia.thumbnail}
             onLoadedData={handleMediaLoad}
             onEnded={handleVideoEnded}
             autoPlay={autoPlay}
             muted
+            playsInline
             loop={media.length === 1}
             className="w-full h-full object-cover"
-            preload="metadata"
+            preload={preloadFully ? 'auto' : 'metadata'}
           />
         );
       

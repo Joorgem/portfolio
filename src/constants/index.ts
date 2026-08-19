@@ -53,6 +53,45 @@ export interface Course {
 
 export const myProjects: Project[] = [
   {
+    id: 4,
+    title: "Fernanda Fiuza", // overwritten at render by translation; fallback only
+    subDescription: [
+      "A portfolio for movement director Fernanda Fiuza, whose CORPO CÂMERA research treats the camera as an extension of the body.",
+      "A dark, video-first site she manages herself, engineered to keep a grid full of adaptive previews feeling weightless.",
+    ],
+    href: "https://fernandafiuza.com",
+    repositoryUrl: "#", // private repo -> hides the Code button
+    logo: "", // value unused by Projects section
+    image: "", // value unused by Projects section
+    media: [
+      {
+        type: "video",
+        src: "/assets/projects-optimized/fernanda-fiuza-demo-opt.mp4",
+        alt: "Fernanda Fiuza portfolio — desktop walkthrough",
+        category: "web",
+        priority: 1,
+      },
+      {
+        type: "video",
+        src: "/assets/projects-optimized/fernanda-fiuza-mobile-opt.mp4",
+        alt: "Fernanda Fiuza portfolio — mobile walkthrough",
+        category: "mobile",
+        priority: 1,
+      },
+    ],
+    // tag id/path are unused by the Projects section (it renders the locale JSON tag name only);
+    // paths point at existing logo files to avoid dead refs.
+    tags: [
+      { id: 40, name: "Next.js", path: "/assets/logos/nextjs.check.svg" },
+      { id: 41, name: "TypeScript", path: "/assets/logos/typescript.svg" },
+      { id: 42, name: "Sanity", path: "/assets/logos/react.svg" },
+      { id: 43, name: "Mux", path: "/assets/logos/nodejs.svg" },
+      { id: 44, name: "Tailwind", path: "/assets/logos/tailwindcss.svg" },
+      { id: 45, name: "next-intl", path: "/assets/logos/vitejs.svg" },
+      { id: 46, name: "Vercel", path: "/assets/logos/docker.svg" },
+    ],
+  },
+  {
     id: 1,
     title: "SOLTO®",
     subDescription: [

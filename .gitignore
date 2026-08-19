@@ -74,3 +74,10 @@ temp/
 claude.md
 gemini.md
 CODE_AUDIT.md
+
+# Playwright capture intermediates (capture-fernanda.mjs)
+.capture-tmp/
+
+# Playwright
+test-results/
+playwright-report/
