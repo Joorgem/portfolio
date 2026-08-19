@@ -92,6 +92,7 @@ const SimpleMediaViewer: React.FC<SimpleMediaViewerProps> = ({
               media={[currentMedia]}
               className="w-full h-full"
               autoPlay={false}
+              playOnVisible
               showControls={true}
               showIndicators={false}
             />

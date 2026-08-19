@@ -81,3 +81,58 @@ test('3D mode mounts and dismisses the selector without crashing', async ({ page
   await expect(page.getByText('Immersive Mode', { exact: true })).toHaveCount(0, { timeout: 30_000 })
   expect(errors, `uncaught page errors:\n${errors.join('\n')}`).toEqual([])
 })
+
+// ---------------------------------------------------------------------------
+// Viewport-driven playback. The videos carry no poster file: the first frame is
+// painted by the `#t=0.1` media fragment, and playback starts only once the card
+// actually holds the viewport. Threshold is 0.5, and every ProjectShowcase is
+// min-h-screen, so at most one video can ever be decoding.
+// ---------------------------------------------------------------------------
+
+const DEMO = 'video[src*="fernanda-fiuza-demo-opt.mp4"]'
+
+// Scrolls to a showcase far enough down that Fernanda's card leaves the viewport.
+async function scrollAwayFromFernanda(page: Page) {
+  await page.locator('section.min-h-screen').nth(2).scrollIntoViewIfNeeded()
+}
+
+test('E9 — Fernanda video plays once its card holds the viewport', async ({ page }) => {
+  await openOnePage(page, 'en')
+  const sc = fernandaShowcase(page)
+  await sc.scrollIntoViewIfNeeded()
+
+  await expect(sc.locator(DEMO)).toHaveJSProperty('paused', false)
+})
+
+test('E10 — it pauses again once the card leaves the viewport', async ({ page }) => {
+  await openOnePage(page, 'en')
+  const sc = fernandaShowcase(page)
+  await sc.scrollIntoViewIfNeeded()
+  await expect(sc.locator(DEMO)).toHaveJSProperty('paused', false)
+
+  await scrollAwayFromFernanda(page)
+  await expect(sc.locator(DEMO)).toHaveJSProperty('paused', true)
+})
+
+test('E11 — the video is playsInline (iOS Safari refuses inline playback without it)', async ({ page }) => {
+  await openOnePage(page, 'en')
+  const sc = fernandaShowcase(page)
+  await sc.scrollIntoViewIfNeeded()
+
+  await expect(sc.locator(DEMO)).toHaveAttribute('playsinline', '')
+})
+
+test('E12 — prefers-reduced-motion: no autoplay, but a real first frame (not a black box)', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await openOnePage(page, 'en')
+  const sc = fernandaShowcase(page)
+  await sc.scrollIntoViewIfNeeded()
+
+  const video = sc.locator(DEMO)
+  await expect(video).toHaveJSProperty('paused', true)
+  // readyState >= 2 (HAVE_CURRENT_DATA) proves a frame is decoded and painted,
+  // which is what makes the paused state look like a poster instead of black.
+  await expect
+    .poll(() => video.evaluate((v: HTMLVideoElement) => v.readyState), { timeout: 15_000 })
+    .toBeGreaterThanOrEqual(2)
+})
