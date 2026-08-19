@@ -16,11 +16,11 @@
     {
       "title": "Fernanda Fiuza",
       "subDescription": [
-        "Site de portfólio bilíngue (PT/EN) da diretora de movimento, coreógrafa e operadora de câmera Fernanda Fiuza, no ar em fernandafiuza.com.",
-        "Construído em Next.js 15 (App Router) com internacionalização por campo via next-intl, em uma experiência única, escura e editorial.",
-        "O CMS Sanity permite que a Fernanda gerencie projetos de movimento, galerias de fotos e sua bio de forma independente — sem precisar de desenvolvedor.",
-        "Os vídeos são hospedados e transmitidos de forma adaptativa pelo Mux, com prévias animadas na grade inicial e heróis de projeto em autoplay.",
-        "Publicado na Vercel com ISR, estilizado com Tailwind CSS v4 e ajustado para transições bilíngues suaves (View Transitions)."
+        "Um portfólio para Fernanda Fiuza — diretora de movimento, coreógrafa e diretora audiovisual, cuja pesquisa CORPO CÂMERA trata a câmera como uma extensão do corpo. Ela dirigiu o movimento de Tove Lo, Marina Sena, IZA e Getúlio Abelha e de marcas como Natura e Cheetos, com trabalhos premiados do Prêmio Arcanjo de Cultura a Cannes.",
+        "O site foi feito para sumir atrás do vídeo: uma home escura e editorial que é, ela própria, uma grade em tela cheia dos seus filmes — cada quadro rodando uma prévia em loop, fazendo a navegação parecer assistir a um reel.",
+        "A parte difícil foi fazer um site saturado de vídeo parecer leve — cada prévia tem streaming adaptativo, ajustada por navegador para a grade rolar fluida e imediata, sem spinners nem travadas.",
+        "A Fernanda gerencia tudo sozinha por um CMS visual: adiciona projetos, organiza galerias de fotos e edita a bio, sem código e sem depender de desenvolvedor.",
+        "Galeria de fotos em tela cheia, PT/EN com troca instantânea de idioma e deploy contínuo — no ar em produção em fernandafiuza.com."
       ],
       "tags": [
         {

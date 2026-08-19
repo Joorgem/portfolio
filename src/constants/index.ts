@@ -56,8 +56,8 @@ export const myProjects: Project[] = [
     id: 4,
     title: "Fernanda Fiuza", // overwritten at render by translation; fallback only
     subDescription: [
-      "Bilingual (PT/EN) portfolio for movement director and choreographer Fernanda Fiuza.",
-      "Built with Next.js 15 App Router, Sanity CMS, and Mux adaptive video streaming.",
+      "A portfolio for movement director Fernanda Fiuza, whose CORPO CÂMERA research treats the camera as an extension of the body.",
+      "A dark, video-first site she manages herself, engineered to keep a grid full of adaptive previews feeling weightless.",
     ],
     href: "https://fernandafiuza.com",
     repositoryUrl: "#", // private repo -> hides the Code button
