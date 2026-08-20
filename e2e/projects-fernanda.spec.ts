@@ -41,9 +41,11 @@ for (const locale of ['en', 'pt'] as Locale[]) {
     const sc = fernandaShowcase(page)
     await sc.scrollIntoViewIfNeeded()
 
-    // E1 — first, numbered 01
+    // E1 — renders, and is genuinely the first showcase. Project numbering was
+    // removed, so ordering is asserted positionally rather than by reading "01".
     await expect(sc.getByRole('heading', { name: 'Fernanda Fiuza' })).toBeVisible()
-    await expect(sc.getByText('01', { exact: true })).toBeVisible()
+    await expect(page.locator('section.min-h-screen').first()).toContainText('Fernanda Fiuza')
+    await expect(sc.getByText('01', { exact: true })).toHaveCount(0)
 
     // E2 — desktop video wired (web is the default tab)
     await expect(sc.locator('video[src*="fernanda-fiuza-demo-opt.mp4"]')).toHaveCount(1)
