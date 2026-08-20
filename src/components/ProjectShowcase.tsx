@@ -80,13 +80,8 @@ const ProjectShowcase: React.FC<ProjectShowcaseProps> = ({
           
           {/* Header Section - Number, Title, Description */}
           <div className="space-y-6">
-            {/* Project Number */}
-            <div className="flex items-center gap-4">
-              <span className="text-6xl lg:text-8xl font-bold text-white">
-                {String(index + 1).padStart(2, '0')}
-              </span>
-              <div className="h-px flex-1 bg-gradient-to-r from-white/40 to-transparent" />
-            </div>
+            {/* Divider */}
+            <div className="h-px w-full bg-gradient-to-r from-white/40 to-transparent" />
 
             {/* Title */}
             <h2 className="text-4xl lg:text-6xl font-bold text-white">
